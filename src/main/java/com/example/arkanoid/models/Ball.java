@@ -5,6 +5,9 @@ public class Ball extends MovableObject {
 
     public Ball(double x, double y, double radius) {
         super(x, y, radius * 2, radius * 2);
+        double v = SPEED;
+        this.dx = v;
+        this.dy = -v;
     }
 
     @Override
