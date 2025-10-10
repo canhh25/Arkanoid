@@ -65,13 +65,42 @@ public class GameManager {
     }
 
     private void checkCollisions() {
+        //ball va chạm với tường
         if (ball.getX() <= 0 || ball.getX() >= gameWidth - ball.getWidth()) ball.dx *= -1;
         if (ball.getY() <= 0) ball.dy *= -1;
+
+        //ball va chạm với paddle
         if (ball.getBounds().intersects(paddle.getBounds())) {
-            ball.dy *= -1;
-            ball.setY(paddle.getY() - ball.getHeight());
+            // Biên của ball
+            double ballLeft = ball.getX();
+            double ballRight = ball.getX() + ball.getWidth();
+            double ballTop = ball.getY();
+            double ballBottom = ball.getY() + ball.getHeight();
+
+            // Biên của paddle
+            double paddleLeft = paddle.getX();
+            double paddleRight = paddle.getX() + paddle.getWidth();
+            double paddleTop = paddle.getY();
+            double paddleBottom = paddle.getY() + paddle.getHeight();
+
+            // Chỉ phản ứng nếu bóng đang rơi xuống, tránh bóng va chạm liên tục với paddle
+            if (ball.dy > 0 && ballBottom >= paddleTop && ballTop < paddleTop) {
+                // Đặt bóng lên trên mặt paddle
+                ball.setY(paddleTop - ball.getHeight());
+
+                // Đảo hướng dọc
+                ball.dy = -Math.abs(ball.dy);
+
+                // Tính vị trí chạm để xác định hướng bật ngang
+                double paddleCenter = paddleLeft + paddle.getWidth() / 2;
+                double ballCenter = ballLeft + ball.getWidth() / 2;
+                double hitPosition = (ballCenter - paddleCenter) / (paddle.getWidth() / 2);
+                hitPosition = Math.max(-1, Math.min(1, hitPosition));
+                ball.dx = hitPosition * 3;
+            }
         }
 
+        //ball va chạm với brick
         for (Brick brick : bricks) {
             if (ball.getBounds().intersects(brick.getBounds())) {
                 ball.dy *= -1;
@@ -89,8 +118,19 @@ public class GameManager {
         }
     }
 
-    public Paddle getPaddle() { return paddle; }
-    public Ball getBall() { return ball; }
-    public List<Brick> getBricks() { return bricks; }
-    public boolean isGameOver() { return isGameOver; }
+    public Paddle getPaddle() {
+        return paddle;
+    }
+
+    public Ball getBall() {
+        return ball;
+    }
+
+    public List<Brick> getBricks() {
+        return bricks;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
 }
