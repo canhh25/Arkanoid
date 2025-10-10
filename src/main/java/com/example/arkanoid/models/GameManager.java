@@ -85,10 +85,8 @@ public class GameManager {
 
             // Chỉ phản ứng nếu bóng đang rơi xuống, tránh bóng va chạm liên tục với paddle
             if (ball.dy > 0 && ballBottom >= paddleTop && ballTop < paddleTop) {
-                // Đặt bóng lên trên mặt paddle
+                // Đặt bóng lên trên mặt paddle, tránh mắc kẹt trong paddle
                 ball.setY(paddleTop - ball.getHeight());
-
-                // Đảo hướng dọc
                 ball.dy = -Math.abs(ball.dy);
 
                 // Tính vị trí chạm để xác định hướng bật ngang
