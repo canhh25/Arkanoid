@@ -1,37 +1,21 @@
 package com.example.arkanoid.models;
 
 public class Ball extends MovableObject {
-    private static final double SPEED = 100;
+    public double dx, dy;
+    public static final double WIDTH = 14;
+    public static final double HEIGHT = 14;
 
-    public Ball(double x, double y, double radius) {
-        super(x, y, radius * 2, radius * 2);
-        double v = SPEED;
-        this.dx = v;
-        this.dy = -v;
-    }
+    public Ball(double x, double y) {
+        super(x, y, WIDTH, HEIGHT, "/images/ball/ball.png");
 
-    @Override
-    public void move() {
-        super.move();
+        // Vận tốc ban đầu
+        dx = 2;
+        dy = -2;
     }
 
     @Override
     public void update() {
-        move();
-        checkWallCollision(1000,1000);
-    }
-
-    public void checkWallCollision(double sceneWidth, double sceneHeight) {
-        if (x <= 0) {
-            x = 0;
-            dx = -dx;
-        } else if (x + width >= sceneWidth) {
-            x = sceneWidth - width;
-            dx = -dx;
-        }
-        if (y <= 0) {
-            y = 0;
-            dy = -dy;
-        }
+        x += dx;
+        y += dy;
     }
 }

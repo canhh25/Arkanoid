@@ -1,8 +1,9 @@
 package com.example.arkanoid.models;
 
 public enum GameState {
-    MENU,
-    PLAYING,
+    READY,
+    RUNNING,
     PAUSED,
-    GAME_OVER
+    GAME_OVER,
+    WIN
 }
