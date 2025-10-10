@@ -1,25 +1,24 @@
 package com.example.arkanoid.models;
 
 public class Brick extends GameObject {
-    private int hitPoints;
-    private String type;
-
-    public Brick(double x, double y, double width, double height, int hitPoints, String type) {
-        super(x, y, width, height);
+    public static final double BRICK_WIDTH = 96;
+    public static final double BRICK_HEIGHT = 32;
+    public int hitPoints;
+    private final String crackedImagePath;
+    public Brick(double x, double y, int hitPoints, String imagePath, String crackedImagePath) {
+        super(x, y, BRICK_WIDTH, BRICK_HEIGHT, imagePath);
         this.hitPoints = hitPoints;
-        this.type = type;
+        this.crackedImagePath = crackedImagePath;
+    }
+    public void hit() {
+        this.hitPoints--;
+        if (this.hitPoints == 2 && crackedImagePath != null) {
+            setImage(crackedImagePath);
+        }
     }
 
-    public void takeHit() {
-        hitPoints--;
-    }
 
     public boolean isDestroyed() {
-        return this.hitPoints <= 0;
+        return hitPoints <= 0;
     }
-
-    public String getType() {
-        return type;
-    }
-
 }
