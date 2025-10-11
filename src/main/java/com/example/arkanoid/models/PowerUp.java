@@ -5,8 +5,8 @@ public class PowerUp extends GameObject {
     protected int duration;
     protected boolean isActive = false;
 
-    public PowerUp(double x, double y, double width, double height, String type, int duration) {
-        super(x, y, width, height);
+    public PowerUp(double x, double y, double width, double height, String type, int duration, String imagePath) {
+        super(x, y, width, height,imagePath);
         this.type = type;
         this.duration = duration;
     }
