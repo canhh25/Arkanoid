@@ -89,7 +89,6 @@ public class GameManager {
         }
     }
 
-
     public Paddle getPaddle() { return paddle; }
     public Ball getBall() { return ball; }
     public List<Brick> getBricks() { return bricks; }
