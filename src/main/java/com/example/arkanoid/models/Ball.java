@@ -18,7 +18,6 @@ public class Ball extends MovableObject {
         dy = -2;
     }
 
-
     @Override
     public void update() {
         x += dx;

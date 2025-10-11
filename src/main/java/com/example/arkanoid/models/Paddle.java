@@ -4,7 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class Paddle extends MovableObject {
-    public static final double PADDLE_SPEED = 7.5;
+    public static final double PADDLE_SPEED = 5;
     public static final double WIDTH = 100;
     public static final double HEIGHT = 30;
 
@@ -20,7 +20,6 @@ public class Paddle extends MovableObject {
     public Paddle(double x, double y, double gameWidth) {
         super(x, y, WIDTH, HEIGHT, "/images/paddle/bat0.png");
         this.gameWidth = gameWidth;
-
     }
 
     public void setMovingLeft(boolean movingLeft) {

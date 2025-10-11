@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
+    private static final double BALL_SPEED = 3.5;
     private final int gameWidth;
     private final int gameHeight;
 
@@ -64,10 +65,25 @@ public class GameManager {
         checkCollisions();
     }
 
+    private void normalizeBallSpeed(Ball ball) {
+        double v = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+        if (v == 0) return;
+        ball.dx = ball.dx / v * BALL_SPEED;
+        ball.dy = ball.dy / v * BALL_SPEED;
+    }
+
     private void checkCollisions() {
         //ball va chạm với tường
-        if (ball.getX() <= 0 || ball.getX() >= gameWidth - ball.getWidth()) ball.dx *= -1;
-        if (ball.getY() <= 0) ball.dy *= -1;
+        if (ball.getX() <= 0 || ball.getX() >= gameWidth - ball.getWidth()) {
+            ball.dx *= -1;
+            normalizeBallSpeed(ball);
+
+        }
+        if (ball.getY() <= 0) {
+            ball.dy *= -1;
+            normalizeBallSpeed(ball);
+        }
+
 
         //ball va chạm với paddle
         if (ball.getBounds().intersects(paddle.getBounds())) {
@@ -95,6 +111,7 @@ public class GameManager {
                 double hitPosition = (ballCenter - paddleCenter) / (paddle.getWidth() / 2);
                 hitPosition = Math.max(-1, Math.min(1, hitPosition));
                 ball.dx = hitPosition * 3;
+                normalizeBallSpeed(ball);
             }
         }
 
