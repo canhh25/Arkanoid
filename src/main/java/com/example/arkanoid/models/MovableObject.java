@@ -1,10 +1,18 @@
 package com.example.arkanoid.models;
 
-public abstract class MovableObject extends GameObject {
+abstract class MovableObject extends GameObject {
+    protected double dx, dy;
 
-    public MovableObject(double x, double y, double width, double height, String imagePath) {
-        super(x, y, width, height, imagePath);
+    public MovableObject(double x, double y, double width, double height,String imagePath) {
+        super(x, y, width, height,imagePath);
     }
 
-    public abstract void update();
+    public void move() {
+        x += dx;
+        y += dy;
+    }
+
+    public void update() {
+        move();
+    }
 }
