@@ -12,6 +12,10 @@ public class GameManager {
     private List<Brick> bricks;
     private List<MovableObject> movables = new ArrayList<>();
 
+    private boolean brickBrokenThisFrame = false;
+    private boolean brickHitThisFrame = false;
+    private boolean paddleHitThisFrame = false;
+
     private boolean isGameOver = false;
 
     public GameManager(int width, int height) {
@@ -22,7 +26,7 @@ public class GameManager {
 
     public void setupGame() {
         isGameOver = false;
-
+        resetSoundFlags();
         bricks = new ArrayList<>();
         movables = new ArrayList<>();
 
@@ -54,6 +58,8 @@ public class GameManager {
     public void update(boolean goLeft, boolean goRight) {
         if (isGameOver) return;
 
+        resetSoundFlags();
+
         paddle.setMovingLeft(goLeft);
         paddle.setMovingRight(goRight);
 
@@ -62,6 +68,7 @@ public class GameManager {
         }
 
         checkCollisions();
+        playSounds();
     }
 
     private void checkCollisions() {
@@ -70,12 +77,17 @@ public class GameManager {
         if (ball.getBounds().intersects(paddle.getBounds())) {
             ball.dy *= -1;
             ball.setY(paddle.getY() - ball.getHeight());
+            paddleHitThisFrame = true;
         }
 
         for (Brick brick : bricks) {
             if (ball.getBounds().intersects(brick.getBounds())) {
                 ball.dy *= -1;
                 brick.hit();
+                brickHitThisFrame=true;
+                if (brick.isDestroyed()) {
+                    brickBrokenThisFrame = true;
+                }
                 break;
             }
         }
@@ -86,6 +98,25 @@ public class GameManager {
         }
         if (bricks.isEmpty()) {
             isGameOver = true;
+        }
+    }
+
+    private void resetSoundFlags() {
+        brickBrokenThisFrame = false;
+        brickHitThisFrame = false;
+        paddleHitThisFrame = false;
+    }
+
+    private void playSounds() {
+
+        if (brickBrokenThisFrame) {
+            SoundManager.playBrickBreak();
+        }
+        if (brickHitThisFrame) {
+            SoundManager.playBrickHit();
+        }
+        if (paddleHitThisFrame) {
+            SoundManager.playPaddleHit();
         }
     }
 
