@@ -1,7 +1,6 @@
 package com.example.arkanoid.main;
 
 import com.example.arkanoid.controllers.GameController;
-import com.example.arkanoid.models.GameManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -13,8 +12,6 @@ public class Main extends Application {
 
     private static final int WIDTH = 960;
     private static final int HEIGHT = 640;
-    GameManager gameManager = new GameManager(WIDTH, HEIGHT);
-
 
     @Override
     public void start(Stage primaryStage) {

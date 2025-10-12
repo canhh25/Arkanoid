@@ -13,7 +13,6 @@ public class Brick extends GameObject {
         this.type = type;
         this.crackedImagePath = crackedImagePath;
     }
-
     public void hit() {
         if(this.type != 4) {
             this.hitPoints--;
@@ -22,6 +21,7 @@ public class Brick extends GameObject {
             }
         }
     }
+
 
     public boolean isDestroyed() {
         return hitPoints <= 0;
