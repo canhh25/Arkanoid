@@ -20,6 +20,7 @@ public class GameManager {
     public int level;
     private boolean isGameOver = false;
 
+
     public GameManager(int width, int height) {
         this.gameWidth = width;
         this.gameHeight = height;
@@ -42,20 +43,6 @@ public class GameManager {
         movables.add(ball);
 
     }
-
-    public void update(boolean goLeft, boolean goRight) {
-        if (isGameOver) return;
-
-        paddle.setMovingLeft(goLeft);
-        paddle.setMovingRight(goRight);
-
-        for (MovableObject obj : movables) {
-            obj.update();
-        }
-
-        checkCollisions();
-    }
-
     private void normalizeBallSpeed(Ball ball) {
         double v = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
         if (v == 0) return;
@@ -122,6 +109,21 @@ public class GameManager {
             isGameOver = true;
         }
     }
+
+    public void update(boolean goLeft, boolean goRight) {
+        if (isGameOver) return;
+
+        paddle.setMovingLeft(goLeft);
+        paddle.setMovingRight(goRight);
+
+        for (MovableObject obj : movables) {
+            obj.update();
+        }
+
+        checkCollisions();
+    }
+
+
 
     public Paddle getPaddle() {
         return paddle;
