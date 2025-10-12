@@ -1,9 +1,5 @@
 package com.example.arkanoid.models;
 
-import java.awt.*;
-import java.io.IOException;
-
-import java.io.IOException;
 
 public class Ball extends MovableObject {
     public double dx, dy;
