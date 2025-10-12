@@ -49,7 +49,6 @@ public class LevelLoader {
         };
         LEVELS.add(level4);
 
-// Level 5 – Viền 3, trong caro 1–2
         int[][] level5 = {
                 {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
                 {3, 1, 2, 1, 2, 1, 2, 1, 2, 3},
@@ -60,7 +59,6 @@ public class LevelLoader {
         };
         LEVELS.add(level5);
 
-// Level 6 – Kim cương 2, cột 3 chắn bóng
         int[][] level6 = {
                 {0, 0, 0, 2, 2, 2, 2, 0, 0, 0},
                 {0, 0, 2, 2, 1, 1, 2, 2, 0, 0},

@@ -84,7 +84,6 @@ public class GameManager {
             double ballTop = ball.getY();
             double ballBottom = ball.getY() + ball.getHeight();
 
-            // Biên của paddle
             double paddleLeft = paddle.getX();
             double paddleRight = paddle.getX() + paddle.getWidth();
             double paddleTop = paddle.getY();
