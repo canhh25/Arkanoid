@@ -1,5 +1,7 @@
 package com.example.arkanoid.models;
 
+import com.example.arkanoid.utils.LevelLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +23,16 @@ public class GameManager {
     public GameManager(int width, int height) {
         this.gameWidth = width;
         this.gameHeight = height;
+        this.score = 0;
+        this.lives = 3;
+        this.level = 6;
         setupGame();
     }
 
     public void setupGame() {
         isGameOver = false;
 
-        bricks = new ArrayList<>();
+        bricks = LevelLoader.loadLevel(this.level);
         movables = new ArrayList<>();
 
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
@@ -36,23 +41,6 @@ public class GameManager {
         movables.add(paddle);
         movables.add(ball);
 
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 10; col++) {
-                double x = col * (Brick.BRICK_WIDTH + 10) + 35;
-                double y = row * (Brick.BRICK_HEIGHT + 10) + 50;
-                if (row < 2) {
-                    bricks.add(new Brick(x, y,
-                            2,
-                            "/images/brick/brick_red.png",
-                            "/images/brick/brick_red_cracked.png"));
-                } else {
-                    bricks.add(new Brick(x, y,
-                            1,
-                            "/images/brick/brick_blue.png",
-                            null));
-                }
-            }
-        }
     }
 
     public void update(boolean goLeft, boolean goRight) {

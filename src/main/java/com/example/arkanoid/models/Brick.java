@@ -4,18 +4,22 @@ public class Brick extends GameObject {
     public static final double BRICK_WIDTH = 96;
     public static final double BRICK_HEIGHT = 32;
     public int hitPoints;
+    public int type;
     private final String crackedImagePath;
 
-    public Brick(double x, double y, int hitPoints, String imagePath, String crackedImagePath) {
+    public Brick(double x, double y, int hitPoints, int type, String imagePath, String crackedImagePath) {
         super(x, y, BRICK_WIDTH, BRICK_HEIGHT, imagePath);
         this.hitPoints = hitPoints;
+        this.type = type;
         this.crackedImagePath = crackedImagePath;
     }
 
     public void hit() {
-        this.hitPoints--;
-        if (this.hitPoints == 2 && crackedImagePath != null) {
-            setImage(crackedImagePath);
+        if(this.type != 4) {
+            this.hitPoints--;
+            if((this.hitPoints == 1 && this.type == 2) || this.hitPoints == 2 && this.type == 3) {
+                setImage(crackedImagePath);
+            }
         }
     }
 

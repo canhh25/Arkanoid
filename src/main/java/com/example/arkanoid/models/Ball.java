@@ -3,7 +3,12 @@ package com.example.arkanoid.models;
 import java.awt.*;
 import java.io.IOException;
 
-import static jdk.jfr.internal.SecuritySupport.getResourceAsStream;
+//import static jdk.jfr.internal.SecuritySupport.getResourceAsStream;
+
+//import java.awt.*;
+import java.io.IOException;
+
+//import static jdk.jfr.internal.SecuritySupport.getResourceAsStream;
 
 public class Ball extends MovableObject {
     public double dx, dy;
