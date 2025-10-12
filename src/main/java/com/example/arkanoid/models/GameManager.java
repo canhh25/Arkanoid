@@ -13,6 +13,9 @@ public class GameManager {
     private List<Brick> bricks;
     private List<MovableObject> movables = new ArrayList<>();
 
+    public int score;
+    public int lives;
+    public int level;
     private boolean isGameOver = false;
 
     public GameManager(int width, int height) {
