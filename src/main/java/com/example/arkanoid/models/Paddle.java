@@ -30,6 +30,14 @@ public class Paddle extends MovableObject {
         this.movingRight = movingRight;
     }
 
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
     @Override
     public void update() {
         if (movingLeft && x > 0) {
