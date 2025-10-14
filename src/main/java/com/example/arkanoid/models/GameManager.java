@@ -1,6 +1,7 @@
 package com.example.arkanoid.models;
 
 import com.example.arkanoid.utils.LevelLoader;
+import com.example.arkanoid.utils.SoundManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,20 +19,22 @@ public class GameManager {
     public int score;
     public int lives;
     public int level;
-    private boolean isGameOver = false;
-
+    private boolean brickBrokenThisFrame = false;
+    private boolean brickHitThisFrame = false;
+    private boolean paddleHitThisFrame = false;
+    private GameState gameState =  GameState.PAUSED;
     public GameManager(int width, int height) {
         this.gameWidth = width;
         this.gameHeight = height;
         this.score = 0;
         this.lives = 3;
-        this.level = 6;
+        this.level = 5;
         setupGame();
     }
 
     public void setupGame() {
-        isGameOver = false;
-
+        gameState = GameState.RUNNING;
+        resetSoundFlags();
         bricks = LevelLoader.loadLevel(this.level);
         movables = new ArrayList<>();
 
@@ -44,8 +47,8 @@ public class GameManager {
     }
 
     public void update(boolean goLeft, boolean goRight) {
-        if (isGameOver) return;
-
+        if (gameState == GameState.GAME_OVER) return;
+        resetSoundFlags();
         paddle.setMovingLeft(goLeft);
         paddle.setMovingRight(goRight);
 
@@ -54,6 +57,7 @@ public class GameManager {
         }
 
         checkCollisions();
+        playSounds();
     }
 
     private void normalizeBallSpeed(Ball ball) {
@@ -110,20 +114,60 @@ public class GameManager {
         for (Brick brick : bricks) {
             if (ball.getBounds().intersects(brick.getBounds())) {
                 ball.dy *= -1;
+                brickHitThisFrame = true;
+                if(brick.hitPoints == 1) {
+                    this.score += (brick.type * 10);
+                    brickBrokenThisFrame = true;
+                }
                 brick.hit();
                 break;
             }
         }
+        System.out.println(this.score);
         bricks.removeIf(Brick::isDestroyed);
 
+        // Kiểm tra nếu hết brick(trừ brick không thể phá) thì qua màn.
+        int countBrick = 0;
+        for(Brick  brick : bricks) {
+            if(brick.type != 4) {
+                countBrick++;
+            }
+        }
+        if(countBrick == 0) {
+            gameState = GameState.WIN;
+        }
         if (ball.getY() > gameHeight) {
-            isGameOver = true;
+            this.lives--;
+            if(this.lives == 0) {
+                gameState = GameState.GAME_OVER;
+            } else {
+                setupGame();
+            }
+
         }
         if (bricks.isEmpty()) {
-            isGameOver = true;
+            gameState = GameState.GAME_OVER;
         }
     }
+    private void resetSoundFlags() {
+        brickBrokenThisFrame = false;
+        brickHitThisFrame = false;
+        paddleHitThisFrame = false;
+    }
 
+    private void playSounds() {
+        new Thread(() -> {
+            if (brickBrokenThisFrame) {
+                SoundManager.playBrickBreak();
+            }
+            if (brickHitThisFrame) {
+                SoundManager.playBrickHit();
+            }
+            if (paddleHitThisFrame) {
+                SoundManager.playPaddleHit();
+            }
+        }).start();
+    }
     public Paddle getPaddle() {
         return paddle;
     }
@@ -137,6 +181,9 @@ public class GameManager {
     }
 
     public boolean isGameOver() {
-        return isGameOver;
+        return gameState == GameState.GAME_OVER;
+    }
+    public int getScore() {
+        return this.score;
     }
 }

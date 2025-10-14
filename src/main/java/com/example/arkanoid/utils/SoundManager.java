@@ -1,4 +1,4 @@
-package com.example.arkanoid.models;
+package com.example.arkanoid.utils;
 import javafx.scene.media.AudioClip;
 import java.util.ArrayList;
 import java.util.List;
