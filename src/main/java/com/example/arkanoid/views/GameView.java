@@ -1,10 +1,12 @@
 package com.example.arkanoid.views;
 
+import com.example.arkanoid.main.Main;
 import com.example.arkanoid.models.Brick;
 import com.example.arkanoid.models.GameManager;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 public class GameView {
@@ -36,4 +38,5 @@ public class GameView {
             gc.fillText("Press SPACE to Restart", WIDTH / 2.0, HEIGHT / 2.0 + 40);
         }
     }
+
 }
