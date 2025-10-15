@@ -5,8 +5,8 @@ import javafx.scene.image.Image;
 
 public class Paddle extends MovableObject {
     public static final double PADDLE_SPEED = 5;
-    public static final double WIDTH = 100;
-    public static final double HEIGHT = 30;
+    public static final double PADDLE_WIDTH = 100;
+    public static final double PADDLE_HEIGHT= 30;
 
     private boolean movingLeft = false;
     private boolean movingRight = false;
@@ -18,7 +18,7 @@ public class Paddle extends MovableObject {
     private int frameTimer = 0;
 
     public Paddle(double x, double y, double gameWidth) {
-        super(x, y, WIDTH, HEIGHT, "/images/paddle/bat0.png");
+        super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT, "/images/paddle/bat0.png");
         this.gameWidth = gameWidth;
     }
 

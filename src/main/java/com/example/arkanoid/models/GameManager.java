@@ -1,5 +1,8 @@
 package com.example.arkanoid.models;
 
+import com.example.arkanoid.utils.LevelLoader;
+import com.example.arkanoid.utils.SoundManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,18 +16,26 @@ public class GameManager {
     private List<Brick> bricks;
     private List<MovableObject> movables = new ArrayList<>();
 
-    private boolean isGameOver = false;
-
+    public int score;
+    public int lives;
+    public int level;
+    private boolean brickBrokenThisFrame = false;
+    private boolean brickHitThisFrame = false;
+    private boolean paddleHitThisFrame = false;
+    private GameState gameState =  GameState.PAUSED;
     public GameManager(int width, int height) {
         this.gameWidth = width;
         this.gameHeight = height;
+        this.score = 0;
+        this.lives = 3;
+        this.level = 5;
         setupGame();
     }
 
     public void setupGame() {
-        isGameOver = false;
-
-        bricks = new ArrayList<>();
+        gameState = GameState.RUNNING;
+        resetSoundFlags();
+        bricks = LevelLoader.loadLevel(this.level);
         movables = new ArrayList<>();
 
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
@@ -33,28 +44,11 @@ public class GameManager {
         movables.add(paddle);
         movables.add(ball);
 
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 10; col++) {
-                double x = col * (Brick.BRICK_WIDTH + 10) + 35;
-                double y = row * (Brick.BRICK_HEIGHT + 10) + 50;
-                if (row < 2) {
-                    bricks.add(new Brick(x, y,
-                            2,
-                            "/images/brick/brick_red.png",
-                            "/images/brick/brick_red_cracked.png"));
-                } else {
-                    bricks.add(new Brick(x, y,
-                            1,
-                            "/images/brick/brick_blue.png",
-                            null));
-                }
-            }
-        }
     }
 
     public void update(boolean goLeft, boolean goRight) {
-        if (isGameOver) return;
-
+        if (gameState == GameState.GAME_OVER) return;
+        resetSoundFlags();
         paddle.setMovingLeft(goLeft);
         paddle.setMovingRight(goRight);
 
@@ -63,6 +57,7 @@ public class GameManager {
         }
 
         checkCollisions();
+        playSounds();
     }
 
     private void normalizeBallSpeed(Ball ball) {
@@ -119,20 +114,60 @@ public class GameManager {
         for (Brick brick : bricks) {
             if (ball.getBounds().intersects(brick.getBounds())) {
                 ball.dy *= -1;
+                brickHitThisFrame = true;
+                if(brick.hitPoints == 1) {
+                    this.score += (brick.type * 10);
+                    brickBrokenThisFrame = true;
+                }
                 brick.hit();
                 break;
             }
         }
+        System.out.println(this.score);
         bricks.removeIf(Brick::isDestroyed);
 
+        // Kiểm tra nếu hết brick(trừ brick không thể phá) thì qua màn.
+        int countBrick = 0;
+        for(Brick  brick : bricks) {
+            if(brick.type != 4) {
+                countBrick++;
+            }
+        }
+        if(countBrick == 0) {
+            gameState = GameState.WIN;
+        }
         if (ball.getY() > gameHeight) {
-            isGameOver = true;
+            this.lives--;
+            if(this.lives == 0) {
+                gameState = GameState.GAME_OVER;
+            } else {
+                setupGame();
+            }
+
         }
         if (bricks.isEmpty()) {
-            isGameOver = true;
+            gameState = GameState.GAME_OVER;
         }
     }
+    private void resetSoundFlags() {
+        brickBrokenThisFrame = false;
+        brickHitThisFrame = false;
+        paddleHitThisFrame = false;
+    }
 
+    private void playSounds() {
+        new Thread(() -> {
+            if (brickBrokenThisFrame) {
+                SoundManager.playBrickBreak();
+            }
+            if (brickHitThisFrame) {
+                SoundManager.playBrickHit();
+            }
+            if (paddleHitThisFrame) {
+                SoundManager.playPaddleHit();
+            }
+        }).start();
+    }
     public Paddle getPaddle() {
         return paddle;
     }
@@ -146,6 +181,9 @@ public class GameManager {
     }
 
     public boolean isGameOver() {
-        return isGameOver;
+        return gameState == GameState.GAME_OVER;
+    }
+    public int getScore() {
+        return this.score;
     }
 }
