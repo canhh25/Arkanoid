@@ -1,4 +1,7 @@
-package com.example.arkanoid.models;
+package com.example.arkanoid.models.Power;
+
+import com.example.arkanoid.models.GameObject;
+import com.example.arkanoid.models.Paddle;
 
 public abstract class PowerUp extends GameObject {
     protected String type;
