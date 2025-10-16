@@ -24,13 +24,14 @@ public class GameManager {
     private boolean brickHitThisFrame = false;
     private boolean paddleHitThisFrame = false;
     private GameState gameState =  GameState.PAUSED;
+
     public GameManager(int width, int height) {
         this.gameWidth = width;
         this.gameHeight = height;
         this.score = 0;
         this.lives = 3;
         this.level = 5;
-        PowerUpManager.setGameManager(this);
+        PowerUpManager.setGameManager(this); // THÊM DÒNG NÀY
         setupGame();
     }
 
@@ -39,13 +40,13 @@ public class GameManager {
         resetSoundFlags();
         bricks = LevelLoader.loadLevel(this.level);
         movables = new ArrayList<>();
-        PowerUpManager.clearPowerUps();
+        PowerUpManager.clearPowerUps(); // THÊM: Clear powerups khi reset game
+
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
         ball = new Ball(gameWidth / 2.0 - 10, gameHeight - 80);
 
         movables.add(paddle);
         movables.add(ball);
-
     }
 
     public void update(boolean goLeft, boolean goRight) {
@@ -58,7 +59,9 @@ public class GameManager {
             obj.update();
         }
 
+        // THÊM: Update powerups
         PowerUpManager.updatePowerUps(paddle);
+
         checkCollisions();
         playSounds();
     }
@@ -75,13 +78,11 @@ public class GameManager {
         if (ball.getX() <= 0 || ball.getX() >= gameWidth - ball.getWidth()) {
             ball.dx *= -1;
             normalizeBallSpeed(ball);
-
         }
         if (ball.getY() <= 0) {
             ball.dy *= -1;
             normalizeBallSpeed(ball);
         }
-
 
         //ball va chạm với paddle
         if (ball.getBounds().intersects(paddle.getBounds())) {
@@ -102,8 +103,8 @@ public class GameManager {
                 // Đặt bóng lên trên mặt paddle, tránh mắc kẹt trong paddle
                 ball.setY(paddleTop - ball.getHeight());
                 ball.dy = -Math.abs(ball.dy);
-
                 paddleHitThisFrame = true;
+
                 // Tính vị trí chạm để xác định hướng bật ngang
                 double paddleCenter = paddleLeft + paddle.getWidth() / 2;
                 double ballCenter = ballLeft + ball.getWidth() / 2;
@@ -123,7 +124,7 @@ public class GameManager {
                     this.score += (brick.type * 10);
                     brickBrokenThisFrame = true;
                 }
-                brick.hit();
+                brick.hit(); // Trong phương thức hit() sẽ tự động spawn powerup nếu brick bị phá
                 break;
             }
         }
@@ -147,12 +148,12 @@ public class GameManager {
             } else {
                 setupGame();
             }
-
         }
         if (bricks.isEmpty()) {
             gameState = GameState.GAME_OVER;
         }
     }
+
     private void resetSoundFlags() {
         brickBrokenThisFrame = false;
         brickHitThisFrame = false;
@@ -172,9 +173,25 @@ public class GameManager {
             }
         }).start();
     }
+
+    // THÊM: Phương thức render powerups
     public void renderPowerUps(GraphicsContext gc) {
         PowerUpManager.renderPowerUps(gc);
     }
+
+    // THÊM: Các phương thức getter cần thiết
+    public int getLives() {
+        return lives;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getGameHeight() {
+        return gameHeight;
+    }
+
     public Paddle getPaddle() {
         return paddle;
     }
@@ -190,11 +207,8 @@ public class GameManager {
     public boolean isGameOver() {
         return gameState == GameState.GAME_OVER;
     }
+
     public int getScore() {
         return this.score;
-    }
-
-    public int getGameHeight() {
-        return gameHeight;
     }
 }
