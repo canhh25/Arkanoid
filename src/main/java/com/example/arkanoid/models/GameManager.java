@@ -102,6 +102,7 @@ public class GameManager {
                 // Đặt bóng lên trên mặt paddle, tránh mắc kẹt trong paddle
                 ball.setY(paddleTop - ball.getHeight());
                 ball.dy = -Math.abs(ball.dy);
+
                 paddleHitThisFrame = true;
                 // Tính vị trí chạm để xác định hướng bật ngang
                 double paddleCenter = paddleLeft + paddle.getWidth() / 2;
@@ -117,11 +118,10 @@ public class GameManager {
         for (Brick brick : bricks) {
             if (ball.getBounds().intersects(brick.getBounds())) {
                 ball.dy *= -1;
-                brickBrokenThisFrame = true;
+                brickHitThisFrame = true;
                 if(brick.hitPoints == 1) {
                     this.score += (brick.type * 10);
-
-                    brickHitThisFrame = true;
+                    brickBrokenThisFrame = true;
                 }
                 brick.hit();
                 break;
@@ -193,8 +193,8 @@ public class GameManager {
     public int getScore() {
         return this.score;
     }
+
     public int getGameHeight() {
         return gameHeight;
     }
-
 }
