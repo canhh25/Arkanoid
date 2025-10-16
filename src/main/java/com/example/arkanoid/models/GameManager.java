@@ -2,6 +2,7 @@ package com.example.arkanoid.models;
 
 import com.example.arkanoid.utils.LevelLoader;
 import com.example.arkanoid.utils.SoundManager;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class GameManager {
         this.score = 0;
         this.lives = 3;
         this.level = 5;
+        PowerUpManager.setGameManager(this);
         setupGame();
     }
 
@@ -37,7 +39,7 @@ public class GameManager {
         resetSoundFlags();
         bricks = LevelLoader.loadLevel(this.level);
         movables = new ArrayList<>();
-
+        PowerUpManager.clearPowerUps();
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
         ball = new Ball(gameWidth / 2.0 - 10, gameHeight - 80);
 
@@ -56,6 +58,7 @@ public class GameManager {
             obj.update();
         }
 
+        PowerUpManager.updatePowerUps(paddle);
         checkCollisions();
         playSounds();
     }
@@ -99,7 +102,7 @@ public class GameManager {
                 // Đặt bóng lên trên mặt paddle, tránh mắc kẹt trong paddle
                 ball.setY(paddleTop - ball.getHeight());
                 ball.dy = -Math.abs(ball.dy);
-
+                paddleHitThisFrame = true;
                 // Tính vị trí chạm để xác định hướng bật ngang
                 double paddleCenter = paddleLeft + paddle.getWidth() / 2;
                 double ballCenter = ballLeft + ball.getWidth() / 2;
@@ -114,10 +117,11 @@ public class GameManager {
         for (Brick brick : bricks) {
             if (ball.getBounds().intersects(brick.getBounds())) {
                 ball.dy *= -1;
-                brickHitThisFrame = true;
+                brickBrokenThisFrame = true;
                 if(brick.hitPoints == 1) {
                     this.score += (brick.type * 10);
-                    brickBrokenThisFrame = true;
+
+                    brickHitThisFrame = true;
                 }
                 brick.hit();
                 break;
@@ -168,6 +172,9 @@ public class GameManager {
             }
         }).start();
     }
+    public void renderPowerUps(GraphicsContext gc) {
+        PowerUpManager.renderPowerUps(gc);
+    }
     public Paddle getPaddle() {
         return paddle;
     }
@@ -186,4 +193,8 @@ public class GameManager {
     public int getScore() {
         return this.score;
     }
+    public int getGameHeight() {
+        return gameHeight;
+    }
+
 }

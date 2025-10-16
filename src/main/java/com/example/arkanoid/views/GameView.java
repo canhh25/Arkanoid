@@ -17,12 +17,14 @@ public class GameView {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, WIDTH, HEIGHT);
 
+
         if (!gameManager.isGameOver()) {
             gameManager.getPaddle().render(gc);
             gameManager.getBall().render(gc);
             for (Brick brick : gameManager.getBricks()) {
                 brick.render(gc);
             }
+            gameManager.renderPowerUps(gc);
         } else {
             gc.setFill(Color.WHITE);
             gc.setFont(new Font("Arial", 40));

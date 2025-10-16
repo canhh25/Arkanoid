@@ -13,28 +13,26 @@ public abstract class GameObject {
         this.y = y;
         this.width = width;
         this.height = height;
-        try {
-            this.image = new Image(getClass().getResourceAsStream(imagePath));
-        } catch (Exception e) {
-            e.printStackTrace();
-            this.width = 0;
-            this.height = 0;
+        if (imagePath != null) {
+            try {
+                this.image = new Image(getClass().getResourceAsStream(imagePath));
+            } catch (Exception e) {
+                System.out.println("Cannot load image: " + imagePath);
+                // KHÔNG set width, height = 0 vì sẽ ảnh hưởng đến collision detection
+            }
         }
     }
 
-    protected void setImage(String imagePath) {
+    public void setImage(String imagePath) {
         try {
             this.image = new Image(getClass().getResourceAsStream(imagePath));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Cannot load image: " + imagePath);
         }
     }
 
-    public void render(GraphicsContext gc) {
-        if (image != null) {
-            gc.drawImage(image, x, y, width, height);
-        }
-    }
+    // XÓA PHƯƠNG THỨC RENDER(GraphicsContext gc) Ở ĐÂY
+    // Chỉ giữ phương thức abstract
 
     public Rectangle2D getBounds() {
         return new Rectangle2D(x, y, width, height);
@@ -44,6 +42,10 @@ public abstract class GameObject {
     public double getY() { return y; }
     public double getWidth() { return width; }
     public double getHeight() { return height; }
+    public Image getImage() { return image; }
     public void setX(double x) { this.x = x; }
     public void setY(double y) { this.y = y; }
+
+    // CHỈ GIỮ LẠI PHƯƠNG THỨC ABSTRACT CHO JavaFX
+    public abstract void render(GraphicsContext gc);
 }
