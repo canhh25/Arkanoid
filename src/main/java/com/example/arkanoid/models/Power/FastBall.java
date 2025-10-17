@@ -1,6 +1,7 @@
 package com.example.arkanoid.models.Power;
 
 import com.example.arkanoid.models.Ball;
+import com.example.arkanoid.models.Paddle;
 
 public class FastBall extends PowerUp {
     private static final double SPEED_SCALE = 1.5;
@@ -30,4 +31,7 @@ public class FastBall extends PowerUp {
             isActive = false;
         }
     }
+
+    @Override public void applyEffect(Paddle paddle) {}
+    @Override public void removeEffect(Paddle paddle) {}
 }

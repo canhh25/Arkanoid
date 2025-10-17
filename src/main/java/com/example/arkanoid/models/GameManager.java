@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
-    private static final double BALL_SPEED = 3.5;
+    private static final double BALL_SPEED = 2;
     private final int gameWidth;
     private final int gameHeight;
 
@@ -22,7 +22,9 @@ public class GameManager {
     private boolean brickBrokenThisFrame = false;
     private boolean brickHitThisFrame = false;
     private boolean paddleHitThisFrame = false;
-    private GameState gameState =  GameState.PAUSED;
+    private boolean waitingLaunch = true;
+    private GameState gameState = GameState.PAUSED;
+
     public GameManager(int width, int height) {
         this.gameWidth = width;
         this.gameHeight = height;
@@ -39,11 +41,25 @@ public class GameManager {
         movables = new ArrayList<>();
 
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
-        ball = new Ball(gameWidth / 2.0 - 10, gameHeight - 80);
+        ball = new Ball(gameWidth / 2.0 - 10, gameHeight - 80, BALL_SPEED);
 
+        waitingLaunch = true;
+        ball.setDx(0);
+        ball.setDy(0);
+        ball.setX(paddle.getX() + paddle.getWidth() / 2 - ball.getWidth() / 2);
+        ball.setY(paddle.getY() - ball.getHeight());
         movables.add(paddle);
         movables.add(ball);
+    }
 
+    public void requestLaunch() {
+        if (waitingLaunch && gameState == GameState.RUNNING) {
+            waitingLaunch = false;
+            // bắn lên trên, lệch phải 60 độ
+            double angle = Math.toRadians(-60);
+            ball.dx = BALL_SPEED * Math.cos(angle);
+            ball.dy = BALL_SPEED * Math.sin(angle);
+        }
     }
 
     public void update(boolean goLeft, boolean goRight) {
@@ -51,11 +67,14 @@ public class GameManager {
         resetSoundFlags();
         paddle.setMovingLeft(goLeft);
         paddle.setMovingRight(goRight);
-
-        for (MovableObject obj : movables) {
-            obj.update();
+        paddle.update();
+        if (waitingLaunch) {
+            // dán bóng theo paddle, không cho bóng chạy & không check va chạm
+            ball.setX(paddle.getX() + paddle.getWidth() / 2 - ball.getWidth() / 2);
+            ball.setY(paddle.getY() - ball.getHeight());
+            return;
         }
-
+        ball.update();
         checkCollisions();
         playSounds();
     }
@@ -79,12 +98,10 @@ public class GameManager {
             normalizeBallSpeed(ball);
         }
 
-
         //ball va chạm với paddle
         if (ball.getBounds().intersects(paddle.getBounds())) {
             // Biên của ball
             double ballLeft = ball.getX();
-            double ballRight = ball.getX() + ball.getWidth();
             double ballTop = ball.getY();
             double ballBottom = ball.getY() + ball.getHeight();
 
@@ -98,15 +115,25 @@ public class GameManager {
             if (ball.dy > 0 && ballBottom >= paddleTop && ballTop < paddleTop) {
                 // Đặt bóng lên trên mặt paddle, tránh mắc kẹt trong paddle
                 ball.setY(paddleTop - ball.getHeight());
-                ball.dy = -Math.abs(ball.dy);
 
-                // Tính vị trí chạm để xác định hướng bật ngang
-                double paddleCenter = paddleLeft + paddle.getWidth() / 2;
-                double ballCenter = ballLeft + ball.getWidth() / 2;
-                double hitPosition = (ballCenter - paddleCenter) / (paddle.getWidth() / 2);
+                // Tính vị trí chạm để xác định góc bật
+                double paddleCenter = paddleLeft + paddle.getWidth() / 2.0;
+                double ballCenter = ballLeft + ball.getWidth() / 2.0;
+                double hitPosition = (ballCenter - paddleCenter) / (paddle.getWidth() / 2.0); // [-1..1]
                 hitPosition = Math.max(-1, Math.min(1, hitPosition));
-                ball.dx = hitPosition * 3;
-                normalizeBallSpeed(ball);
+
+                double MAX_DEFLECT = Math.toRadians(60);
+                double angle = -Math.PI / 2 + hitPosition * MAX_DEFLECT;
+
+                double MIN_AWAY = Math.toRadians(10);
+                double away = Math.abs(angle + Math.PI / 2);
+                if (away < MIN_AWAY) {
+                    angle = (angle < -Math.PI / 2) ? -Math.PI / 2 - MIN_AWAY : -Math.PI / 2 + MIN_AWAY;
+                }
+
+                ball.dx = BALL_SPEED * Math.cos(angle);
+                ball.dy = BALL_SPEED * Math.sin(angle);
+                paddleHitThisFrame = true;
             }
         }
 
@@ -114,8 +141,9 @@ public class GameManager {
         for (Brick brick : bricks) {
             if (ball.getBounds().intersects(brick.getBounds())) {
                 ball.dy *= -1;
+                normalizeBallSpeed(ball);
                 brickHitThisFrame = true;
-                if(brick.hitPoints == 1) {
+                if (brick.hitPoints == 1) {
                     this.score += (brick.type * 10);
                     brickBrokenThisFrame = true;
                 }
@@ -128,17 +156,17 @@ public class GameManager {
 
         // Kiểm tra nếu hết brick(trừ brick không thể phá) thì qua màn.
         int countBrick = 0;
-        for(Brick  brick : bricks) {
-            if(brick.type != 4) {
+        for (Brick brick : bricks) {
+            if (brick.type != 4) {
                 countBrick++;
             }
         }
-        if(countBrick == 0) {
+        if (countBrick == 0) {
             gameState = GameState.WIN;
         }
         if (ball.getY() > gameHeight) {
             this.lives--;
-            if(this.lives == 0) {
+            if (this.lives == 0) {
                 gameState = GameState.GAME_OVER;
             } else {
                 setupGame();
@@ -149,6 +177,7 @@ public class GameManager {
             gameState = GameState.GAME_OVER;
         }
     }
+
     private void resetSoundFlags() {
         brickBrokenThisFrame = false;
         brickHitThisFrame = false;
@@ -168,6 +197,7 @@ public class GameManager {
             }
         }).start();
     }
+
     public Paddle getPaddle() {
         return paddle;
     }
@@ -183,6 +213,7 @@ public class GameManager {
     public boolean isGameOver() {
         return gameState == GameState.GAME_OVER;
     }
+
     public int getScore() {
         return this.score;
     }

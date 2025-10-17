@@ -1,5 +1,6 @@
 package com.example.arkanoid.models.Power;
 
+import com.example.arkanoid.models.Ball;
 import com.example.arkanoid.models.GameObject;
 import com.example.arkanoid.models.Paddle;
 
@@ -27,4 +28,7 @@ public abstract class PowerUp extends GameObject {
     public abstract void applyEffect(Paddle paddle);
 
     public abstract void removeEffect(Paddle paddle);
+
+    public void applyEffect(Ball ball) {}
+    public void removeEffect(Ball ball) {}
 }
