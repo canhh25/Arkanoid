@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class Paddle extends MovableObject {
     public static final double PADDLE_SPEED = 5;
-    public static final double PADDLE_WIDTH = 100;
-    public static final double PADDLE_HEIGHT= 30;
+    public static double paddle_width = 100;
+    public static double paddle_height = 30;
 
     private boolean movingLeft = false;
     private boolean movingRight = false;
@@ -20,7 +20,7 @@ public class Paddle extends MovableObject {
     private int frameTimer = 0;
 
     public Paddle(double x, double y, double gameWidth) {
-        super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT, "/images/paddle/bat0.png");
+        super(x, y, paddle_width, paddle_height, "/images/paddle/bat0.png");
         this.gameWidth = gameWidth;
     }
 
@@ -60,4 +60,19 @@ public class Paddle extends MovableObject {
         }
     }
 
+    public double getWidth() {
+        return paddle_width;
+    }
+
+    public void setWidth(double paddle_width) {
+        Paddle.paddle_width = paddle_width;
+    }
+
+    public double getHeight() {
+        return paddle_height;
+    }
+
+    public void setHeight(double paddle_height) {
+        Paddle.paddle_height = paddle_height;
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.arkanoid.models;
 
+import com.example.arkanoid.models.Power.ExtraLifePowerUp;
+import com.example.arkanoid.models.Power.PowerUpManager;
 import com.example.arkanoid.utils.LevelLoader;
 import com.example.arkanoid.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
-    private static final double BALL_SPEED = 3.5;
+    private static final double BALL_SPEED = 2.5;
     private final int gameWidth;
     private final int gameHeight;
 
@@ -60,7 +62,7 @@ public class GameManager {
         }
 
         // THÊM: Update powerups
-        PowerUpManager.updatePowerUps(paddle);
+        PowerUpManager.updatePowerUps(paddle, ball);
 
         checkCollisions();
         playSounds();
@@ -128,7 +130,7 @@ public class GameManager {
                 break;
             }
         }
-        System.out.println(this.score);
+//        System.out.println(this.score);
         bricks.removeIf(Brick::isDestroyed);
 
         // Kiểm tra nếu hết brick(trừ brick không thể phá) thì qua màn.

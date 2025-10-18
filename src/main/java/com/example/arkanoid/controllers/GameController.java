@@ -60,7 +60,7 @@ public class GameController {
 
     }
     private void drawScore() {
-        String scoreText = "Score: " + gameManager.getScore();
+        String scoreText = "Lives: " + gameManager.getLives();
         double padding = 20;
 
         gc.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
