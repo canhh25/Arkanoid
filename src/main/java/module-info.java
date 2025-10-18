@@ -3,6 +3,7 @@ module com.example.arkanoid {
     requires javafx.fxml;
     requires javafx.media;
     requires javafx.graphics;
+    requires java.desktop;
 //    requires com.example.arkanoid;
 
     opens com.example.arkanoid.main to javafx.fxml;

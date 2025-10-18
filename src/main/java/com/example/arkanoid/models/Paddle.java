@@ -3,6 +3,8 @@ package com.example.arkanoid.models;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.awt.*;
+
 public class Paddle extends MovableObject {
     public static final double PADDLE_SPEED = 5;
     public static final double PADDLE_WIDTH = 100;
@@ -49,4 +51,13 @@ public class Paddle extends MovableObject {
 
         render(gc);
     }
+    public void render(GraphicsContext gc) {
+        if (getImage() != null) {
+            gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
+        } else {
+            gc.setFill(javafx.scene.paint.Color.BLUE);
+            gc.fillRect(getX(), getY(), getWidth(), getHeight());
+        }
+    }
+
 }
