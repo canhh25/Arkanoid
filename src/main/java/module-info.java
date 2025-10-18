@@ -13,4 +13,5 @@ module com.example.arkanoid {
     exports com.example.arkanoid.controllers;
     exports com.example.arkanoid.models;
     exports com.example.arkanoid.utils;
+    exports com.example.arkanoid.models.Power;
 }
