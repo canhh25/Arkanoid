@@ -1,15 +1,17 @@
 package com.example.arkanoid.models.Power;
 
 import com.example.arkanoid.models.Ball;
+import javafx.scene.canvas.GraphicsContext;
 
-public class FastBall extends PowerUp {
+public class FastBall extends PowerUp<Ball> {
     private static final double SPEED_SCALE = 1.5;
     private double baseDx;
     private double baseDy;
-
+    public static final double DURATION = 100;
     public FastBall(double x, double y) {
-        super(x, y, 14, 14, "FastBall", 10000, "/images/ball/ball.png");
+        super(x, y, 14, 14, "FAST_BALL");
     }
+
 
     @Override
     public void applyEffect(Ball ball) {
@@ -29,5 +31,10 @@ public class FastBall extends PowerUp {
             ball.setDy(baseDy);
             isActive = false;
         }
+    }
+
+    @Override
+    public void render(GraphicsContext gc) {
+
     }
 }
