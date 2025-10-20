@@ -18,7 +18,7 @@ public class MenuController {
 
     @FXML
     private void handleHelp(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/views/ViewMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/views/MenuView.fxml"));
         Parent root = loader.load();
 
         Stage stage = new Stage();
@@ -30,7 +30,7 @@ public class MenuController {
 
     @FXML
     private void handleEsc(ActionEvent event) {
-        Stage stage = (Stage) btnExit.getScene().getWindow();
+        Stage stage = (Stage) btnEsc.getScene().getWindow();
         stage.close();
     }
 
