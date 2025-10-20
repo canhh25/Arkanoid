@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="640.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.arkanoid.controllers.MenuController">
+
+    <ImageView fitHeight="640.0" fitWidth="960.0" layoutX="118.0" layoutY="66.0"
+               pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+        <Image url="@../../../../../resources/images/menu/menu.png" />
+
+    </ImageView>
+    <Button fx:id="btnStart" layoutX="373.0" layoutY="291.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="98.0" prefWidth="214.0" style="-fx-background-color: transparent;" />
+    <Button fx:id="btnHelp" layoutX="368.0" layoutY="413.0" mnemonicParsing="false" onAction="#handleHelp" prefHeight="98.0" prefWidth="214.0" style="-fx-background-color: transparent;" />
+    <Button fx:id="btnEsc" layoutX="21.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleEsc" prefHeight="52.0" prefWidth="78.0" style="-fx-background-color: transparent;" />
+    <Button fx:id="btnSound" layoutX="859.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleSound" prefHeight="43.0" prefWidth="68.0" style="-fx-background-color: transparent;" />
+
+</AnchorPane>
