@@ -1,7 +1,7 @@
 package com.example.arkanoid.models;
 
 public class Brick extends GameObject {
-    public static final double BRICK_WIDTH = 48;
+    public static final double BRICK_WIDTH = 960;
     public static final double BRICK_HEIGHT = 16;
     public int hitPoints;
     public int type;

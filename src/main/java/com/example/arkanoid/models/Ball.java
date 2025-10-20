@@ -2,9 +2,26 @@ package com.example.arkanoid.models;
 
 public class Ball extends MovableObject {
     public double dx, dy;
+    private double prevX, prevY;
     private double speed;
     public static final double BALL_WIDTH = 14;
     public static final double BALL_HEIGHT = 14;
+
+    public double getPrevX() {
+        return prevX;
+    }
+
+    public void setPrevX(double prevX) {
+        this.prevX = prevX;
+    }
+
+    public double getPrevY() {
+        return prevY;
+    }
+
+    public void setPrevY(double prevY) {
+        this.prevY = prevY;
+    }
 
     public Ball(double x, double y, double speed) {
         super(x, y, BALL_WIDTH, BALL_HEIGHT, "/images/ball/ball.png");
@@ -47,6 +64,8 @@ public class Ball extends MovableObject {
 
     @Override
     public void update() {
+        prevX = x;
+        prevY = y;
         x += dx;
         y += dy;
     }
