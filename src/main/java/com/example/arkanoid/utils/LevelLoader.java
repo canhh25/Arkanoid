@@ -50,16 +50,6 @@ public class LevelLoader {
         LEVELS.add(level4);
 
         int[][] level5 = {
-                {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
-                {3, 1, 2, 1, 2, 1, 2, 1, 2, 3},
-                {3, 2, 1, 2, 1, 2, 1, 2, 1, 3},
-                {3, 1, 2, 1, 2, 1, 2, 1, 2, 3},
-                {3, 2, 1, 2, 1, 2, 1, 2, 1, 3},
-                {3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
-        };
-        LEVELS.add(level5);
-
-        int[][] level6 = {
                 {0, 0, 0, 2, 2, 2, 2, 0, 0, 0},
                 {0, 0, 2, 2, 1, 1, 2, 2, 0, 0},
                 {0, 2, 2, 1, 3, 3, 1, 2, 2, 0},
@@ -67,7 +57,7 @@ public class LevelLoader {
                 {0, 2, 2, 1, 3, 3, 1, 2, 2, 0},
                 {0, 0, 2, 2, 1, 1, 2, 2, 0, 0}
         };
-        LEVELS.add(level6);
+        LEVELS.add(level5);
     }
 
     public static List<Brick> loadLevel(int level) {
@@ -100,6 +90,18 @@ public class LevelLoader {
                     bricks.add(new Brick(x, y,
                             levelAgain[row][col],
                             2,
+                            imagePath,
+                            crackedImagePath));
+                } else if(levelAgain[row][col] == 3) {
+                    bricks.add(new Brick(x, y,
+                            levelAgain[row][col],
+                            3,
+                            imagePath,
+                            crackedImagePath));
+                } else if(levelAgain[row][col] == 4) {
+                    bricks.add(new Brick(x, y,
+                            levelAgain[row][col],
+                            4,
                             imagePath,
                             crackedImagePath));
                 }

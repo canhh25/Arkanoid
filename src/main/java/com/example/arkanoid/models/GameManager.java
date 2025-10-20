@@ -1,12 +1,16 @@
 package com.example.arkanoid.models;
 
+import com.example.arkanoid.models.Power.ExtraLifePowerUp;
+import com.example.arkanoid.models.Power.PowerUpManager;
 import com.example.arkanoid.utils.LevelLoader;
+import com.example.arkanoid.utils.SoundManager;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
-    private static final double BALL_SPEED = 3.5;
+    private static final double BALL_SPEED = 2.5;
     private final int gameWidth;
     private final int gameHeight;
 
@@ -18,34 +22,38 @@ public class GameManager {
     public int score;
     public int lives;
     public int level;
-    private boolean isGameOver = false;
+    private boolean brickBrokenThisFrame = false;
+    private boolean brickHitThisFrame = false;
+    private boolean paddleHitThisFrame = false;
+    private GameState gameState =  GameState.PAUSED;
 
     public GameManager(int width, int height) {
         this.gameWidth = width;
         this.gameHeight = height;
         this.score = 0;
         this.lives = 3;
-        this.level = 6;
+        this.level = 5;
+        PowerUpManager.setGameManager(this); // THÊM DÒNG NÀY
         setupGame();
     }
 
     public void setupGame() {
-        isGameOver = false;
-
+        gameState = GameState.RUNNING;
+        resetSoundFlags();
         bricks = LevelLoader.loadLevel(this.level);
         movables = new ArrayList<>();
+        PowerUpManager.clearPowerUps(); // THÊM: Clear powerups khi reset game
 
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
         ball = new Ball(gameWidth / 2.0 - 10, gameHeight - 80);
 
         movables.add(paddle);
         movables.add(ball);
-
     }
 
     public void update(boolean goLeft, boolean goRight) {
-        if (isGameOver) return;
-
+        if (gameState == GameState.GAME_OVER) return;
+        resetSoundFlags();
         paddle.setMovingLeft(goLeft);
         paddle.setMovingRight(goRight);
 
@@ -53,7 +61,11 @@ public class GameManager {
             obj.update();
         }
 
+        // THÊM: Update powerups
+        PowerUpManager.updatePowerUps(paddle, ball);
+
         checkCollisions();
+        playSounds();
     }
 
     private void normalizeBallSpeed(Ball ball) {
@@ -68,13 +80,11 @@ public class GameManager {
         if (ball.getX() <= 0 || ball.getX() >= gameWidth - ball.getWidth()) {
             ball.dx *= -1;
             normalizeBallSpeed(ball);
-
         }
         if (ball.getY() <= 0) {
             ball.dy *= -1;
             normalizeBallSpeed(ball);
         }
-
 
         //ball va chạm với paddle
         if (ball.getBounds().intersects(paddle.getBounds())) {
@@ -95,6 +105,7 @@ public class GameManager {
                 // Đặt bóng lên trên mặt paddle, tránh mắc kẹt trong paddle
                 ball.setY(paddleTop - ball.getHeight());
                 ball.dy = -Math.abs(ball.dy);
+                paddleHitThisFrame = true;
 
                 // Tính vị trí chạm để xác định hướng bật ngang
                 double paddleCenter = paddleLeft + paddle.getWidth() / 2;
@@ -110,18 +121,77 @@ public class GameManager {
         for (Brick brick : bricks) {
             if (ball.getBounds().intersects(brick.getBounds())) {
                 ball.dy *= -1;
-                brick.hit();
+                brickHitThisFrame = true;
+                if(brick.hitPoints == 1) {
+                    this.score += (brick.type * 10);
+                    brickBrokenThisFrame = true;
+                }
+                brick.hit(); // Trong phương thức hit() sẽ tự động spawn powerup nếu brick bị phá
                 break;
             }
         }
+//        System.out.println(this.score);
         bricks.removeIf(Brick::isDestroyed);
 
+        // Kiểm tra nếu hết brick(trừ brick không thể phá) thì qua màn.
+        int countBrick = 0;
+        for(Brick  brick : bricks) {
+            if(brick.type != 4) {
+                countBrick++;
+            }
+        }
+        if(countBrick == 0) {
+            gameState = GameState.WIN;
+        }
         if (ball.getY() > gameHeight) {
-            isGameOver = true;
+            this.lives--;
+            if(this.lives == 0) {
+                gameState = GameState.GAME_OVER;
+            } else {
+                setupGame();
+            }
         }
         if (bricks.isEmpty()) {
-            isGameOver = true;
+            gameState = GameState.GAME_OVER;
         }
+    }
+
+    private void resetSoundFlags() {
+        brickBrokenThisFrame = false;
+        brickHitThisFrame = false;
+        paddleHitThisFrame = false;
+    }
+
+    private void playSounds() {
+        new Thread(() -> {
+            if (brickBrokenThisFrame) {
+                SoundManager.playBrickBreak();
+            }
+            if (brickHitThisFrame) {
+                SoundManager.playBrickHit();
+            }
+            if (paddleHitThisFrame) {
+                SoundManager.playPaddleHit();
+            }
+        }).start();
+    }
+
+    // THÊM: Phương thức render powerups
+    public void renderPowerUps(GraphicsContext gc) {
+        PowerUpManager.renderPowerUps(gc);
+    }
+
+    // THÊM: Các phương thức getter cần thiết
+    public int getLives() {
+        return lives;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getGameHeight() {
+        return gameHeight;
     }
 
     public Paddle getPaddle() {
@@ -137,6 +207,10 @@ public class GameManager {
     }
 
     public boolean isGameOver() {
-        return isGameOver;
+        return gameState == GameState.GAME_OVER;
+    }
+
+    public int getScore() {
+        return this.score;
     }
 }
