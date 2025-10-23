@@ -1,5 +1,6 @@
 package com.example.arkanoid.models.Power;
 
+import com.example.arkanoid.models.Ball;
 import com.example.arkanoid.models.GameObject;
 import com.example.arkanoid.models.Paddle;
 import javafx.scene.canvas.GraphicsContext;

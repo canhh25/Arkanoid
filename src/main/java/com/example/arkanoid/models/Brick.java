@@ -4,8 +4,8 @@ import com.example.arkanoid.models.Power.*;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Brick extends GameObject {
-    public static final double BRICK_WIDTH = 96;
-    public static final double BRICK_HEIGHT = 32 * 1.5;
+    public static final double BRICK_WIDTH = 960/11;
+    public static final double BRICK_HEIGHT = 16*1.5;
     public int hitPoints;
     // 4 type.
     // - 1, 2, 3 lần lượt hitPoints = type.

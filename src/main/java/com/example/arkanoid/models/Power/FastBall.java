@@ -1,6 +1,7 @@
 package com.example.arkanoid.models.Power;
 
 import com.example.arkanoid.models.Ball;
+import com.example.arkanoid.models.Paddle;
 import javafx.scene.canvas.GraphicsContext;
 
 public class FastBall extends PowerUp<Ball> {

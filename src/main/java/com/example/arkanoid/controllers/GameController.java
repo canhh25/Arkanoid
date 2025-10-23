@@ -26,6 +26,7 @@ public class GameController {
         this.gameView = new GameView();
         setupInputHandling(gc.getCanvas().getScene());
     }
+
     public void start() {
         new AnimationTimer() {
             @Override
@@ -45,8 +46,12 @@ public class GameController {
                 goLeft = true;
             } else if (event.getCode() == KeyCode.RIGHT) {
                 goRight = true;
-            } else if (event.getCode() == KeyCode.SPACE && gameManager.isGameOver()) {
-                gameManager.setupGame();
+            } else if (event.getCode() == KeyCode.SPACE) {
+                if (gameManager.isGameOver()) {
+                    gameManager.setupGame();
+                } else {
+                    gameManager.requestLaunch();
+                }
             }
         });
 
