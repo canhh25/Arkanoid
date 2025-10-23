@@ -46,6 +46,14 @@ public class Ball extends MovableObject {
         return speed;
     }
 
+    @Override
+    public void render(GraphicsContext gc) {
+        // Vẽ brick bằng ảnh từ GameObject - giữ nguyên chức năng hiện có
+        if (getImage() != null) {
+            gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
+        }
+    }
+
     public double getDx() {
         return dx;
     }

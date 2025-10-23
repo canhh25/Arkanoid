@@ -22,7 +22,7 @@ public class GameController {
 
     public GameController(GraphicsContext gc) {
         this.gc = gc;
-        this.gameManager = new GameManager(960, 640);
+        this.gameManager = GameManager.getInstance();
         this.gameView = new GameView();
         setupInputHandling(gc.getCanvas().getScene());
     }
@@ -37,11 +37,9 @@ public class GameController {
             }
         }.start();
     }
-
     private void render() {
         drawScore();
     }
-
     private void setupInputHandling(Scene scene) {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.LEFT) {
@@ -66,9 +64,8 @@ public class GameController {
         });
 
     }
-
     private void drawScore() {
-        String scoreText = "Score: " + gameManager.getScore();
+        String scoreText = "Lives: " + gameManager.getLives();
         double padding = 20;
 
         gc.setFont(Font.font("Verdana", FontWeight.BOLD, 24));

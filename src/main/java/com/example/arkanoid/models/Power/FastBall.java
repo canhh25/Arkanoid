@@ -2,15 +2,19 @@ package com.example.arkanoid.models.Power;
 
 import com.example.arkanoid.models.Ball;
 import com.example.arkanoid.models.Paddle;
+import javafx.scene.canvas.GraphicsContext;
 
-public class FastBall extends PowerUp {
+public class FastBall extends PowerUp<Ball> {
     private static final double SPEED_SCALE = 1.5;
+    private static final double EXTEND_TIME = 3000;
     private double baseDx;
     private double baseDy;
 
     public FastBall(double x, double y) {
-        super(x, y, 14, 14, "FastBall", 10000, "/images/ball/ball.png");
+        super(x, y, 38, 19, "FAST_BALL");
+        this.maxActiveTime = 10000;
     }
+
 
     @Override
     public void applyEffect(Ball ball) {
@@ -19,7 +23,9 @@ public class FastBall extends PowerUp {
             baseDy = ball.getDy();
             ball.setDx(baseDx * SPEED_SCALE);
             ball.setDy(baseDy * SPEED_SCALE);
-            isActive = true;
+            activate();
+        } else {
+            extendTime(EXTEND_TIME);
         }
     }
 
@@ -32,6 +38,4 @@ public class FastBall extends PowerUp {
         }
     }
 
-    @Override public void applyEffect(Paddle paddle) {}
-    @Override public void removeEffect(Paddle paddle) {}
 }

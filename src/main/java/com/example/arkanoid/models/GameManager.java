@@ -1,7 +1,10 @@
 package com.example.arkanoid.models;
 
+import com.example.arkanoid.models.Power.ExtraLifePowerUp;
+import com.example.arkanoid.models.Power.PowerUpManager;
 import com.example.arkanoid.utils.LevelLoader;
 import com.example.arkanoid.utils.SoundManager;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,20 +28,37 @@ public class GameManager {
     private boolean waitingLaunch = true;
     private GameState gameState = GameState.PAUSED;
 
-    public GameManager(int width, int height) {
-        this.gameWidth = width;
-        this.gameHeight = height;
+    public static GameManager instance;
+    private GameManager() {
         this.score = 0;
         this.lives = 3;
         this.level = 5;
+        PowerUpManager.setGameManager(this); // THÊM DÒNG NÀY
         setupGame();
     }
+    public static GameManager getInstance() {
+        if (instance == null) {
+            instance = new GameManager();
+        }
+        return instance;
+    }
 
+    public void resetGame() {
+        this.lives = 3;
+        if(gameState == GameState.GAME_OVER) {
+            this.score = 0;
+            this.level = 1;
+        } else {
+            this.level++;
+        }
+
+    }
     public void setupGame() {
         gameState = GameState.RUNNING;
         resetSoundFlags();
         bricks = LevelLoader.loadLevel(this.level);
         movables = new ArrayList<>();
+        PowerUpManager.clearPowerUps(); // THÊM: Clear powerups khi reset game
 
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
         ball = new Ball(gameWidth / 2.0 - 10, gameHeight - 80, BALL_SPEED);
@@ -251,10 +271,21 @@ public class GameManager {
 
         //Brick: xử lý đúng 1 viên đầu tiên
         for (Brick brick : bricks) {
-            if (resolveBrickCollision(brick)) {
+//             if (resolveBrickCollision(brick)) {
+//                 break;
+//             }
+            if (ball.getBounds().intersects(brick.getBounds())) {
+                ball.dy *= -1;
+                brickHitThisFrame = true;
+                if(brick.hitPoints == 1) {
+                    this.score += (brick.type * 10);
+                    brickBrokenThisFrame = true;
+                }
+                brick.hit(); // Trong phương thức hit() sẽ tự động spawn powerup nếu brick bị phá
                 break;
             }
         }
+//        System.out.println(this.score);
         bricks.removeIf(Brick::isDestroyed);
 
         //  Rơi dưới đáy => mất mạng/reset
@@ -297,6 +328,24 @@ public class GameManager {
                 SoundManager.playPaddleHit();
             }
         }).start();
+    }
+
+    // THÊM: Phương thức render powerups
+    public void renderPowerUps(GraphicsContext gc) {
+        PowerUpManager.renderPowerUps(gc);
+    }
+
+    // THÊM: Các phương thức getter cần thiết
+    public int getLives() {
+        return lives;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getGameHeight() {
+        return gameHeight;
     }
 
     public Paddle getPaddle() {
