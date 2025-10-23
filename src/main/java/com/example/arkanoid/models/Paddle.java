@@ -64,8 +64,10 @@ public class Paddle extends MovableObject {
         return paddle_width;
     }
 
-    public void setWidth(double paddle_width) {
-        Paddle.paddle_width = paddle_width;
+    public void setWidth(double newWidth) {
+        double centerX = this.x + Paddle.paddle_width / 2;
+        Paddle.paddle_width = newWidth;
+        this.x = centerX - Paddle.paddle_width / 2;
     }
 
     public double getHeight() {

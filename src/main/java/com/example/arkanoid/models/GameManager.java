@@ -11,8 +11,8 @@ import java.util.List;
 
 public class GameManager {
     private static final double BALL_SPEED = 2.5;
-    private final int gameWidth;
-    private final int gameHeight;
+    private static final int gameWidth = 1280;
+    private static final int gameHeight = 640;
 
     private Paddle paddle;
     private Ball ball;
@@ -25,18 +25,33 @@ public class GameManager {
     private boolean brickBrokenThisFrame = false;
     private boolean brickHitThisFrame = false;
     private boolean paddleHitThisFrame = false;
-    private GameState gameState =  GameState.PAUSED;
+    public GameState gameState =  GameState.PAUSED;
 
-    public GameManager(int width, int height) {
-        this.gameWidth = width;
-        this.gameHeight = height;
+    public static GameManager instance;
+    private GameManager() {
         this.score = 0;
         this.lives = 3;
         this.level = 5;
         PowerUpManager.setGameManager(this); // THÊM DÒNG NÀY
         setupGame();
     }
+    public static GameManager getInstance() {
+        if (instance == null) {
+            instance = new GameManager();
+        }
+        return instance;
+    }
 
+    public void resetGame() {
+        this.lives = 3;
+        if(gameState == GameState.GAME_OVER) {
+            this.score = 0;
+            this.level = 1;
+        } else {
+            this.level++;
+        }
+
+    }
     public void setupGame() {
         gameState = GameState.RUNNING;
         resetSoundFlags();
@@ -60,7 +75,6 @@ public class GameManager {
         for (MovableObject obj : movables) {
             obj.update();
         }
-
         // THÊM: Update powerups
         PowerUpManager.updatePowerUps(paddle, ball);
 
@@ -134,13 +148,7 @@ public class GameManager {
         bricks.removeIf(Brick::isDestroyed);
 
         // Kiểm tra nếu hết brick(trừ brick không thể phá) thì qua màn.
-        int countBrick = 0;
-        for(Brick  brick : bricks) {
-            if(brick.type != 4) {
-                countBrick++;
-            }
-        }
-        if(countBrick == 0) {
+        if(isEmptyBrick()) {
             gameState = GameState.WIN;
         }
         if (ball.getY() > gameHeight) {
@@ -156,6 +164,14 @@ public class GameManager {
         }
     }
 
+    public boolean isEmptyBrick() {
+        for(Brick brick : bricks) {
+            if(brick.type != 4) {
+                return false;
+            }
+        }
+        return true;
+    }
     private void resetSoundFlags() {
         brickBrokenThisFrame = false;
         brickHitThisFrame = false;

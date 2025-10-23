@@ -3,8 +3,13 @@ package com.example.arkanoid.controllers;
 import com.example.arkanoid.main.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MenuController {
 
@@ -17,7 +22,7 @@ public class MenuController {
     }
 
     @FXML
-    private void handleHelp(ActionEvent event) {
+    private void handleHelp(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/views/MenuView.fxml"));
         Parent root = loader.load();
 
