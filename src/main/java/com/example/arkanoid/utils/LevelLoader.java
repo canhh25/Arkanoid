@@ -142,25 +142,25 @@ public class LevelLoader {
                 String crackedImagePath;
                 switch (cell) {
                     case 1 -> {
-                        imagePath = "/images/brick/brick_red.png";
-                        crackedImagePath = "/images/brick/brick_red_cracked.png";
-                    }
-                    case 2 -> {
                         imagePath = "/images/brick/brick_green.png";
                         crackedImagePath = "/images/brick/brick_green_cracked.png";
                     }
-                    case 3 -> {
+                    case 2 -> {
                         imagePath = "/images/brick/brick_blue.png";
                         crackedImagePath = "/images/brick/brick_blue_cracked.png";
                     }
-                    case 4 -> {
+                    case 3 -> {
                         imagePath = "/images/brick/brick_yellow.png";
                         crackedImagePath = "/images/brick/brick_yellow_cracked.png";
                     }
-                    default -> {
-                        // Fallback
+                    case 4 -> {
                         imagePath = "/images/brick/brick_red.png";
                         crackedImagePath = "/images/brick/brick_red_cracked.png";
+                    }
+                    default -> {
+                        // Fallback
+                        imagePath = "/images/brick/brick_green.png";
+                        crackedImagePath = "/images/brick/brick_green_cracked.png";
                     }
                 }
 
