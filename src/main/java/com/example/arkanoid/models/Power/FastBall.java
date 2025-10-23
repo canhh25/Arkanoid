@@ -5,11 +5,13 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class FastBall extends PowerUp<Ball> {
     private static final double SPEED_SCALE = 1.5;
+    private static final double EXTEND_TIME = 3000;
     private double baseDx;
     private double baseDy;
-    public static final double DURATION = 100;
+
     public FastBall(double x, double y) {
-        super(x, y, 14, 14, "FAST_BALL");
+        super(x, y, 38, 19, "FAST_BALL");
+        this.maxActiveTime = 10000;
     }
 
 
@@ -20,7 +22,9 @@ public class FastBall extends PowerUp<Ball> {
             baseDy = ball.getDy();
             ball.setDx(baseDx * SPEED_SCALE);
             ball.setDy(baseDy * SPEED_SCALE);
-            isActive = true;
+            activate();
+        } else {
+            extendTime(EXTEND_TIME);
         }
     }
 
@@ -33,8 +37,4 @@ public class FastBall extends PowerUp<Ball> {
         }
     }
 
-    @Override
-    public void render(GraphicsContext gc) {
-
-    }
 }

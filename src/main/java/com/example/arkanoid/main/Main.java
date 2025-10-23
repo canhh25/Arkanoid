@@ -14,9 +14,9 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    public static final int SCREEN_WIDTH = 960;
+    public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 640;
-    GameManager gameManager = new GameManager(SCREEN_WIDTH, SCREEN_HEIGHT);
+    GameManager gameManager = GameManager.getInstance();
 
     @Override
     public void start(Stage primaryStage) {

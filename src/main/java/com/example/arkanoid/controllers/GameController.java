@@ -22,7 +22,7 @@ public class GameController {
 
     public GameController(GraphicsContext gc) {
         this.gc = gc;
-        this.gameManager = new GameManager(960, 640);
+        this.gameManager = GameManager.getInstance();
         this.gameView = new GameView();
         setupInputHandling(gc.getCanvas().getScene());
     }
