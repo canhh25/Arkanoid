@@ -1,5 +1,7 @@
 package com.example.arkanoid.models;
 
+import javafx.scene.canvas.GraphicsContext;
+
 public class Ball extends MovableObject {
     public double dx, dy;
     private double prevX, prevY;

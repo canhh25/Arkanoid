@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
-    private static final double BALL_SPEED = 2;
-    private final int gameWidth;
-    private final int gameHeight;
+    private static final double BALL_SPEED = 3.5;
+    private final int gameWidth = 1280;
+    private final int gameHeight = 640;
 
     private Paddle paddle;
     private Ball ball;
@@ -26,7 +26,7 @@ public class GameManager {
     private boolean brickHitThisFrame = false;
     private boolean paddleHitThisFrame = false;
     private boolean waitingLaunch = true;
-    private GameState gameState = GameState.PAUSED;
+    public GameState gameState = GameState.PAUSED;
 
     public static GameManager instance;
     private GameManager() {
@@ -99,6 +99,7 @@ public class GameManager {
             return;
         }
         ball.update();
+        PowerUpManager.updatePowerUps(paddle, ball);
         checkCollisions();
         playSounds();
     }
@@ -300,15 +301,16 @@ public class GameManager {
         }
 
         // 5) win nếu hết brick phá được
-        int countBreakable = 0;
-        for (Brick brick : bricks) {
-            if (brick.type != 4) countBreakable++;
-        }
-        if (countBreakable == 0) {
+        if(isEmptyBrick()) {
             gameState = GameState.WIN;
         }
     }
-
+    public boolean isEmptyBrick() {
+        for (Brick brick : bricks) {
+            if (brick.type != 4) return false;
+        }
+        return true;
+    }
 
     private void resetSoundFlags() {
         brickBrokenThisFrame = false;
