@@ -65,7 +65,7 @@ public class GameController {
 
     }
     private void drawScore() {
-        String scoreText = "Lives: " + gameManager.getLives();
+        String scoreText = "Levels: " + gameManager.getLevel();
         double padding = 20;
 
         gc.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
