@@ -11,7 +11,7 @@ public class FastBall extends PowerUp<Ball> {
     private double baseDy;
 
     public FastBall(double x, double y) {
-        super(x, y, 38, 19, "FAST_BALL");
+        super(x, y, 38, 19, "fast_ball");
         this.maxActiveTime = 10000;
     }
 

@@ -13,7 +13,7 @@ import java.util.Map;
 public class PowerUpManager {
     private static List<PowerUp> fallingPowerUps = new ArrayList<>(); // PowerUp đang rơi
     private static Map<String, PowerUp> activePowerUps = new HashMap<>(); // PowerUp đang hoạt động
-    private static GameManager gameManager;
+    public static GameManager gameManager;
 
     public static void setGameManager(GameManager gm) {
         gameManager = gm;
@@ -75,19 +75,18 @@ public class PowerUpManager {
         if (activePowerUps.containsKey(type)) {
             PowerUp existingPowerUp = activePowerUps.get(type);
 
-            // Nếu là loại có thời gian, extend thêm
             if (powerUp instanceof ExpandPaddle) {
                 existingPowerUp.extendTime(3000);
                 System.out.println("Extend PowerUp: " + type + " Times: " + existingPowerUp.activeTime);
             } else if (powerUp instanceof FastBall) {
                 existingPowerUp.extendTime(3000);
                 System.out.println("Extend PowerUp: " + type);
-            }
-            // ExtraLife thì apply luôn
-            else if (powerUp instanceof ExtraLifePowerUp) {
-              if(((ExtraLifePowerUp) powerUp).getCountLives() > 0) {
-                  powerUp.applyEffect(gameManager);
-              }
+            } else if (powerUp instanceof ExtraLifePowerUp) {
+                if (((ExtraLifePowerUp) powerUp).getCountLives() > 0) {
+                    existingPowerUp.applyEffect(gameManager);
+                }
+            } else if (powerUp instanceof MultiBallPowerUp) {
+                existingPowerUp.applyEffect(gameManager);
             }
         } else {
             // Chưa có, apply hiệu ứng mới
@@ -99,6 +98,8 @@ public class PowerUpManager {
             } else if (powerUp instanceof FastBall) {
                 powerUp.applyEffect(ball);
                 activePowerUps.put(type, powerUp);
+            } else if (powerUp instanceof MultiBallPowerUp) {
+                powerUp.applyEffect(gameManager);
             }
 
             System.out.println("Kích hoạt PowerUp: " + type);

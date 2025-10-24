@@ -7,6 +7,7 @@ import com.example.arkanoid.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
@@ -15,7 +16,7 @@ public class GameManager {
     private final int gameHeight = 640;
 
     private Paddle paddle;
-    private Ball ball;
+    private List<Ball> balls;
     private List<Brick> bricks;
     private List<MovableObject> movables = new ArrayList<>();
 
@@ -29,13 +30,16 @@ public class GameManager {
     public GameState gameState = GameState.PAUSED;
 
     public static GameManager instance;
+
     private GameManager() {
         this.score = 0;
         this.lives = 3;
-        this.level = 5;
-        PowerUpManager.setGameManager(this); // THÊM DÒNG NÀY
+        this.level = 1;
+        this.balls = new ArrayList<>();
+        PowerUpManager.setGameManager(this);
         setupGame();
     }
+
     public static GameManager getInstance() {
         if (instance == null) {
             instance = new GameManager();
@@ -51,38 +55,71 @@ public class GameManager {
         } else {
             this.level++;
         }
-
     }
+
     public void setupGame() {
         gameState = GameState.RUNNING;
         resetSoundFlags();
         bricks = LevelLoader.loadLevel(this.level);
         movables = new ArrayList<>();
-        PowerUpManager.clearPowerUps(); // THÊM: Clear powerups khi reset game
+        PowerUpManager.clearPowerUps();
 
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
-        ball = new Ball(gameWidth / 2.0 - 10, gameHeight - 80, BALL_SPEED);
+
+        // Tạo bóng chính
+        balls = new ArrayList<>();
+        Ball mainBall = new Ball(gameWidth / 2.0 - 10, gameHeight - 80, BALL_SPEED);
+        balls.add(mainBall);
 
         waitingLaunch = true;
-        ball.setDx(0);
-        ball.setDy(0);
-        ball.setX(paddle.getX() + paddle.getWidth() / 2 - ball.getWidth() / 2);
-        ball.setY(paddle.getY() - ball.getHeight());
-        ball.setPrevX(ball.getX());
-        ball.setPrevY(ball.getY());
+        mainBall.setDx(0);
+        mainBall.setDy(0);
+        mainBall.setX(paddle.getX() + paddle.getWidth() / 2 - mainBall.getWidth() / 2);
+        mainBall.setY(paddle.getY() - mainBall.getHeight());
+        mainBall.setPrevX(mainBall.getX());
+        mainBall.setPrevY(mainBall.getY());
+
         movables.add(paddle);
-        movables.add(ball);
+        movables.add(mainBall);
     }
 
     public void requestLaunch() {
-        if (waitingLaunch && gameState == GameState.RUNNING) {
+        if (waitingLaunch && gameState == GameState.RUNNING && !balls.isEmpty()) {
             waitingLaunch = false;
+            Ball mainBall = balls.get(0);
             double angle = Math.toRadians(-60);
-            ball.dx = BALL_SPEED * Math.cos(angle);
-            ball.dy = BALL_SPEED * Math.sin(angle);
-            ball.setPrevX(ball.getX());
-            ball.setPrevY(ball.getY());
+            mainBall.dx = BALL_SPEED * Math.cos(angle);
+            mainBall.dy = BALL_SPEED * Math.sin(angle);
+            mainBall.setPrevX(mainBall.getX());
+            mainBall.setPrevY(mainBall.getY());
         }
+    }
+
+    // THÊM: Phương thức spawn thêm 2 bóng
+    public void spawnExtraBalls() {
+        if (balls.isEmpty()) return;
+        System.out.println("Add ball");
+        Ball originalBall = balls.get(0);
+
+        // Tạo bóng thứ 2 (bay về trái)
+        Ball ball2 = new Ball(originalBall.getX(), originalBall.getY(), BALL_SPEED);
+        double angle2 = Math.toRadians(-120); // 120 độ
+        ball2.dx = BALL_SPEED * Math.cos(angle2);
+        ball2.dy = BALL_SPEED * Math.sin(angle2);
+        ball2.setPrevX(ball2.getX());
+        ball2.setPrevY(ball2.getY());
+        balls.add(ball2);
+        movables.add(ball2);
+
+        // Tạo bóng thứ 3 (bay về phải)
+        Ball ball3 = new Ball(originalBall.getX(), originalBall.getY(), BALL_SPEED);
+        double angle3 = Math.toRadians(-60); // 60 độ
+        ball3.dx = BALL_SPEED * Math.cos(angle3);
+        ball3.dy = BALL_SPEED * Math.sin(angle3);
+        ball3.setPrevX(ball3.getX());
+        ball3.setPrevY(ball3.getY());
+        balls.add(ball3);
+        movables.add(ball3);
     }
 
     public void update(boolean goLeft, boolean goRight) {
@@ -91,15 +128,22 @@ public class GameManager {
         paddle.setMovingLeft(goLeft);
         paddle.setMovingRight(goRight);
         paddle.update();
-        if (waitingLaunch) {
-            ball.setX(paddle.getX() + paddle.getWidth() / 2 - ball.getWidth() / 2);
-            ball.setY(paddle.getY() - ball.getHeight());
-            ball.setPrevX(ball.getX());
-            ball.setPrevY(ball.getY());
+
+        if (waitingLaunch && !balls.isEmpty()) {
+            Ball mainBall = balls.get(0);
+            mainBall.setX(paddle.getX() + paddle.getWidth() / 2 - mainBall.getWidth() / 2);
+            mainBall.setY(paddle.getY() - mainBall.getHeight());
+            mainBall.setPrevX(mainBall.getX());
+            mainBall.setPrevY(mainBall.getY());
             return;
         }
-        ball.update();
-        PowerUpManager.updatePowerUps(paddle, ball);
+
+        // Update tất cả các bóng
+        for (Ball ball : balls) {
+            ball.update();
+        }
+
+        PowerUpManager.updatePowerUps(paddle, balls.isEmpty() ? null : balls.get(0));
         checkCollisions();
         playSounds();
     }
@@ -123,20 +167,17 @@ public class GameManager {
         ball.dy = ball.dy / v * BALL_SPEED;
     }
 
-    private void resolveWalls() {
-        // Trái
+    private void resolveWalls(Ball ball) {
         if (ball.getX() <= 0) {
             ball.setX(0);
             ball.reverseX();
             normalizeBallSpeed(ball);
         }
-        // Phải
         if (ball.getX() + ball.getWidth() >= gameWidth) {
             ball.setX(gameWidth - ball.getWidth());
             ball.reverseX();
             normalizeBallSpeed(ball);
         }
-        // Trần
         if (ball.getY() <= 0) {
             ball.setY(0);
             ball.reverseY();
@@ -144,7 +185,7 @@ public class GameManager {
         }
     }
 
-    private void resolvePaddleCollision() {
+    private void resolvePaddleCollision(Ball ball) {
         double pLeft = paddle.getX();
         double pTop = paddle.getY();
         double pRight = pLeft + paddle.getWidth();
@@ -161,7 +202,7 @@ public class GameManager {
             double r = ball.getWidth() / 2.0;
             double paddleCenter = pLeft + paddle.getWidth() / 2.0;
             double ballCenter = ball.getX() + r;
-            double hit = (ballCenter - paddleCenter) / (paddle.getWidth() / 2.0); // [-1..1]
+            double hit = (ballCenter - paddleCenter) / (paddle.getWidth() / 2.0);
             hit = Math.max(-1, Math.min(1, hit));
 
             double MAX_DEFLECT = Math.toRadians(60);
@@ -202,109 +243,69 @@ public class GameManager {
         }
     }
 
-    private boolean resolveBrickCollision(Brick brick) {
-        var r = brick.getBounds();
-        double bLeft = r.getMinX();
-        double bTop = r.getMinY();
-        double bRight = bLeft + r.getWidth();
-        double bBottom = bTop + r.getHeight();
-
-        if (!circleIntersectsRect(ball, bLeft, bTop, r.getWidth(), r.getHeight()))
+    private boolean resolveBrickCollision(Ball ball, Brick brick) {
+        if (!ball.getBounds().intersects(brick.getBounds())) {
             return false;
-
-        boolean fromTop = (ball.getPrevY() + ball.getHeight()) <= bTop;
-        boolean fromBottom = (ball.getPrevY()) >= bBottom;
-        boolean fromLeft = (ball.getPrevX() + ball.getWidth()) <= bLeft;
-        boolean fromRight = (ball.getPrevX()) >= bRight;
-
-        if (fromTop) {
-            ball.setY(bTop - ball.getHeight());
-            ball.reverseY();
-        } else if (fromBottom) {
-            ball.setY(bBottom);
-            ball.reverseY();
-        } else if (fromLeft) {
-            ball.setX(bLeft - ball.getWidth());
-            ball.reverseX();
-        } else if (fromRight) {
-            ball.setX(bRight);
-            ball.reverseX();
-        } else {
-            // fallback: chọn trục chồng lấp ít hơn
-            double overlapX = Math.min((ball.getX() + ball.getWidth()) - bLeft, bRight - ball.getX());
-            double overlapY = Math.min((ball.getY() + ball.getHeight()) - bTop, bBottom - ball.getY());
-            if (overlapX < overlapY) {
-                if ((ball.getX() + ball.getWidth() / 2.0) > (bLeft + r.getWidth() / 2.0)) {
-                    ball.setX(bRight);
-                } else {
-                    ball.setX(bLeft - ball.getWidth());
-                }
-                ball.reverseX();
-            } else {
-                if ((ball.getY() + ball.getHeight() / 2.0) > (bTop + r.getHeight() / 2.0)) {
-                    ball.setY(bBottom);
-                } else {
-                    ball.setY(bTop - ball.getHeight());
-                }
-                ball.reverseY();
-            }
         }
 
-        normalizeBallSpeed(ball);
-
-        // điểm/âm thanh
+        ball.dy *= -1;
         brickHitThisFrame = true;
-        if (brick.hitPoints == 1) {
+
+        if(brick.hitPoints == 1) {
             this.score += (brick.type * 10);
             brickBrokenThisFrame = true;
         }
-        brick.hit();
 
+        brick.hit();
         return true;
     }
 
     private void checkCollisions() {
-        // 1) Tường và trần
-        resolveWalls();
+        // Duyệt qua tất cả các bóng
+        Iterator<Ball> ballIterator = balls.iterator();
+        while (ballIterator.hasNext()) {
+            Ball ball = ballIterator.next();
 
-        // 2) Paddle
-        resolvePaddleCollision();
+            // 1) Tường và trần
+            resolveWalls(ball);
 
-        //Brick: xử lý đúng 1 viên đầu tiên
-        for (Brick brick : bricks) {
-//             if (resolveBrickCollision(brick)) {
-//                 break;
-//             }
-            if (ball.getBounds().intersects(brick.getBounds())) {
-                ball.dy *= -1;
-                brickHitThisFrame = true;
-                if(brick.hitPoints == 1) {
-                    this.score += (brick.type * 10);
-                    brickBrokenThisFrame = true;
+            // 2) Paddle
+            resolvePaddleCollision(ball);
+
+            // 3) Brick
+            for (Brick brick : bricks) {
+                if (resolveBrickCollision(ball, brick)) {
+                    break;
                 }
-                brick.hit(); // Trong phương thức hit() sẽ tự động spawn powerup nếu brick bị phá
-                break;
+            }
+
+            // 4) Kiểm tra bóng rơi xuống đáy
+            if (ball.getY() > gameHeight) {
+                ballIterator.remove();
+                movables.remove(ball);
             }
         }
-//        System.out.println(this.score);
+
+        // Xóa brick bị phá
         bricks.removeIf(Brick::isDestroyed);
 
-        //  Rơi dưới đáy => mất mạng/reset
-        if (ball.getY() > gameHeight) {
+        // 5) Kiểm tra hết bóng => mất mạng
+        if (balls.isEmpty()) {
             this.lives--;
             if (this.lives == 0) {
                 gameState = GameState.GAME_OVER;
             } else {
-                setupGame(); // reset bóng dán vào paddle
+                setupGame();
             }
             return;
         }
 
-        // 5) win nếu hết brick phá được
+        // 6) Win nếu hết brick
         if(isEmptyBrick()) {
             gameState = GameState.WIN;
         }
     }
+
     public boolean isEmptyBrick() {
         for (Brick brick : bricks) {
             if (brick.type != 4) return false;
@@ -332,12 +333,17 @@ public class GameManager {
         }).start();
     }
 
-    // THÊM: Phương thức render powerups
     public void renderPowerUps(GraphicsContext gc) {
         PowerUpManager.renderPowerUps(gc);
     }
 
-    // THÊM: Các phương thức getter cần thiết
+    // THÊM: Render tất cả các bóng
+    public void renderBalls(GraphicsContext gc) {
+        for (Ball ball : balls) {
+            ball.render(gc);
+        }
+    }
+
     public int getLives() {
         return lives;
     }
@@ -354,8 +360,14 @@ public class GameManager {
         return paddle;
     }
 
+    // THAY ĐỔI: Trả về bóng đầu tiên (để tương thích code cũ)
     public Ball getBall() {
-        return ball;
+        return balls.isEmpty() ? null : balls.get(0);
+    }
+
+    // THÊM: Getter cho danh sách bóng
+    public List<Ball> getBalls() {
+        return balls;
     }
 
     public List<Brick> getBricks() {

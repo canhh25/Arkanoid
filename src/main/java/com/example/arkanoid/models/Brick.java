@@ -56,6 +56,10 @@ public class Brick extends GameObject {
                     break;
                 case 3:
                     powerUp = new ExpandPaddle(centerX, centerY);
+                    break;
+                case 4:
+                    powerUp = new MultiBallPowerUp(centerX, centerY);
+                    break;
             }
 
             if(powerUp != null) {

@@ -20,7 +20,7 @@ public class GameView {
 
         if (!gameManager.isGameOver()) {
             gameManager.getPaddle().render(gc);
-            gameManager.getBall().render(gc);
+            gameManager.renderBalls(gc);
             for (Brick brick : gameManager.getBricks()) {
                 brick.render(gc);
             }
