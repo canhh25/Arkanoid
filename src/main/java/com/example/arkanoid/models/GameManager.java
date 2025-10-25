@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GameManager {
     private static final double BALL_SPEED = 3.5;
-    private final int gameWidth = 1280;
+    private final int gameWidth = 960;
     private final int gameHeight = 640;
 
     private Paddle paddle;

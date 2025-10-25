@@ -11,7 +11,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 public class GameView {
-    private static final int WIDTH = 1280;
+    private static final int WIDTH = 960;
     private static final int HEIGHT = 640;
     public void render(GraphicsContext gc, GameManager gameManager) {
         gc.setFill(Color.BLACK);

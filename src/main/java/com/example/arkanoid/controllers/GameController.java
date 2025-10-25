@@ -74,7 +74,7 @@ public class GameController {
         gc.setTextAlign(TextAlignment.RIGHT);
 
         // Vẽ văn bản
-        gc.fillText(scoreText, Main.SCREEN_WIDTH - padding, 30);
+        gc.fillText(scoreText, Main.WIDTH - padding, 30);
         gc.setTextAlign(TextAlignment.LEFT);
     }
 }
