@@ -142,25 +142,25 @@ public class LevelLoader {
                 String crackedImagePath;
                 switch (cell) {
                     case 1 -> {
-                        imagePath = "/images/brick/brick_green.png";
-                        crackedImagePath = "/images/brick/brick_green_cracked.png";
+                        imagePath = "/images/brick/brick_lime.png";
+                        crackedImagePath = "/images/brick/brick_lime_cracked.png";
                     }
                     case 2 -> {
-                        imagePath = "/images/brick/brick_blue.png";
-                        crackedImagePath = "/images/brick/brick_blue_cracked.png";
+                        imagePath = "/images/brick/brick_cyan.png";
+                        crackedImagePath = "/images/brick/brick_cyan_cracked.png";
                     }
                     case 3 -> {
-                        imagePath = "/images/brick/brick_yellow.png";
-                        crackedImagePath = "/images/brick/brick_yellow_cracked.png";
+                        imagePath = "/images/brick/brick_purple.png";
+                        crackedImagePath = "/images/brick/brick_purple_cracked.png";
                     }
                     case 4 -> {
-                        imagePath = "/images/brick/brick_red.png";
-                        crackedImagePath = "/images/brick/brick_red_cracked.png";
+                        imagePath = "/images/brick/brick_magenta.png";
+                        crackedImagePath = "/images/brick/brick_magenta_cracked.png";
                     }
                     default -> {
                         // Fallback
-                        imagePath = "/images/brick/brick_green.png";
-                        crackedImagePath = "/images/brick/brick_green_cracked.png";
+                        imagePath = "/images/brick/brick_lime.png";
+                        crackedImagePath = "/images/brick/brick_lime_cracked.png";
                     }
                 }
 

@@ -9,14 +9,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.image.Image;
 
 public class GameView {
     private static final int WIDTH = 960;
     private static final int HEIGHT = 640;
+   private final Image background = new Image(
+            getClass().getResource("/images/background/backTest.jpg").toExternalForm()
+    );
     public void render(GraphicsContext gc, GameManager gameManager) {
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, WIDTH, HEIGHT);
-
+        gc.drawImage(background, 0, 0, WIDTH, HEIGHT);
 
         if (!gameManager.isGameOver()) {
             gameManager.getPaddle().render(gc);
