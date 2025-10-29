@@ -1,5 +1,8 @@
 package com.example.arkanoid.utils;
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +12,10 @@ public class SoundManager {
     private static final List<AudioClip> paddleHitPool = new ArrayList<>();
 
     private static final int POOL_SIZE = 5;
+
+    // Thêm MediaPlayer cho nhạc nền
+    private static MediaPlayer backgroundMusicPlayer;
+    private static boolean isMuted = false;
 
     static {
         initializeSoundPool();
@@ -38,7 +45,6 @@ public class SoundManager {
             String resourcePath = SoundManager.class.getResource(path).toExternalForm();
             AudioClip clip = new AudioClip(resourcePath);
 
-
             clip.setVolume(0.001);
             clip.play();
             try {
@@ -57,15 +63,15 @@ public class SoundManager {
     }
 
     public static void playBrickBreak() {
-        playInstant(brickBreakPool);
+        if (!isMuted) playInstant(brickBreakPool);
     }
 
     public static void playBrickHit() {
-        playInstant(brickHitPool);
+        if (!isMuted) playInstant(brickHitPool);
     }
 
     public static void playPaddleHit() {
-        playInstant(paddleHitPool);
+        if (!isMuted) playInstant(paddleHitPool);
     }
 
     private static void playInstant(List<AudioClip> pool) {
@@ -102,6 +108,84 @@ public class SoundManager {
         }
     }
 
+    // ===== PHƯƠNG THỨC MỚI CHO NHẠC NỀN =====
+
+    /**
+     * Phát nhạc nền (loop)
+     * @param musicPath Đường dẫn file nhạc (ví dụ: "/sounds/menu_music.mp3")
+     */
+    public static void playBackgroundMusic(String musicPath) {
+        try {
+            stopBackgroundMusic(); // Dừng nhạc cũ nếu có
+
+            String resourcePath = SoundManager.class.getResource(musicPath).toExternalForm();
+            Media media = new Media(resourcePath);
+            backgroundMusicPlayer = new MediaPlayer(media);
+
+            backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Lặp vô hạn
+            backgroundMusicPlayer.setVolume(isMuted ? 0.0 : 0.3); // Volume 30%
+            backgroundMusicPlayer.play();
+
+        } catch (Exception e) {
+            System.err.println("Không thể phát nhạc nền: " + musicPath);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Dừng nhạc nền
+     */
+    public static void stopBackgroundMusic() {
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.stop();
+            backgroundMusicPlayer.dispose();
+            backgroundMusicPlayer = null;
+        }
+    }
+
+    /**
+     * Tạm dừng nhạc nền
+     */
+    public static void pauseBackgroundMusic() {
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.pause();
+        }
+    }
+
+    /**
+     * Tiếp tục phát nhạc nền
+     */
+    public static void resumeBackgroundMusic() {
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.play();
+        }
+    }
+
+    /**
+     * Bật/tắt tất cả âm thanh
+     */
+    public static void setMuted(boolean muted) {
+        isMuted = muted;
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.setVolume(muted ? 0.0 : 0.3);
+        }
+    }
+
+    /**
+     * Kiểm tra trạng thái mute
+     */
+    public static boolean isMuted() {
+        return isMuted;
+    }
+
+    /**
+     * Điều chỉnh âm lượng nhạc nền (0.0 - 1.0)
+     */
+    public static void setBackgroundVolume(double volume) {
+        if (backgroundMusicPlayer != null && !isMuted) {
+            backgroundMusicPlayer.setVolume(Math.max(0.0, Math.min(1.0, volume)));
+        }
+    }
 
     public static void testAllSounds() {
         System.out.println("🔊 Testing all sounds...");

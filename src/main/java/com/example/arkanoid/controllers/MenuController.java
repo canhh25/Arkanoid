@@ -1,5 +1,6 @@
 package com.example.arkanoid.controllers;
 
+import com.example.arkanoid.utils.SoundManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +32,7 @@ public class MenuController {
 
     public void openGame(Stage stage) {
         try {
+            SoundManager.stopBackgroundMusic();
             Canvas canvas = new Canvas(WIDTH, HEIGHT);
             GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -71,6 +73,7 @@ public class MenuController {
 
     @FXML
     private void handleEsc(ActionEvent event) {
+        SoundManager.stopBackgroundMusic();
         Stage stage = (Stage) btnEsc.getScene().getWindow();
         stage.close();
     }
@@ -80,11 +83,13 @@ public class MenuController {
         volumeSprite = new Image(getClass().getResource("/images/menu/volume.png").toExternalForm());
         btnVolume.setImage(volumeSprite);
         btnVolume.setViewport(new Rectangle2D(0, 0, 70, 70));
+        SoundManager.playBackgroundMusic("/sounds/nen.mp3");
     }
 
     @FXML
     private void toggleVolume() {
         mute = !mute;
+        SoundManager.setMuted(mute);
         if (mute) {
             btnVolume.setViewport(new Rectangle2D(70, 0, 70, 70));
             // xu li am thanh
