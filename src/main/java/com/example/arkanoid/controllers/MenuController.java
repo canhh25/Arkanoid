@@ -1,6 +1,7 @@
 package com.example.arkanoid.controllers;
 
 import com.example.arkanoid.utils.SoundManager;
+import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +31,7 @@ public class MenuController {
     private Image volumeSprite;
 
 
+
     public void openGame(Stage stage) {
         try {
             SoundManager.stopBackgroundMusic();
@@ -52,8 +54,14 @@ public class MenuController {
     }
     @FXML
     private void handleStart(ActionEvent event) {
-        Stage stage = (Stage) btnStart.getScene().getWindow();
-        openGame(stage);
+        // PHÁT ÂM THANH START
+        SoundManager.playGameStart();
+
+       
+
+             Stage stage = (Stage) btnStart.getScene().getWindow();
+             openGame(stage);
+
     }
 
     @FXML

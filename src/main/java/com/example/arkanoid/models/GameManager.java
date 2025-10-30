@@ -320,7 +320,7 @@ public class GameManager {
     }
 
     private void playSounds() {
-        new Thread(() -> {
+
             if (brickBrokenThisFrame) {
                 SoundManager.playBrickBreak();
             }
@@ -330,7 +330,7 @@ public class GameManager {
             if (paddleHitThisFrame) {
                 SoundManager.playPaddleHit();
             }
-        }).start();
+
     }
 
     public void renderPowerUps(GraphicsContext gc) {
