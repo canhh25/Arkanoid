@@ -1,5 +1,8 @@
 package com.example.arkanoid.utils;
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,8 +10,13 @@ public class SoundManager {
     private static final List<AudioClip> brickBreakPool = new ArrayList<>();
     private static final List<AudioClip> brickHitPool = new ArrayList<>();
     private static final List<AudioClip> paddleHitPool = new ArrayList<>();
+    private static final List<AudioClip> gameStartPool = new ArrayList<>();
 
-    private static final int POOL_SIZE = 5;
+    private static final int POOL_SIZE = 10;
+
+    // Thêm MediaPlayer cho nhạc nền
+    private static MediaPlayer backgroundMusicPlayer;
+    private static boolean isMuted = false;
 
     static {
         initializeSoundPool();
@@ -22,6 +30,7 @@ public class SoundManager {
         preloadSoundGroup(brickBreakPool, "/sounds/brick_break.wav");
         preloadSoundGroup(brickHitPool, "/sounds/brick_hit.wav");
         preloadSoundGroup(paddleHitPool, "/sounds/paddle_hit.wav");
+        preloadSoundGroup(gameStartPool, "/sounds/game_start.wav");
     }
 
     private static void preloadSoundGroup(List<AudioClip> pool, String path) {
@@ -38,17 +47,17 @@ public class SoundManager {
             String resourcePath = SoundManager.class.getResource(path).toExternalForm();
             AudioClip clip = new AudioClip(resourcePath);
 
-
-            clip.setVolume(0.001);
+            // Preload bằng cách phát im lặng
+            clip.setVolume(0.0); // Thay 0.001 = 0.0
             clip.play();
             try {
-                Thread.sleep(10);
+                Thread.sleep(1); // Giảm từ 10ms xuống 1ms
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 
             clip.stop();
-            clip.setVolume(1.0);
+            clip.setVolume(0.7); // Volume 70% cho game (1.0 có thể quá to)
             return clip;
 
         } catch (Exception e) {
@@ -57,17 +66,19 @@ public class SoundManager {
     }
 
     public static void playBrickBreak() {
-        playInstant(brickBreakPool);
+        if (!isMuted) playInstant(brickBreakPool);
     }
 
     public static void playBrickHit() {
-        playInstant(brickHitPool);
+        if (!isMuted) playInstant(brickHitPool);
     }
 
     public static void playPaddleHit() {
-        playInstant(paddleHitPool);
+        if (!isMuted) playInstant(paddleHitPool);
     }
-
+    public static void playGameStart() {
+        if (!isMuted) playInstant(gameStartPool);
+    }
     private static void playInstant(List<AudioClip> pool) {
         for (AudioClip clip : pool) {
             if (clip != null) {
@@ -90,6 +101,7 @@ public class SoundManager {
         if (pool == brickBreakPool) return "/sounds/brick_break.wav";
         if (pool == brickHitPool) return "/sounds/brick_hit.wav";
         if (pool == paddleHitPool) return "/sounds/paddle_hit.wav";
+        if (pool == gameStartPool) return "/sounds/game_start.wav";
         return null;
     }
 
@@ -102,6 +114,84 @@ public class SoundManager {
         }
     }
 
+    // ===== PHƯƠNG THỨC MỚI CHO NHẠC NỀN =====
+
+    /**
+     * Phát nhạc nền (loop)
+     * @param musicPath Đường dẫn file nhạc (ví dụ: "/sounds/menu_music.mp3")
+     */
+    public static void playBackgroundMusic(String musicPath) {
+        try {
+            stopBackgroundMusic(); // Dừng nhạc cũ nếu có
+
+            String resourcePath = SoundManager.class.getResource(musicPath).toExternalForm();
+            Media media = new Media(resourcePath);
+            backgroundMusicPlayer = new MediaPlayer(media);
+
+            backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Lặp vô hạn
+            backgroundMusicPlayer.setVolume(isMuted ? 0.0 : 0.3); // Volume 30%
+            backgroundMusicPlayer.play();
+
+        } catch (Exception e) {
+            System.err.println("Không thể phát nhạc nền: " + musicPath);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Dừng nhạc nền
+     */
+    public static void stopBackgroundMusic() {
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.stop();
+            backgroundMusicPlayer.dispose();
+            backgroundMusicPlayer = null;
+        }
+    }
+
+    /**
+     * Tạm dừng nhạc nền
+     */
+    public static void pauseBackgroundMusic() {
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.pause();
+        }
+    }
+
+    /**
+     * Tiếp tục phát nhạc nền
+     */
+    public static void resumeBackgroundMusic() {
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.play();
+        }
+    }
+
+    /**
+     * Bật/tắt tất cả âm thanh
+     */
+    public static void setMuted(boolean muted) {
+        isMuted = muted;
+        if (backgroundMusicPlayer != null) {
+            backgroundMusicPlayer.setVolume(muted ? 0.0 : 0.3);
+        }
+    }
+
+    /**
+     * Kiểm tra trạng thái mute
+     */
+    public static boolean isMuted() {
+        return isMuted;
+    }
+
+    /**
+     * Điều chỉnh âm lượng nhạc nền (0.0 - 1.0)
+     */
+    public static void setBackgroundVolume(double volume) {
+        if (backgroundMusicPlayer != null && !isMuted) {
+            backgroundMusicPlayer.setVolume(Math.max(0.0, Math.min(1.0, volume)));
+        }
+    }
 
     public static void testAllSounds() {
         System.out.println("🔊 Testing all sounds...");
@@ -113,6 +203,8 @@ public class SoundManager {
                 playPaddleHit();
                 Thread.sleep(200);
                 playBrickBreak();
+                Thread.sleep(200);
+                playGameStart();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
