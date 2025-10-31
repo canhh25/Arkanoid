@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import java.awt.*;
 
 public class Paddle extends MovableObject {
-    public static final double PADDLE_SPEED = 5;
+    public static final double PADDLE_SPEED = 7;
     public static double paddle_width = 100;
     public static double paddle_height= 30;
 
