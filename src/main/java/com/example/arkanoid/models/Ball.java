@@ -54,6 +54,7 @@ public class Ball extends MovableObject {
 
     public boolean isFireEffectEnabled() {
         return fireEffectEnabled;
+
     }
 
     @Override

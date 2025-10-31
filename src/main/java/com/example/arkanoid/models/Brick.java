@@ -1,11 +1,10 @@
 package com.example.arkanoid.models;
 
 import com.example.arkanoid.models.Power.*;
-import javafx.scene.canvas.GraphicsContext;
 
 public class Brick extends GameObject {
-    public static final double BRICK_WIDTH = 96;
-    public static final double BRICK_HEIGHT = 32;
+    public static final double BRICK_WIDTH = 960 / 11;
+    public static final double BRICK_HEIGHT = 16 * 1.5;
     public int hitPoints;
     // 4 type.
     // - 1, 2, 3 lần lượt hitPoints = type.
@@ -23,7 +22,7 @@ public class Brick extends GameObject {
     }
 
     public void hit() {
-        if(this.type != 4) {
+        if (this.type != 4) {
             this.hitPoints--;
 
             // THÊM: Spawn powerup khi brick bị phá
@@ -31,7 +30,7 @@ public class Brick extends GameObject {
                 spawnPowerUp();
             }
 
-            if((this.hitPoints == 1 && this.type == 2)
+            if ((this.hitPoints == 1 && this.type == 2)
                     || this.hitPoints == 2 && this.type == 3) {
                 setImage(crackedImagePath);
             }
@@ -62,7 +61,7 @@ public class Brick extends GameObject {
                     break;
             }
 
-            if(powerUp != null) {
+            if (powerUp != null) {
                 PowerUpManager.addPowerUp(powerUp);
             }
         }
@@ -70,12 +69,5 @@ public class Brick extends GameObject {
 
     public boolean isDestroyed() {
         return hitPoints <= 0;
-    }
-    @Override
-    public void render(GraphicsContext gc) {
-        // Vẽ brick bằng ảnh từ GameObject - giữ nguyên chức năng hiện có
-        if (getImage() != null) {
-            gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
-        }
     }
 }

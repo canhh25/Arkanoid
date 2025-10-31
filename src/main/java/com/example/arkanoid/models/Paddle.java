@@ -1,7 +1,6 @@
 package com.example.arkanoid.models;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 import java.awt.*;
 
@@ -13,7 +12,6 @@ public class Paddle extends MovableObject {
     private boolean movingLeft = false;
     private boolean movingRight = false;
     private final double gameWidth;
-    private Image image;
     private int frame = 0;
     private int frameCount = 3; // số frame (bat0, bat1, bat2)
     private int frameDelay = 10;
