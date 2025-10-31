@@ -1,7 +1,5 @@
 package com.example.arkanoid.models;
 
-import javafx.scene.canvas.GraphicsContext;
-
 public class Ball extends MovableObject {
     public double dx, dy;
     private double prevX, prevY;
@@ -46,14 +44,6 @@ public class Ball extends MovableObject {
 
     public double getSpeed() {
         return speed;
-    }
-
-    @Override
-    public void render(GraphicsContext gc) {
-        // Vẽ brick bằng ảnh từ GameObject - giữ nguyên chức năng hiện có
-        if (getImage() != null) {
-            gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
-        }
     }
 
     public double getDx() {
