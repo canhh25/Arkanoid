@@ -40,7 +40,7 @@ public class GameView {
             }
 
             if(gameManager.gameState == GameState.WIN ||  gameManager.gameState == GameState.GAME_OVER) {
-                gameManager.resetGame();
+                gameManager.nextGame();
             }
 
             gc.setFont(new Font("Arial", 20));

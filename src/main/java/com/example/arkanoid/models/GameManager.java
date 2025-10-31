@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
-    private static final double BALL_SPEED = 3.5;
+    private static final double BALL_SPEED = 5.5;
     private final int gameWidth = 960;
     private final int gameHeight = 640;
 
@@ -47,20 +47,23 @@ public class GameManager {
         return instance;
     }
 
-    public void resetGame() {
-        this.lives = 3;
-        if(gameState == GameState.GAME_OVER) {
-            this.score = 0;
-            this.level = 1;
-        } else {
+    public void nextGame() {
+        if (gameState == GameState.WIN) {
             this.level++;
+        } else if (gameState == GameState.GAME_OVER) {
+            this.score = 0;
+            this.lives = 3;
         }
+        setupGame();
     }
 
     public void setupGame() {
+        if (gameState != GameState.DEAD) {
+            bricks = LevelLoader.loadLevel(this.level);
+        }
         gameState = GameState.RUNNING;
         resetSoundFlags();
-        bricks = LevelLoader.loadLevel(this.level);
+
         movables = new ArrayList<>();
         PowerUpManager.clearPowerUps();
 
@@ -251,7 +254,7 @@ public class GameManager {
         ball.dy *= -1;
         brickHitThisFrame = true;
 
-        if(brick.hitPoints == 1) {
+        if (brick.hitPoints == 1) {
             this.score += (brick.type * 10);
             brickBrokenThisFrame = true;
         }
@@ -292,17 +295,19 @@ public class GameManager {
         // 5) Kiểm tra hết bóng => mất mạng
         if (balls.isEmpty()) {
             this.lives--;
-            if (this.lives == 0) {
-                gameState = GameState.GAME_OVER;
-            } else {
+            if (lives > 0) {
+                gameState = GameState.DEAD;
                 setupGame();
+            } else {
+                gameState = GameState.GAME_OVER;
             }
             return;
         }
 
         // 6) Win nếu hết brick
-        if(isEmptyBrick()) {
+        if (isEmptyBrick()) {
             gameState = GameState.WIN;
+            nextGame();
         }
     }
 
