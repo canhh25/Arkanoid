@@ -251,10 +251,53 @@ public class GameManager {
             return false;
         }
 
-        ball.dy *= -1;
-        brickHitThisFrame = true;
+        double bLeft = brick.getX();
+        double bTop = brick.getY();
+        double bRight = bLeft + brick.getWidth();
+        double bBottom = bTop + brick.getHeight();
 
-        if (brick.hitPoints == 1) {
+        double ballLeft = ball.getX();
+        double ballTop = ball.getY();
+        double ballRight = ballLeft + ball.getWidth();
+        double ballBottom = ballTop + ball.getHeight();
+
+        // tính overlap
+        double overlapLeft = ballRight - bLeft;
+        double overlapRight = bRight - ballLeft;
+        double overlapTop = ballBottom - bTop;
+        double overlapBottom = bBottom - ballTop;
+
+        // tìm min overlap = hướng va chạm
+        double minOverlap = Math.min(
+                Math.min(overlapLeft, overlapRight),
+                Math.min(overlapTop, overlapBottom)
+        );
+
+        // đẩy ball ra
+        if (minOverlap == overlapTop) {
+            // Va chạm từ trên xuống
+            ball.setY(bTop - ball.getHeight() - 0.1);
+        } else if (minOverlap == overlapBottom) {
+            // Va chạm từ dưới lên
+            ball.setY(bBottom + 0.1);
+            ball.reverseY();
+        } else if (minOverlap == overlapLeft) {
+            // Va chạm từ trái
+            ball.setX(bLeft - ball.getWidth() - 0.1);
+            ball.reverseX();
+        } else {
+            ball.setX(bRight + 0.1);
+            ball.reverseX();
+        }
+
+        ball.setPrevX(ball.getX());
+        ball.setPrevY(ball.getY());
+
+        normalizeBallSpeed(ball);
+
+        // Sound & Score
+        brickHitThisFrame = true;
+        if(brick.hitPoints == 1) {
             this.score += (brick.type * 10);
             brickBrokenThisFrame = true;
         }

@@ -13,6 +13,7 @@ public class Ball extends MovableObject {
     private double speed;
     public static final double BALL_WIDTH = 14;
     public static final double BALL_HEIGHT = 14;
+    private int collisionCooldown = 0;
 
     private List<Particle> particles;
     private boolean fireEffectEnabled = true;

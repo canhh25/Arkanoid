@@ -21,7 +21,7 @@ public class GameView {
     private static final int HEIGHT = 640;
     private final List<Image> backgroundFrames = new ArrayList<>();
     private int currentFrameIndex = 0;
-    private final double FPS = 120.0;
+    private final double FPS = 60.0;
     private Image currentBackground;
     private static final Random RANDOM = new Random();
     private static final String[] BG_FOLDERS = {"Pixel-Art Background 1",
@@ -104,5 +104,4 @@ public class GameView {
             gc.fillText("Press SPACE to Restart", WIDTH / 2.0, HEIGHT / 2.0 + 40);
         }
     }
-
 }
