@@ -30,8 +30,6 @@ public class MenuController {
     private boolean mute = false;
     private Image volumeSprite;
 
-
-
     public void openGame(Stage stage) {
         try {
             SoundManager.stopBackgroundMusic();
@@ -57,7 +55,7 @@ public class MenuController {
         // PHÁT ÂM THANH START
         SoundManager.playGameStart();
 
-       
+
 
              Stage stage = (Stage) btnStart.getScene().getWindow();
              openGame(stage);
@@ -113,4 +111,12 @@ public class MenuController {
         stage.close();
     }
 
+    public void openGameOver(Stage stage) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com.example.arkanoid/main/GameOverView.fxml"));
+            stage.setScene(new Scene(root, WIDTH, HEIGHT));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

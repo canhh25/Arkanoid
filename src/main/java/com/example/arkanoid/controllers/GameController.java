@@ -4,6 +4,7 @@ import com.example.arkanoid.main.Main;
 import com.example.arkanoid.models.GameManager;
 import com.example.arkanoid.views.GameView;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -11,6 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.stage.Stage;
 
 public class GameController {
     private boolean goLeft = false;
@@ -19,6 +23,7 @@ public class GameController {
     private final GameManager gameManager;
     private final GameView gameView;
     private final GraphicsContext gc;
+    private AnimationTimer animationTimer;
 
     public GameController(GraphicsContext gc) {
         this.gc = gc;
@@ -28,14 +33,28 @@ public class GameController {
     }
 
     public void start() {
-        new AnimationTimer() {
+        animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                if (gameManager.isGameOver()) {
+                    animationTimer.stop();
+                    showGameOver();
+                    return;
+                }
                 gameManager.update(goLeft, goRight);
                 gameView.render(gc, gameManager);
                 render();
             }
-        }.start();
+        };
+        animationTimer.start();
+    }
+
+    private void showGameOver() {
+        Platform.runLater(() -> {
+            Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+            MenuController menuController = new MenuController();
+            menuController.openGameOver(stage);
+        });
     }
 
     private void setupInputHandling(Scene scene) {
