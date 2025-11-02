@@ -1,17 +1,16 @@
 package com.example.arkanoid.models;
 
-import com.example.arkanoid.models.Power.ExtraLifePowerUp;
 import com.example.arkanoid.models.Power.PowerUpManager;
 import com.example.arkanoid.utils.LevelLoader;
 import com.example.arkanoid.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
-
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
-    private static final double BALL_SPEED = 5.5;
+    private static final double BALL_SPEED = 5.0;
     private final int gameWidth = 960;
     private final int gameHeight = 640;
 
@@ -27,6 +26,7 @@ public class GameManager {
     private boolean brickHitThisFrame = false;
     private boolean paddleHitThisFrame = false;
     private boolean waitingLaunch = true;
+    private static final Random RANDOM = new Random();
     public GameState gameState = GameState.PAUSED;
 
     public static GameManager instance;
@@ -90,9 +90,11 @@ public class GameManager {
         if (waitingLaunch && gameState == GameState.RUNNING && !balls.isEmpty()) {
             waitingLaunch = false;
             Ball mainBall = balls.get(0);
-            double angle = Math.toRadians(-60);
-            mainBall.dx = BALL_SPEED * Math.cos(angle);
-            mainBall.dy = BALL_SPEED * Math.sin(angle);
+            double minAngleDeg = -120.0;
+            double maxAngleDeg = -60.0;
+            double randomAngleDeg = minAngleDeg + (maxAngleDeg - minAngleDeg) * RANDOM.nextDouble();
+            double angle = Math.toRadians(randomAngleDeg);
+            mainBall.launchByAngle(angle);
             mainBall.setPrevX(mainBall.getX());
             mainBall.setPrevY(mainBall.getY());
         }
@@ -107,8 +109,7 @@ public class GameManager {
         // Tạo bóng thứ 2 (bay về trái)
         Ball ball2 = new Ball(originalBall.getX(), originalBall.getY(), BALL_SPEED);
         double angle2 = Math.toRadians(-120); // 120 độ
-        ball2.dx = BALL_SPEED * Math.cos(angle2);
-        ball2.dy = BALL_SPEED * Math.sin(angle2);
+        ball2.launchByAngle(angle2);
         ball2.setPrevX(ball2.getX());
         ball2.setPrevY(ball2.getY());
         balls.add(ball2);
@@ -117,8 +118,7 @@ public class GameManager {
         // Tạo bóng thứ 3 (bay về phải)
         Ball ball3 = new Ball(originalBall.getX(), originalBall.getY(), BALL_SPEED);
         double angle3 = Math.toRadians(-60); // 60 độ
-        ball3.dx = BALL_SPEED * Math.cos(angle3);
-        ball3.dy = BALL_SPEED * Math.sin(angle3);
+        ball3.launchByAngle(angle3);
         ball3.setPrevX(ball3.getX());
         ball3.setPrevY(ball3.getY());
         balls.add(ball3);

@@ -33,7 +33,6 @@ public class Ball extends MovableObject {
 
     public void setSpeed(double s) {
         this.speed = s;
-        renormalize();
     }
 
     public void launchByAngle(double angleRad) {
@@ -146,14 +145,6 @@ public class Ball extends MovableObject {
 
     public void reverseX() { dx = -dx; }
     public void reverseY() { dy = -dy; }
-
-    public void renormalize() {
-        double v = Math.hypot(dx, dy);
-        if (v == 0) return;
-        double k = speed / v;
-        dx *= k;
-        dy *= k;
-    }
 
     public void clearParticles() {
         particles.clear();
