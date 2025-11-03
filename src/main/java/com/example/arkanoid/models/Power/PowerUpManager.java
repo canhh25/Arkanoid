@@ -6,14 +6,37 @@ import com.example.arkanoid.models.Paddle;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class PowerUpManager {
-    private static List<PowerUp> fallingPowerUps = new ArrayList<>(); // PowerUp đang rơi
-    private static Map<String, PowerUp> activePowerUps = new HashMap<>(); // PowerUp đang hoạt động
+    private static final List<PowerUp> fallingPowerUps = new ArrayList<>();
+    private static final Map<String, ActivePowerUpEntry> activePowerUps = new ConcurrentHashMap<>();
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+
     public static GameManager gameManager;
+
+    // Class để lưu PowerUp và task của nó
+    private static class ActivePowerUpEntry {
+        PowerUp powerUp;
+        ScheduledFuture<?> scheduledTask;
+
+        ActivePowerUpEntry(PowerUp powerUp, ScheduledFuture<?> task) {
+            this.powerUp = powerUp;
+            this.scheduledTask = task;
+        }
+
+        void cancel() {
+            if (scheduledTask != null && !scheduledTask.isDone()) {
+                scheduledTask.cancel(false);
+            }
+        }
+    }
 
     public static void setGameManager(GameManager gm) {
         gameManager = gm;
@@ -43,29 +66,6 @@ public class PowerUpManager {
                 fallingPowerUps.remove(i);
             }
         }
-
-        // Cập nhật PowerUp đang hoạt động
-        List<String> expiredTypes = new ArrayList<>();
-        for (Map.Entry<String, PowerUp> entry : activePowerUps.entrySet()) {
-            PowerUp powerUp = entry.getValue();
-            powerUp.update();
-
-            if (powerUp.isExpired()) {
-                // Gỡ hiệu ứng
-                if (powerUp instanceof ExpandPaddle) {
-                    powerUp.removeEffect(paddle);
-                } else if (powerUp instanceof FastBall) {
-                    powerUp.removeEffect(ball);
-                }
-                expiredTypes.add(entry.getKey());
-            }
-        }
-
-        // Xóa các PowerUp hết hạn
-        for (String type : expiredTypes) {
-            activePowerUps.remove(type);
-            System.out.println("PowerUp hết hạn: " + type);
-        }
     }
 
     private static void handlePowerUpCollection(PowerUp powerUp, Paddle paddle, Ball ball) {
@@ -73,36 +73,88 @@ public class PowerUpManager {
 
         // Kiểm tra xem đã có PowerUp cùng loại đang hoạt động chưa
         if (activePowerUps.containsKey(type)) {
-            PowerUp existingPowerUp = activePowerUps.get(type);
+            ActivePowerUpEntry entry = activePowerUps.get(type);
 
-            if (powerUp instanceof ExpandPaddle) {
-                existingPowerUp.extendTime(3000);
-                System.out.println("Extend PowerUp: " + type + " Times: " + existingPowerUp.activeTime);
-            } else if (powerUp instanceof FastBall) {
-                existingPowerUp.extendTime(3000);
-                System.out.println("Extend PowerUp: " + type);
+            if (powerUp instanceof ExpandPaddle || powerUp instanceof FastBall) {
+                // Cancel task cũ
+                entry.cancel();
+
+                // Extend thời gian trong PowerUp
+                entry.powerUp.extendTime(3000);
+
+                // Lấy thời gian còn lại từ activeTime của PowerUp
+                long remainingTime = entry.powerUp.activeTime;
+
+                // Schedule task mới với thời gian còn lại
+                ScheduledFuture<?> newTask = scheduler.schedule(() -> {
+                    removePowerUpEffect(entry.powerUp, paddle, ball);
+                    activePowerUps.remove(type);
+                    System.out.println("PowerUp hết hạn: " + type);
+                }, remainingTime, TimeUnit.MILLISECONDS);
+
+                entry.scheduledTask = newTask;
+
+                System.out.println("Extend PowerUp: " + type + " - Remaining: " + remainingTime + "ms");
             } else if (powerUp instanceof ExtraLifePowerUp) {
-                if (((ExtraLifePowerUp) powerUp).getCountLives() > 0) {
-                    existingPowerUp.applyEffect(gameManager);
-                }
+                // Instant effect - apply ngay
+                powerUp.applyEffect(gameManager);
             } else if (powerUp instanceof MultiBallPowerUp) {
-                existingPowerUp.applyEffect(gameManager);
+                // Instant effect - apply ngay
+                powerUp.applyEffect(gameManager);
             }
         } else {
-            // Chưa có, apply hiệu ứng mới
-            if (powerUp instanceof ExtraLifePowerUp) {
-                powerUp.applyEffect(gameManager);
-            } else if (powerUp instanceof ExpandPaddle) {
-                powerUp.applyEffect(paddle);
-                activePowerUps.put(type, powerUp);
-            } else if (powerUp instanceof FastBall) {
-                powerUp.applyEffect(ball);
-                activePowerUps.put(type, powerUp);
-            } else if (powerUp instanceof MultiBallPowerUp) {
-                powerUp.applyEffect(gameManager);
-            }
+            // Chưa có PowerUp này, apply mới
+            applyNewPowerUp(powerUp, paddle, ball, type);
+        }
+    }
 
+    private static void applyNewPowerUp(PowerUp powerUp, Paddle paddle, Ball ball, String type) {
+        if (powerUp instanceof ExtraLifePowerUp) {
+            powerUp.applyEffect(gameManager);
+            System.out.println("Kích hoạt PowerUp (instant): " + type);
+
+        } else if (powerUp instanceof MultiBallPowerUp) {
+            powerUp.applyEffect(gameManager);
             System.out.println("Kích hoạt PowerUp: " + type);
+
+        } else if (powerUp instanceof ExpandPaddle) {
+            powerUp.applyEffect(paddle);
+
+            long duration = powerUp.activeTime > 0 ? powerUp.activeTime : 5000; // Default 5 giây
+
+            // Schedule việc remove effect sau duration
+            ScheduledFuture<?> task = scheduler.schedule(() -> {
+                powerUp.removeEffect(paddle);
+                activePowerUps.remove(type);
+                System.out.println("PowerUp hết hạn: " + type);
+            }, duration, TimeUnit.MILLISECONDS);
+
+            activePowerUps.put(type, new ActivePowerUpEntry(powerUp, task));
+            System.out.println("Kích hoạt PowerUp: " + type + " - Duration: " + duration + "ms");
+
+        } else if (powerUp instanceof FastBall) {
+            powerUp.applyEffect(ball);
+
+            // Lấy duration sau khi applyEffect (có thể được set trong applyEffect)
+            long duration = powerUp.activeTime > 0 ? powerUp.activeTime : 5000; // Default 5 giây
+
+            // Schedule việc remove effect sau duration
+            ScheduledFuture<?> task = scheduler.schedule(() -> {
+                powerUp.removeEffect(ball);
+                activePowerUps.remove(type);
+                System.out.println("PowerUp hết hạn: " + type);
+            }, duration, TimeUnit.MILLISECONDS);
+
+            activePowerUps.put(type, new ActivePowerUpEntry(powerUp, task));
+            System.out.println("Kích hoạt PowerUp: " + type + " - Duration: " + duration + "ms");
+        }
+    }
+
+    private static void removePowerUpEffect(PowerUp powerUp, Paddle paddle, Ball ball) {
+        if (powerUp instanceof ExpandPaddle) {
+            powerUp.removeEffect(paddle);
+        } else if (powerUp instanceof FastBall) {
+            powerUp.removeEffect(ball);
         }
     }
 
@@ -116,7 +168,30 @@ public class PowerUpManager {
     }
 
     public static void clearPowerUps() {
+        // Cancel tất cả scheduled tasks
+        for (ActivePowerUpEntry entry : activePowerUps.values()) {
+            entry.cancel();
+        }
+
         fallingPowerUps.clear();
         activePowerUps.clear();
+    }
+
+    public static void shutdown() {
+        // Cancel tất cả tasks đang chạy
+        for (ActivePowerUpEntry entry : activePowerUps.values()) {
+            entry.cancel();
+        }
+
+        // Shutdown scheduler
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 }

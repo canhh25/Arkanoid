@@ -15,8 +15,9 @@ public abstract class PowerUp<T> extends GameObject {
     protected int currentFrame = 0;
     protected long lastFrameTime = 0;
     protected static final long FRAME_DELAY = 100; // 100ms giữa các frame
-    protected double activeTime = 0;
+    protected long activeTime = 4000;
     protected double maxActiveTime = 10000;
+    protected long duration = 3000;
     public PowerUp(double x, double y, double width, double height, String type) {
         super(x, y, width, height, null);
         this.type = type;
@@ -38,7 +39,7 @@ public abstract class PowerUp<T> extends GameObject {
     }
 
     public void extendTime(double additionalTime) {
-        activeTime = Math.max(0, activeTime - additionalTime);
+        activeTime =(long) Math.max(0, activeTime - additionalTime);
     }
 
     public void activate() {
@@ -85,14 +86,19 @@ public abstract class PowerUp<T> extends GameObject {
         frames = new javafx.scene.image.Image[8];
         try {
             // Load 8 frame animation
+            String checkPowerUp = this.type;
             for (int i = 0; i < 8; i++) {
-                String imagePath = "/images/powerups/powerup_life/powerup_life_" + (i + 1) + ".png";
+                String imagePath = "/images/powerups/powerup_" + checkPowerUp + "/powerup_" + checkPowerUp + "_" + (i + 1) + ".png";
                 frames[i] = new Image(getClass().getResourceAsStream(imagePath));
             }
         } catch (Exception e) {
             System.out.println("Không load được ảnh powerup: " + type);
             frames = null;
         }
+    }
+
+    public long getDuration() {
+        return duration;
     }
     public String getType() { return type; }
     public boolean isActive() { return isActive; }
