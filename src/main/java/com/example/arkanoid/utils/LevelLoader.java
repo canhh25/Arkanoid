@@ -158,7 +158,6 @@ public class LevelLoader {
                         crackedImagePath = "/images/brick/brick_magenta_cracked.png";
                     }
                     default -> {
-                        // Fallback
                         imagePath = "/images/brick/brick_lime.png";
                         crackedImagePath = "/images/brick/brick_lime_cracked.png";
                     }

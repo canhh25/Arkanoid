@@ -25,7 +25,7 @@ public class FastBall extends PowerUp<Ball> {
             ball.setDy(baseDy * SPEED_SCALE);
             activate();
         } else {
-            extendTime(EXTEND_TIME);
+            extendTime((long) EXTEND_TIME);
         }
     }
 

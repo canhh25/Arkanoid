@@ -34,7 +34,7 @@ public class ExpandPaddle extends PowerUp<Paddle> {
             activate();
             System.out.println("Paddle expanded: " + originalWidth + " -> " + newWidth);
         } else {
-            extendTime(EXTENDED_TIME);
+            extendTime((long) EXTENDED_TIME);
             System.out.println("Extended paddle time");
         }
     }

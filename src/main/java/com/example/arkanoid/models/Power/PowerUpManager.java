@@ -3,6 +3,7 @@ package com.example.arkanoid.models.Power;
 import com.example.arkanoid.models.Ball;
 import com.example.arkanoid.models.GameManager;
 import com.example.arkanoid.models.Paddle;
+import com.example.arkanoid.views.PowerUpView;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -109,17 +110,21 @@ public class PowerUpManager {
     }
 
     private static void applyNewPowerUp(PowerUp powerUp, Paddle paddle, Ball ball, String type) {
+        // Apply effect ngay lập tức
         if (powerUp instanceof ExtraLifePowerUp) {
+            // Instant effect - không cần schedule
             powerUp.applyEffect(gameManager);
             System.out.println("Kích hoạt PowerUp (instant): " + type);
 
         } else if (powerUp instanceof MultiBallPowerUp) {
+            // Instant effect - không cần schedule
             powerUp.applyEffect(gameManager);
-            System.out.println("Kích hoạt PowerUp: " + type);
+            System.out.println("Kích hoạt PowerUp (instant): " + type);
 
         } else if (powerUp instanceof ExpandPaddle) {
             powerUp.applyEffect(paddle);
 
+            // Lấy duration sau khi applyEffect (có thể được set trong applyEffect)
             long duration = powerUp.activeTime > 0 ? powerUp.activeTime : 5000; // Default 5 giây
 
             // Schedule việc remove effect sau duration
