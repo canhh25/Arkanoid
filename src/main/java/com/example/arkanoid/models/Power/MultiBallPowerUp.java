@@ -6,6 +6,8 @@ import com.example.arkanoid.models.Paddle;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import static com.example.arkanoid.models.GameManager.BALL_SPEED;
+
 public class MultiBallPowerUp extends PowerUp<GameManager> {
 
     public MultiBallPowerUp(double x, double y) {
@@ -14,7 +16,14 @@ public class MultiBallPowerUp extends PowerUp<GameManager> {
 
     @Override
     public void applyEffect(GameManager gameManager) {
-        gameManager.spawnExtraBalls();
+        if (gameManager.getBalls().isEmpty()) return;
+        System.out.println("Add ball");
+        Ball originalBall = gameManager.getBall();
+
+        gameManager.addBall(originalBall.getX(), originalBall.getY(), BALL_SPEED, -120);
+
+        gameManager.addBall(originalBall.getX(), originalBall.getY(), BALL_SPEED, -60);
+
     }
 
     @Override

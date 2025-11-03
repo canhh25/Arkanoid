@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
-    private static final double BALL_SPEED = 2.5;
+    public static final double BALL_SPEED = 4;
     private final int gameWidth = 960;
     private final int gameHeight = 640;
 
@@ -98,31 +98,6 @@ public class GameManager {
             mainBall.setPrevX(mainBall.getX());
             mainBall.setPrevY(mainBall.getY());
         }
-    }
-
-    // THÊM: Phương thức spawn thêm 2 bóng
-    public void spawnExtraBalls() {
-        if (balls.isEmpty()) return;
-        System.out.println("Add ball");
-        Ball originalBall = balls.get(0);
-
-        // Tạo bóng thứ 2 (bay về trái)
-        Ball ball2 = new Ball(originalBall.getX(), originalBall.getY(), BALL_SPEED);
-        double angle2 = Math.toRadians(-120); // 120 độ
-        ball2.launchByAngle(angle2);
-        ball2.setPrevX(ball2.getX());
-        ball2.setPrevY(ball2.getY());
-        balls.add(ball2);
-        movables.add(ball2);
-
-        // Tạo bóng thứ 3 (bay về phải)
-        Ball ball3 = new Ball(originalBall.getX(), originalBall.getY(), BALL_SPEED);
-        double angle3 = Math.toRadians(-60); // 60 độ
-        ball3.launchByAngle(angle3);
-        ball3.setPrevX(ball3.getX());
-        ball3.setPrevY(ball3.getY());
-        balls.add(ball3);
-        movables.add(ball3);
     }
 
     public void update(boolean goLeft, boolean goRight) {
@@ -392,6 +367,15 @@ public class GameManager {
         }
     }
 
+    public void addBall(double x, double y, double speed, double angle) {
+       Ball ball = new Ball(x, y, speed);
+       double angle_ball = Math.toRadians(angle);
+       ball.launchByAngle(angle_ball);
+       ball.setPrevX(ball.getX());
+       ball.setPrevY(ball.getY());
+       balls.add(ball);
+       movables.add(ball);
+    }
     public int getLives() {
         return lives;
     }
@@ -408,10 +392,10 @@ public class GameManager {
         return paddle;
     }
 
-    // THAY ĐỔI: Trả về bóng đầu tiên (để tương thích code cũ)
     public Ball getBall() {
         return balls.isEmpty() ? null : balls.get(0);
     }
+
 
     // THÊM: Getter cho danh sách bóng
     public List<Ball> getBalls() {
