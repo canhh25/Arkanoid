@@ -13,6 +13,7 @@ public class Ball extends MovableObject {
     private double speed;
     public static final double BALL_WIDTH = 14;
     public static final double BALL_HEIGHT = 14;
+    private int collisionCooldown = 0;
 
     private List<Particle> particles;
     private boolean fireEffectEnabled = true;
@@ -33,7 +34,6 @@ public class Ball extends MovableObject {
 
     public void setSpeed(double s) {
         this.speed = s;
-        renormalize();
     }
 
     public void launchByAngle(double angleRad) {
@@ -146,14 +146,6 @@ public class Ball extends MovableObject {
 
     public void reverseX() { dx = -dx; }
     public void reverseY() { dy = -dy; }
-
-    public void renormalize() {
-        double v = Math.hypot(dx, dy);
-        if (v == 0) return;
-        double k = speed / v;
-        dx *= k;
-        dy *= k;
-    }
 
     public void clearParticles() {
         particles.clear();
