@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 public class MultiBallPowerUp extends PowerUp<GameManager> {
 
     public MultiBallPowerUp(double x, double y) {
-        super(x, y, 14, 14, "multi_ball");
+        super(x, y, 30, 19, "multi_ball");
     }
 
     @Override

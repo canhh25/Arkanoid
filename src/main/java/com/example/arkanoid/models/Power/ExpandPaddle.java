@@ -12,7 +12,7 @@ public class ExpandPaddle extends PowerUp<Paddle> {
 
 
     public ExpandPaddle(double x, double y) {
-        super(x, y, 38, 19, "expand_paddle");
+        super(x, y, 30, 19, "expand");
     }
 
 

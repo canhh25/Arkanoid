@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
-    private static final double BALL_SPEED = 5.0;
+    private static final double BALL_SPEED = 2.5;
     private final int gameWidth = 960;
     private final int gameHeight = 640;
 

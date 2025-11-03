@@ -85,8 +85,9 @@ public abstract class PowerUp<T> extends GameObject {
         frames = new javafx.scene.image.Image[8];
         try {
             // Load 8 frame animation
+            String checkPowerUp = this.type;
             for (int i = 0; i < 8; i++) {
-                String imagePath = "/images/powerups/powerup_life/powerup_life_" + (i + 1) + ".png";
+                String imagePath = "/images/powerups/powerup_" + checkPowerUp + "/powerup_" + checkPowerUp + "_" + (i + 1) + ".png";
                 frames[i] = new Image(getClass().getResourceAsStream(imagePath));
             }
         } catch (Exception e) {

@@ -11,7 +11,7 @@ import java.awt.*;
 public class ExtraLifePowerUp extends PowerUp<GameManager> {
     public int countLives = 2;
     public ExtraLifePowerUp(double x, double y) {
-        super(x, y, 38, 19, "extra_life"); // Kích thước lớn hơn để nhìn rõ animation
+        super(x, y, 30, 19, "life");
     }
 
     @Override
