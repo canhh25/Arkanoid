@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
-    public static final double BALL_SPEED = 4;
+    public static final double BALL_SPEED = 2;
     private final int gameWidth = 960;
     private final int gameHeight = 640;
 
@@ -322,7 +322,6 @@ public class GameManager {
             return;
         }
 
-        // 6) Win nếu hết brick
         if (isEmptyBrick()) {
             gameState = GameState.WIN;
             nextGame();
@@ -360,13 +359,13 @@ public class GameManager {
         PowerUpManager.renderPowerUps(gc);
     }
 
-    // THÊM: Render tất cả các bóng
     public void renderBalls(GraphicsContext gc) {
         for (Ball ball : balls) {
             ball.render(gc);
         }
     }
 
+    // Add ball từ powerUp.
     public void addBall(double x, double y, double speed, double angle) {
        Ball ball = new Ball(x, y, speed);
        double angle_ball = Math.toRadians(angle);
@@ -376,6 +375,7 @@ public class GameManager {
        balls.add(ball);
        movables.add(ball);
     }
+
     public int getLives() {
         return lives;
     }
@@ -396,8 +396,6 @@ public class GameManager {
         return balls.isEmpty() ? null : balls.get(0);
     }
 
-
-    // THÊM: Getter cho danh sách bóng
     public List<Ball> getBalls() {
         return balls;
     }
