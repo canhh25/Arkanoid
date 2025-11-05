@@ -43,13 +43,16 @@ Phá **toàn bộ gạch có thể phá** để qua màn hoặc chiến thắng 
 
 ---
 
-## 🎨 Giao diện mẫu  
+## 🎨 Giao diện menu  
 
 ![Menu](src/main/resources/images/menu/menu.png)  
 *Giao diện menu chính của game*  
 
-![Gameplay](src/main/resources/images/background/Pixel-Art%20Background%201/preview.png)  
-*Một màn chơi với nền pixel-art*
+## 🎮 Giao diện gameplay
+
+| Map 1 | Map 2 | Map 3 | Map 4 |
+|-------|-------|-------|-------|
+| ![Map 1](src/main/resources/images/background/Pixel-Art%20Background%201/frame0001.png) | ![Map 2](src/main/resources/images/background/Pixel-Art%20Background%202/frame0001.png) | ![Map 3](src/main/resources/images/background/Pixel-Art%20Background%203/frame0001.png) | ![Map 4](src/main/resources/images/background/Pixel-Art%20Background%204/frame0001.png) |
 
 ---
 
