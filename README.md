@@ -52,7 +52,7 @@ Phá **toàn bộ gạch có thể phá** để qua màn hoặc chiến thắng 
 
 | Map 1 | Map 2 | Map 3 | Map 4 |
 |-------|-------|-------|-------|
-| ![Map 1](src/main/resources/images/background/Pixel-Art%20Background%201/frame0001.png) | ![Map 2](src/main/resourcpreview.png) |
+| ![Map 1](src/main/resources/images/background/Pixel-Art%20Background%201/frame0001.png) | ![Map 2](src/main/resources/images/background/Pixel-Art%20Background%202/frame0001.png) | ![Map 3](src/main/resources/images/background/Pixel-Art%20Background%203/preview.png) |
 
 ---
 
