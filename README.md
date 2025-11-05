@@ -13,6 +13,14 @@ Game được viết bằng **JavaFX**, tuân theo mô hình **MVC**.
 ---
 
 ## 🕹️ Cách chơi  
+| Hành động | Phím |
+|------------|------| 
+| Di chuyển sang trái | ←|
+| Di chuyển sang phải | →| 
+| Tạm dừng / Tiếp tục | P |
+---
+
+## 🧱 Brick
 | Hình ảnh | Loại gạch | Độ bền |
 |-----------|------------|--------|
 | ![Normal Brick](src/main/resources/images/brick/brick_green.png) | **Gạch thường** | 1 lần chạm |
@@ -21,10 +29,6 @@ Game được viết bằng **JavaFX**, tuân theo mô hình **MVC**.
 | ![Unbreakable Brick](src/main/resources/images/brick/brick_red.png) | **Gạch không phá được** | Không thể phá |
 ---
 
-## 🧱 Brick
-| Hình ảnh | Độ bền|
-|-----------|-------|
-| 
 ## 💥 Power-ups  
 
 | Hình ảnh | Tên | Hiệu ứng |
