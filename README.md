@@ -1,4 +1,4 @@
-# 🧱 ARKANOID – OOP PROJECT
+# ARKANOID – OOP PROJECT
 
 ## Member
 MSSV: 24020134 — Name: Nguyễn Duy Hiệu <br>
@@ -13,13 +13,18 @@ Game được viết bằng **JavaFX**, tuân theo mô hình **MVC**.
 ---
 
 ## 🕹️ Cách chơi  
-| Hành động | Phím |
-|------------|------|
-| Di chuyển sang trái | `←`|
-| Di chuyển sang phải | `→`|
-| Tạm dừng / Tiếp tục | `P` |
+| Hình ảnh | Loại gạch | Độ bền |
+|-----------|------------|--------|
+| ![Normal Brick](src/main/resources/images/bricks/brick_green.png) | **Gạch thường** | 1 lần chạm |
+| ![Hard Brick](src/main/resources/images/bricks/brick_blue.png) | **Gạch cứng** | 2 lần chạm |
+| ![VeryHard Brick](src/main/resources/images/bricks/brick_yellow.png) | **Gạch siêu cứng** | 3 lần chạm|
+| ![Unbreakable Brick](src/main/resources/images/bricks/brick_red.png) | **Gạch không phá được** | Không thể phá |
 ---
 
+## 🧱 Brick
+| Hình ảnh | Độ bền|
+|-----------|-------|
+| 
 ## 💥 Power-ups  
 
 | Hình ảnh | Tên | Hiệu ứng |
@@ -53,8 +58,3 @@ Phá **toàn bộ gạch có thể phá** để qua màn hoặc chiến thắng 
 | Map 1 | Map 2 | Map 3 | Map 4 |
 |-------|-------|-------|-------|
 | ![Map 1](src/main/resources/images/background/Pixel-Art%20Background%201/frame0001.png) | ![Map 2](src/main/resources/images/background/Pixel-Art%20Background%202/frame0001.png) | ![Map 3](src/main/resources/images/background/Pixel-Art%20Background%203/frame0001.png) | ![Map 4](src/main/resources/images/background/Pixel-Art%20Background%204/preview.png) |
-
----
-
-## 🧰 Cấu trúc dự án  
-
