@@ -22,7 +22,6 @@ public class PowerUpManager {
 
     public static GameManager gameManager;
 
-    // Class để lưu PowerUp và task của nó
     private static class ActivePowerUpEntry {
         PowerUp powerUp;
         ScheduledFuture<?> scheduledTask;
@@ -55,14 +54,12 @@ public class PowerUpManager {
             PowerUp powerUp = fallingPowerUps.get(i);
             powerUp.update();
 
-            // Kiểm tra va chạm với paddle
             if (powerUp.intersects(paddle)) {
                 handlePowerUpCollection(powerUp, paddle, ball);
                 fallingPowerUps.remove(i);
                 continue;
             }
 
-            // Xóa nếu rơi ra ngoài màn hình
             if (powerUp.getY() > gameManager.getGameHeight()) {
                 fallingPowerUps.remove(i);
             }
@@ -97,27 +94,21 @@ public class PowerUpManager {
 
                 System.out.println("Extend PowerUp: " + type + " - Remaining: " + remainingTime + "ms");
             } else if (powerUp instanceof ExtraLifePowerUp) {
-                // Instant effect - apply ngay
                 powerUp.applyEffect(gameManager);
             } else if (powerUp instanceof MultiBallPowerUp) {
-                // Instant effect - apply ngay
                 powerUp.applyEffect(gameManager);
             }
         } else {
-            // Chưa có PowerUp này, apply mới
             applyNewPowerUp(powerUp, paddle, ball, type);
         }
     }
 
     private static void applyNewPowerUp(PowerUp powerUp, Paddle paddle, Ball ball, String type) {
-        // Apply effect ngay lập tức
         if (powerUp instanceof ExtraLifePowerUp) {
-            // Instant effect - không cần schedule
             powerUp.applyEffect(gameManager);
             System.out.println("Kích hoạt PowerUp (instant): " + type);
 
         } else if (powerUp instanceof MultiBallPowerUp) {
-            // Instant effect - không cần schedule
             powerUp.applyEffect(gameManager);
             System.out.println("Kích hoạt PowerUp (instant): " + type);
 
@@ -125,7 +116,7 @@ public class PowerUpManager {
             powerUp.applyEffect(paddle);
 
             // Lấy duration sau khi applyEffect (có thể được set trong applyEffect)
-            long duration = powerUp.activeTime > 0 ? powerUp.activeTime : 5000; // Default 5 giây
+            long duration = powerUp.activeTime > 0 ? powerUp.activeTime : 5000;
 
             // Schedule việc remove effect sau duration
             ScheduledFuture<?> task = scheduler.schedule(() -> {

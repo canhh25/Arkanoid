@@ -4,8 +4,6 @@ import com.example.arkanoid.models.Paddle;
 import javafx.scene.canvas.GraphicsContext;
 
 public class ExpandPaddle extends PowerUp<Paddle> {
-    private static final double EXPAND_SCALE = 2.0;
-    private double baseWidth;
     private double originalWidth;
     private static final double EXTENDED_TIME = 3000;
     private static final double EXPAND_MULTIPLIER = 2.0;
@@ -34,7 +32,7 @@ public class ExpandPaddle extends PowerUp<Paddle> {
             activate();
             System.out.println("Paddle expanded: " + originalWidth + " -> " + newWidth);
         } else {
-            extendTime((long) EXTENDED_TIME);
+            extendTime(EXTENDED_TIME);
             System.out.println("Extended paddle time");
         }
     }

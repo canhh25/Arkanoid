@@ -5,6 +5,7 @@ import com.example.arkanoid.utils.LevelLoader;
 import com.example.arkanoid.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
 
+import java.io.*;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,7 +36,7 @@ public class GameManager {
     private GameManager() {
         this.score = 0;
         this.lives = 3;
-        this.level = 5;
+        this.level = 1;
         this.balls = new ArrayList<>();
         PowerUpManager.setGameManager(this);
         setupGame();
@@ -308,10 +309,8 @@ public class GameManager {
             }
         }
 
-        // Xóa brick bị phá
         bricks.removeIf(Brick::isDestroyed);
 
-        // 5) Kiểm tra hết bóng => mất mạng
         if (balls.isEmpty()) {
             this.lives--;
             if (lives > 0) {
