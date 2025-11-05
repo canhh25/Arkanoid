@@ -63,10 +63,8 @@ public class GameManager {
         }
         gameState = GameState.RUNNING;
         resetSoundFlags();
-
         movables = new ArrayList<>();
         PowerUpManager.clearPowerUps();
-
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
 
         // Tạo bóng chính
@@ -81,7 +79,6 @@ public class GameManager {
         mainBall.setY(paddle.getY() - mainBall.getHeight());
         mainBall.setPrevX(mainBall.getX());
         mainBall.setPrevY(mainBall.getY());
-
         movables.add(paddle);
         movables.add(mainBall);
     }
