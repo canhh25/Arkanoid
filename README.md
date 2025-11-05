@@ -24,30 +24,28 @@ Game được viết bằng **JavaFX**, tuân theo mô hình **MVC**.
 
 | Hình ảnh | Tên | Hiệu ứng |
 |-----------|------|----------|
-| ![Expand](src/main/resources/images/powerups/powerup_expand/icon.png) | **Expand Paddle** | Làm **rộng paddle** giúp dễ đỡ bóng hơn |
-| ![Fast Ball](src/main/resources/images/powerups/powerup_fast_ball/icon.png) | **Fast Ball** | Bóng **di chuyển nhanh hơn** |
-| ![Extra Life](src/main/resources/images/powerups/powerup_life/icon.png) | **Extra Life** | Thêm **1 mạng** |
-| ![Multi Ball](src/main/resources/images/powerups/powerup_multi_ball/icon.png) | **Multi Ball** | Tạo thêm nhiều bóng cùng lúc |
-
-> 📝 Lưu ý: Đảm bảo mỗi thư mục `powerup_*` có 1 ảnh đại diện, ví dụ `icon.png`.
+| ![Expand](src/main/resources/images/powerups/powerup_expand/powerup_expand_1.png) | **Expand Paddle** | Làm **rộng paddle**  trong một khoảng thời gian nhất định |
+| ![Fast Ball](src/main/resources/images/powerups/powerup_fast_ball/powerup_fast_ball_1.png) | **Fast Ball** | Bóng **di chuyển nhanh hơn** |
+| ![Extra Life](src/main/resources/images/powerups/powerup_life/powerup_life_1.png) | **Extra Life** | Thêm **1 mạng** |
+| ![Multi Ball](src/main/resources/images/powerups/powerup_multi_ball/powerup_multi_ball_1.png) | **Multi Ball** | Tạo thêm nhiều bóng cùng lúc |
 
 ---
 
 ## ❤️ Mạng sống  
 - Người chơi bắt đầu với **3 mạng**.  
 - Mỗi khi bóng rơi xuống dưới, mất 1 mạng.  
-- Khi hết mạng → **Game Over**.
+- Khi hết mạng: **Game Over**.
 
 ---
 
 ## 🏆 Thắng cuộc  
-Phá **toàn bộ gạch** để qua màn hoặc chiến thắng trò chơi.
+Phá **toàn bộ gạch có thể phá** để qua màn hoặc chiến thắng trò chơi.
 
 ---
 
 ## 🎨 Giao diện mẫu  
 
-![Menu](src/main/resources/images/menu/menu_preview.png)  
+![Menu](src/main/resources/images/menu/menu.png)  
 *Giao diện menu chính của game*  
 
 ![Gameplay](src/main/resources/images/background/Pixel-Art%20Background%201/preview.png)  
