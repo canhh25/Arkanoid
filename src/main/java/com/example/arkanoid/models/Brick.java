@@ -25,7 +25,6 @@ public class Brick extends GameObject {
         if (this.type != 4) {
             this.hitPoints--;
 
-            // THÊM: Spawn powerup khi brick bị phá
             if (this.hitPoints <= 0) {
                 spawnPowerUp();
             }

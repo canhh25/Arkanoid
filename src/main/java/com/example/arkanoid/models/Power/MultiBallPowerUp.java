@@ -24,6 +24,8 @@ public class MultiBallPowerUp extends PowerUp<GameManager> {
 
         gameManager.addBall(originalBall.getX(), originalBall.getY(), BALL_SPEED, -60);
 
+        gameManager.addBall(originalBall.getX(), originalBall.getY(), BALL_SPEED, -30);
+
     }
 
     @Override

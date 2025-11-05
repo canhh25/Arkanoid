@@ -50,15 +50,13 @@ public class MenuController {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleStart(ActionEvent event) {
         // PHÁT ÂM THANH START
         SoundManager.playGameStart();
-
-
-
-             Stage stage = (Stage) btnStart.getScene().getWindow();
-             openGame(stage);
+        Stage stage = (Stage) btnStart.getScene().getWindow();
+        openGame(stage);
 
     }
 

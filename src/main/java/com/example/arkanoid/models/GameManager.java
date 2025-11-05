@@ -4,13 +4,15 @@ import com.example.arkanoid.models.Power.PowerUpManager;
 import com.example.arkanoid.utils.LevelLoader;
 import com.example.arkanoid.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
+
+import java.io.*;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
-    public static final double BALL_SPEED = 2;
+    public static final double BALL_SPEED = 3;
     private final int gameWidth = 960;
     private final int gameHeight = 640;
 
@@ -34,7 +36,7 @@ public class GameManager {
     private GameManager() {
         this.score = 0;
         this.lives = 3;
-        this.level = 5;
+        this.level = 1;
         this.balls = new ArrayList<>();
         PowerUpManager.setGameManager(this);
         setupGame();
@@ -258,7 +260,7 @@ public class GameManager {
 
         // Sound & Score
         brickHitThisFrame = true;
-        if(brick.hitPoints == 1) {
+        if (brick.hitPoints == 1) {
             this.score += (brick.type * 10);
             brickBrokenThisFrame = true;
         }
@@ -293,10 +295,8 @@ public class GameManager {
             }
         }
 
-        // Xóa brick bị phá
         bricks.removeIf(Brick::isDestroyed);
 
-        // 5) Kiểm tra hết bóng => mất mạng
         if (balls.isEmpty()) {
             this.lives--;
             if (lives > 0) {
@@ -329,15 +329,15 @@ public class GameManager {
 
     private void playSounds() {
 
-            if (brickBrokenThisFrame) {
-                SoundManager.playBrickBreak();
-            }
-            if (brickHitThisFrame) {
-                SoundManager.playBrickHit();
-            }
-            if (paddleHitThisFrame) {
-                SoundManager.playPaddleHit();
-            }
+        if (brickBrokenThisFrame) {
+            SoundManager.playBrickBreak();
+        }
+        if (brickHitThisFrame) {
+            SoundManager.playBrickHit();
+        }
+        if (paddleHitThisFrame) {
+            SoundManager.playPaddleHit();
+        }
 
     }
 
@@ -351,15 +351,14 @@ public class GameManager {
         }
     }
 
-    // Add ball từ powerUp.
     public void addBall(double x, double y, double speed, double angle) {
-       Ball ball = new Ball(x, y, speed);
-       double angle_ball = Math.toRadians(angle);
-       ball.launchByAngle(angle_ball);
-       ball.setPrevX(ball.getX());
-       ball.setPrevY(ball.getY());
-       balls.add(ball);
-       movables.add(ball);
+        Ball ball = new Ball(x, y, speed);
+        double angle_ball = Math.toRadians(angle);
+        ball.launchByAngle(angle_ball);
+        ball.setPrevX(ball.getX());
+        ball.setPrevY(ball.getY());
+        balls.add(ball);
+        movables.add(ball);
     }
 
     public int getLives() {

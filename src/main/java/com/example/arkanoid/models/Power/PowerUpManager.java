@@ -3,6 +3,7 @@ package com.example.arkanoid.models.Power;
 import com.example.arkanoid.models.Ball;
 import com.example.arkanoid.models.GameManager;
 import com.example.arkanoid.models.Paddle;
+import com.example.arkanoid.views.PowerUpView;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ public class PowerUpManager {
 
     public static GameManager gameManager;
 
-    // Class để lưu PowerUp và task của nó
     private static class ActivePowerUpEntry {
         PowerUp powerUp;
         ScheduledFuture<?> scheduledTask;
@@ -54,14 +54,12 @@ public class PowerUpManager {
             PowerUp powerUp = fallingPowerUps.get(i);
             powerUp.update();
 
-            // Kiểm tra va chạm với paddle
             if (powerUp.intersects(paddle)) {
                 handlePowerUpCollection(powerUp, paddle, ball);
                 fallingPowerUps.remove(i);
                 continue;
             }
 
-            // Xóa nếu rơi ra ngoài màn hình
             if (powerUp.getY() > gameManager.getGameHeight()) {
                 fallingPowerUps.remove(i);
             }
@@ -96,14 +94,11 @@ public class PowerUpManager {
 
                 System.out.println("Extend PowerUp: " + type + " - Remaining: " + remainingTime + "ms");
             } else if (powerUp instanceof ExtraLifePowerUp) {
-                // Instant effect - apply ngay
                 powerUp.applyEffect(gameManager);
             } else if (powerUp instanceof MultiBallPowerUp) {
-                // Instant effect - apply ngay
                 powerUp.applyEffect(gameManager);
             }
         } else {
-            // Chưa có PowerUp này, apply mới
             applyNewPowerUp(powerUp, paddle, ball, type);
         }
     }
@@ -115,12 +110,13 @@ public class PowerUpManager {
 
         } else if (powerUp instanceof MultiBallPowerUp) {
             powerUp.applyEffect(gameManager);
-            System.out.println("Kích hoạt PowerUp: " + type);
+            System.out.println("Kích hoạt PowerUp (instant): " + type);
 
         } else if (powerUp instanceof ExpandPaddle) {
             powerUp.applyEffect(paddle);
 
-            long duration = powerUp.activeTime > 0 ? powerUp.activeTime : 5000; // Default 5 giây
+            // Lấy duration sau khi applyEffect (có thể được set trong applyEffect)
+            long duration = powerUp.activeTime > 0 ? powerUp.activeTime : 5000;
 
             // Schedule việc remove effect sau duration
             ScheduledFuture<?> task = scheduler.schedule(() -> {
