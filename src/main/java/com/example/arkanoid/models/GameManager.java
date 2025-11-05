@@ -34,7 +34,7 @@ public class GameManager {
     private GameManager() {
         this.score = 0;
         this.lives = 3;
-        this.level = 5;
+        this.level = 7;
         this.balls = new ArrayList<>();
         PowerUpManager.setGameManager(this);
         setupGame();
