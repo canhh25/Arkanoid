@@ -13,9 +13,9 @@ public class LevelLoader {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0},
-                {0, 1, 2, 2, 1, 1, 2, 2, 1, 0, 0},
-                {0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+                {0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+                {0, 1, 2, 2, 1, 1, 2, 2, 2, 1, 0},
+                {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
                 {0, 0, 1, 2, 2, 2, 2, 1, 0, 0, 0}
         };
         LEVELS.add(level1);
@@ -37,7 +37,7 @@ public class LevelLoader {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0},
                 {0, 2, 3, 3, 3, 4, 3, 3, 3, 2, 0},
-                {0, 2, 2, 3, 3, 3, 3, 3, 2, 2, 0},
+                {0, 2, 2, 3, 3, 4, 3, 3, 2, 2, 0},
                 {0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0}
         };
         LEVELS.add(level3);
@@ -47,7 +47,7 @@ public class LevelLoader {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 1, 0, 2, 0, 3, 0, 2, 0, 1, 0},
-                {0, 2, 0, 3, 0, 4, 0, 3, 0, 2, 0},
+                {0, 2, 2, 3, 2, 4, 2, 3, 2, 2, 0},
                 {0, 1, 0, 3, 0, 4, 0, 3, 0, 1, 0},
                 {0, 2, 0, 3, 0, 4, 0, 3, 0, 2, 0}
         };
@@ -67,23 +67,23 @@ public class LevelLoader {
         int[][] level6 = {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 3, 2, 1, 1, 1, 2, 3, 0, 0},
+                {0, 1, 2, 3, 3, 3, 3, 3, 2, 1, 0},
+                {0, 1, 2, 3, 3, 3, 3, 3, 2, 1, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 1, 2, 3, 4, 4, 4, 3, 2, 1, 0},
-                {0, 1, 2, 3, 4, 4, 4, 3, 2, 1, 0},
-                {0, 2, 3, 4, 3, 3, 3, 4, 3, 2, 0},
-                {0, 1, 2, 3, 4, 4, 4, 3, 2, 1, 0}
+                {4, 4, 4, 4, 1, 0, 1, 4, 4, 4, 4}
         };
         LEVELS.add(level6);
 
         int[][] level7 = {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 2, 3, 4, 4, 4, 3, 2, 0, 0},
-                {0, 2, 3, 4, 4, 4, 4, 4, 3, 2, 0},
-                {0, 3, 4, 4, 4, 4, 4, 4, 4, 3, 0},
-                {0, 2, 3, 4, 4, 4, 4, 4, 3, 2, 0},
-                {0, 0, 2, 3, 4, 4, 4, 3, 2, 0, 0}
+                {1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+                {1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
+                {2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0},
+                {2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0},
+                {3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0},
+                {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0},
+                {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1}
         };
         LEVELS.add(level7);
 
@@ -103,8 +103,8 @@ public class LevelLoader {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 2, 3, 4, 4, 4, 4, 4, 3, 2, 0},
-                {0, 3, 4, 4, 4, 4, 4, 4, 4, 3, 0},
+                {0, 2, 3, 1, 1, 1, 1, 1, 3, 2, 0},
+                {0, 3, 4, 4, 2, 2, 2, 4, 4, 3, 0},
                 {0, 3, 4, 4, 3, 3, 3, 4, 4, 3, 0},
                 {0, 3, 4, 4, 4, 4, 4, 4, 4, 3, 0},
                 {0, 2, 3, 4, 4, 4, 4, 4, 3, 2, 0}
@@ -112,17 +112,16 @@ public class LevelLoader {
         LEVELS.add(level9);
 
         int[][] level10 = {
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 3, 4, 4, 4, 4, 4, 4, 4, 3, 0},
-                {0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0},
-                {0, 3, 4, 4, 4, 4, 4, 4, 4, 3, 0},
-                {0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0},
-                {0, 3, 4, 4, 4, 4, 4, 4, 4, 3, 0}
+                {3, 2, 1, 3, 2, 0, 0, 0, 0, 0, 0},
+                {3, 2, 1, 3, 2, 1, 0, 0, 0, 0, 0},
+                {3, 2, 1, 3, 2, 1, 3, 0, 0, 0, 0},
+                {3, 2, 1, 3, 2, 1, 3, 0, 0, 0, 0},
+                {3, 2, 1, 3, 2, 1, 3, 2, 0, 0, 0},
+                {3, 2, 1, 3, 2, 1, 3, 2, 1, 0, 0},
+                {3, 2, 1, 3, 2, 1, 3, 2, 1, 3, 0},
+                {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1}
         };
         LEVELS.add(level10);
-
     }
 
     public static List<Brick> loadLevel(int level) {
@@ -137,29 +136,29 @@ public class LevelLoader {
                 if (cell <= 0) continue;
                 double x = col * Brick.BRICK_WIDTH;
                 double y = row * Brick.BRICK_HEIGHT;
-                //(1=red, 2=green, 3=blue, 4=yellow)
                 String imagePath;
                 String crackedImagePath;
                 switch (cell) {
                     case 1 -> {
-                        imagePath = "/images/brick/brick_lime.png";
-                        crackedImagePath = "/images/brick/brick_lime_cracked.png";
+                        imagePath = "/images/brick/brick_green.png";
+                        crackedImagePath = "/images/brick/brick_green_cracked.png";
                     }
                     case 2 -> {
-                        imagePath = "/images/brick/brick_cyan.png";
-                        crackedImagePath = "/images/brick/brick_cyan_cracked.png";
+                        imagePath = "/images/brick/brick_blue.png";
+                        crackedImagePath = "/images/brick/brick_blue_cracked.png";
                     }
                     case 3 -> {
-                        imagePath = "/images/brick/brick_purple.png";
-                        crackedImagePath = "/images/brick/brick_purple_cracked.png";
+                        imagePath = "/images/brick/brick_yellow.png";
+                        crackedImagePath = "/images/brick/brick_yellow_cracked.png";
                     }
                     case 4 -> {
-                        imagePath = "/images/brick/brick_magenta.png";
-                        crackedImagePath = "/images/brick/brick_magenta_cracked.png";
+                        imagePath = "/images/brick/brick_red.png";
+                        crackedImagePath = "/images/brick/brick_red_cracked.png";
                     }
                     default -> {
-                        imagePath = "/images/brick/brick_lime.png";
-                        crackedImagePath = "/images/brick/brick_lime_cracked.png";
+                        // Fallback
+                        imagePath = "/images/brick/brick_green.png";
+                        crackedImagePath = "/images/brick/brick_green_cracked.png";
                     }
                 }
 

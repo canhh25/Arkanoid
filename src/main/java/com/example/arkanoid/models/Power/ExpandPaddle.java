@@ -1,19 +1,16 @@
 package com.example.arkanoid.models.Power;
 
 import com.example.arkanoid.models.Paddle;
-import javafx.scene.canvas.GraphicsContext;
 
 public class ExpandPaddle extends PowerUp<Paddle> {
     private double originalWidth;
     private static final double EXTENDED_TIME = 3000;
     private static final double EXPAND_MULTIPLIER = 2.0;
 
-
     public ExpandPaddle(double x, double y) {
         super(x, y, 30, 19, "expand");
         this.duration = 5000;
     }
-
 
     @Override
     public void applyEffect(Paddle paddle) {

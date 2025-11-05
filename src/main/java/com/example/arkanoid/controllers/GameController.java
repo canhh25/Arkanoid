@@ -88,27 +88,20 @@ public class GameController {
     private void drawGameInfo() {
         double padding = 20;
         double y = 35;
-
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Montserrat", FontWeight.BOLD, 28));
-
-        // === SCORE - Căn trái ===
         gc.setTextAlign(TextAlignment.LEFT);
         String scoreText = "Score: " + gameManager.getScore();
         gc.fillText(scoreText, padding, y);
-
-        // === TIME - Ở giữa (lệch trái một chút) ===
         String timeText = "Time: " + formatTime(14);
-        double timeX = Main.WIDTH * 0.35; // 35% từ trái
+
+        double timeX = Main.WIDTH * 0.35;
         gc.fillText(timeText, timeX, y);
-
-        // === LEVEL - Ở giữa (lệch phải một chút) ===
         String levelText = "Level: " + gameManager.getLevel();
-        double levelX = Main.WIDTH * 0.58; // 58% từ trái
+
+        double levelX = Main.WIDTH * 0.58;
         gc.fillText(levelText, levelX, y);
-
         drawHearts(Main.WIDTH - padding, y);
-
         gc.setTextAlign(TextAlignment.LEFT);
     }
 
@@ -117,7 +110,6 @@ public class GameController {
         double heartSize = 25;
         double spacing = 8;
         double heartWidth = heartSize;
-
         for (int i = 0; i < lives; i++) {
             double heartX = rightX - (i * (heartWidth + spacing)) - heartSize;
             drawHeart(heartX, y - heartSize + 5, heartSize);
@@ -126,18 +118,14 @@ public class GameController {
 
     private void drawHeart(double x, double y, double size) {
         gc.setFill(Color.rgb(255, 50, 80));
-
         double centerX = x + size / 2;
         double centerY = y + size / 2;
 
         gc.beginPath();
-
         double topLeftX = centerX - size * 0.25;
         double topLeftY = centerY - size * 0.25;
-
         double topRightX = centerX + size * 0.25;
         double topRightY = centerY - size * 0.25;
-
         double bottomX = centerX;
         double bottomY = centerY + size * 0.4;
 
@@ -151,7 +139,6 @@ public class GameController {
 
         gc.closePath();
         gc.fill();
-
         gc.setStroke(Color.rgb(200, 30, 60));
         gc.setLineWidth(2);
         gc.stroke();
