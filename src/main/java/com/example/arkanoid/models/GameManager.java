@@ -34,7 +34,7 @@ public class GameManager {
     private GameManager() {
         this.score = 0;
         this.lives = 3;
-        this.level = 7;
+        this.level = 5;
         this.balls = new ArrayList<>();
         PowerUpManager.setGameManager(this);
         setupGame();
@@ -223,48 +223,37 @@ public class GameManager {
             return false;
         }
 
+        double prevX = ball.getPrevX();
+        double prevY = ball.getPrevY();
+        double nextX = ball.getX();
+        double nextY = ball.getY();
+
         double bLeft = brick.getX();
         double bTop = brick.getY();
         double bRight = bLeft + brick.getWidth();
         double bBottom = bTop + brick.getHeight();
 
-        double ballLeft = ball.getX();
-        double ballTop = ball.getY();
-        double ballRight = ballLeft + ball.getWidth();
-        double ballBottom = ballTop + ball.getHeight();
+        boolean fromLeft = prevX + ball.getWidth() <= bLeft && nextX + ball.getWidth() > bLeft;
+        boolean fromRight = prevX >= bRight && nextX < bRight;
+        boolean fromTop = prevY + ball.getHeight() <= bTop && nextY + ball.getHeight() > bTop;
+        boolean fromBottom = prevY >= bBottom && nextY < bBottom;
 
-        // tính overlap
-        double overlapLeft = ballRight - bLeft;
-        double overlapRight = bRight - ballLeft;
-        double overlapTop = ballBottom - bTop;
-        double overlapBottom = bBottom - ballTop;
-
-        // tìm min overlap = hướng va chạm
-        double minOverlap = Math.min(
-                Math.min(overlapLeft, overlapRight),
-                Math.min(overlapTop, overlapBottom)
-        );
-
-        // đẩy ball ra
-        if (minOverlap == overlapTop) {
-            // Va chạm từ trên xuống
+        if (fromTop) {
             ball.setY(bTop - ball.getHeight() - 0.1);
-        } else if (minOverlap == overlapBottom) {
-            // Va chạm từ dưới lên
+            ball.reverseY();
+        } else if (fromBottom) {
             ball.setY(bBottom + 0.1);
             ball.reverseY();
-        } else if (minOverlap == overlapLeft) {
-            // Va chạm từ trái
+        } else if (fromLeft) {
             ball.setX(bLeft - ball.getWidth() - 0.1);
             ball.reverseX();
-        } else {
+        } else if (fromRight) {
             ball.setX(bRight + 0.1);
             ball.reverseX();
+        } else {
+            // fallback (nếu không xác định được)
+            ball.reverseY();
         }
-
-        ball.setPrevX(ball.getX());
-        ball.setPrevY(ball.getY());
-
         normalizeBallSpeed(ball);
 
         // Sound & Score
