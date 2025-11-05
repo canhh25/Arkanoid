@@ -15,10 +15,10 @@ Game được viết bằng **JavaFX**, tuân theo mô hình **MVC**.
 ## 🕹️ Cách chơi  
 | Hình ảnh | Loại gạch | Độ bền |
 |-----------|------------|--------|
-| ![Normal Brick](src/main/resources/images/bricks/brick_green.png) | **Gạch thường** | 1 lần chạm |
-| ![Hard Brick](src/main/resources/images/bricks/brick_blue.png) | **Gạch cứng** | 2 lần chạm |
-| ![VeryHard Brick](src/main/resources/images/bricks/brick_yellow.png) | **Gạch siêu cứng** | 3 lần chạm|
-| ![Unbreakable Brick](src/main/resources/images/bricks/brick_red.png) | **Gạch không phá được** | Không thể phá |
+| ![Normal Brick](src/main/resources/images/brick/brick_green.png) | **Gạch thường** | 1 lần chạm |
+| ![Hard Brick](src/main/resources/images/brick/brick_blue.png) | **Gạch cứng** | 2 lần chạm |
+| ![VeryHard Brick](src/main/resources/images/brick/brick_yellow.png) | **Gạch siêu cứng** | 3 lần chạm|
+| ![Unbreakable Brick](src/main/resources/images/brick/brick_red.png) | **Gạch không phá được** | Không thể phá |
 ---
 
 ## 🧱 Brick
