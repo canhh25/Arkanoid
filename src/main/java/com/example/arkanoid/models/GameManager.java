@@ -16,6 +16,10 @@ public class GameManager {
     private final int gameWidth = 960;
     private final int gameHeight = 640;
 
+    private long startTime;      // Thời điểm bắt đầu level
+    private long elapsedTime;    // Thời gian đã chơi (ms)
+    private boolean timerRunning;
+
     private Paddle paddle;
     private List<Ball> balls;
     private List<Brick> bricks;
@@ -55,8 +59,11 @@ public class GameManager {
         } else if (gameState == GameState.GAME_OVER) {
             this.score = 0;
             this.lives = 3;
+            resetTimer();
+
         }
         setupGame();
+        startTimer();
     }
 
     public void setupGame() {
@@ -83,23 +90,35 @@ public class GameManager {
         mainBall.setPrevY(mainBall.getY());
         movables.add(paddle);
         movables.add(mainBall);
+
+
     }
 
     public void requestLaunch() {
         if (waitingLaunch && gameState == GameState.RUNNING && !balls.isEmpty()) {
+
+            if (!timerRunning) {
+                startTimer();
+            }
+
             waitingLaunch = false;
             Ball mainBall = balls.get(0);
             double minAngleDeg = -120.0;
             double maxAngleDeg = -60.0;
             double randomAngleDeg = minAngleDeg + (maxAngleDeg - minAngleDeg) * RANDOM.nextDouble();
             double angle = Math.toRadians(randomAngleDeg);
+
             mainBall.launchByAngle(angle);
             mainBall.setPrevX(mainBall.getX());
             mainBall.setPrevY(mainBall.getY());
         }
     }
 
+
     public void update(boolean goLeft, boolean goRight) {
+        if (timerRunning) {
+            elapsedTime = System.currentTimeMillis() - startTime;
+        }
         if (gameState == GameState.GAME_OVER) return;
         resetSoundFlags();
         paddle.setMovingLeft(goLeft);
@@ -299,17 +318,21 @@ public class GameManager {
 
         if (balls.isEmpty()) {
             this.lives--;
+
             if (lives > 0) {
                 gameState = GameState.DEAD;
                 setupGame();
             } else {
                 gameState = GameState.GAME_OVER;
+                timerRunning = false;
+                elapsedTime = 0;
             }
             return;
         }
 
         if (isEmptyBrick()) {
             gameState = GameState.WIN;
+            timerRunning = false;
             nextGame();
         }
     }
@@ -395,5 +418,25 @@ public class GameManager {
 
     public int getScore() {
         return this.score;
+    }
+
+    public long getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public String getFormattedTime() {
+        long sec = elapsedTime / 1000;
+        long minutes = sec / 60;
+        long seconds = sec % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+    public void startTimer() {
+        startTime = System.currentTimeMillis();
+        timerRunning = true;
+    }
+
+    public void resetTimer() {
+        elapsedTime = 0;
+        timerRunning = false;
     }
 }
