@@ -10,20 +10,23 @@ import java.awt.*;
 
 public class ExtraLifePowerUp extends PowerUp<GameManager> {
     public int countLives = 2;
+
     public ExtraLifePowerUp(double x, double y) {
-        super(x, y, 38, 19, "extra_life"); // Kích thước lớn hơn để nhìn rõ animation
+        super(x, y, 30, 19, "life");
     }
 
     @Override
     public void applyEffect(GameManager gameManager) {
-        if(!isActive()) {
-            gameManager.lives++;
+        if (!isActive()) {
+            if (gameManager.getLives() < 5) {
+                gameManager.lives++;
+            }
         }
     }
 
     @Override
     public void removeEffect(GameManager gameManager) {
-        if(this.getCountLives() > 0) {
+        if (this.getCountLives() > 0) {
             this.isActive = false;
             this.setCountLives(this.countLives - 1);
         }

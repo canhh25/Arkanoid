@@ -28,17 +28,13 @@ public class Particle {
         x += dx;
         y += dy;
 
-        // Giảm tốc độ dần
         dx *= 0.95;
         dy *= 0.95;
 
-        // Giảm kích thước
         size *= 0.97;
 
-        // Giảm thời gian sống
         lifeTime -= 16.67; // ~60 FPS
 
-        // Giảm độ trong suốt
         alpha = lifeTime / maxLifeTime;
     }
 
