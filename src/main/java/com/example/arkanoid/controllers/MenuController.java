@@ -39,7 +39,7 @@ public class MenuController {
             StackPane root = new StackPane(canvas);
             Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-            GameController gameController = new GameController(gc);
+            GameController gameController = new GameController(gc, 1);
 
             stage.setTitle("Arkanoid");
             stage.setScene(scene);
