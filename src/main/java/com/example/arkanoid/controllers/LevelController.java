@@ -29,11 +29,21 @@ public class LevelController {
     @FXML private Button btnLevel10;
     @FXML private Button btnBack;
 
+    private GameController gameController;
+    private int currentLevel;
+
     @FXML
     public void initialize() {
         setupLevelButtons();
     }
 
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+    }
+
+    public void setCurrentLevel(int level) {
+        this.currentLevel = level;
+    }
     // THÊM METHOD PUBLIC NÀY ĐỂ REFRESH TỪ BÊN NGOÀI
     public void refreshLevelButtons() {
         setupLevelButtons();
@@ -133,4 +143,54 @@ public class LevelController {
         int unlockedLevel = gameManager.getUnlockedLevel();
         startLevel(unlockedLevel, event);
     }
+
+    @FXML
+    private void handleRestart(ActionEvent event) {
+        try {
+            Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            pauseStage.close();
+
+            Stage gameStage = (Stage) pauseStage.getOwner();
+            if (gameStage != null) {
+                gameStage.close();
+            }
+
+            Stage newStage = new Stage();
+            Canvas canvas = new Canvas(WIDTH, HEIGHT);
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+            StackPane root = new StackPane(canvas);
+            Scene scene = new Scene(root, WIDTH, HEIGHT);
+
+            GameManager gameManager = GameManager.getInstance();
+            gameManager.setupLevel(currentLevel);
+
+            GameController newGameController = new GameController(gc, currentLevel);
+
+            newStage.setTitle("Level " + currentLevel);
+            newStage.setScene(scene);
+            newStage.setResizable(false);
+            newStage.show();
+
+            newGameController.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleResume(ActionEvent event) {
+        try {
+            Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            pauseStage.close();
+
+            if (gameController != null) {
+                gameController.resumeGame();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

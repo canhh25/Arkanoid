@@ -1,21 +1,20 @@
 package com.example.arkanoid.controllers;
 
 import com.example.arkanoid.utils.SoundManager;
-import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MenuController {
     private static final int WIDTH = 960;
@@ -39,7 +38,7 @@ public class MenuController {
             StackPane root = new StackPane(canvas);
             Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-            GameController gameController = new GameController(gc);
+            GameController gameController = new GameController(gc, 1);
 
             stage.setTitle("Arkanoid");
             stage.setScene(scene);
@@ -121,13 +120,22 @@ public class MenuController {
     @FXML
     private void selectLevel(ActionEvent event) {
         try {
+            Stage menuStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/LevelView.fxml"));
             Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Select Level");
-            stage.setScene(new Scene(root));
-            stage.show();
+            LevelController levelController = loader.getController();
+
+            Stage levelStage = new Stage();
+            levelStage.initModality(Modality.APPLICATION_MODAL);
+            levelStage.initOwner(menuStage);
+            levelStage.setTitle("Select Level");
+            levelStage.setScene(new Scene(root));
+            levelStage.setResizable(false);
+
+            menuStage.hide();
+            levelStage.setOnShown(e -> levelController.refreshLevelButtons());
+            levelStage.setOnHidden(e -> menuStage.show());
+            levelStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
