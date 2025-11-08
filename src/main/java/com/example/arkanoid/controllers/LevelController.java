@@ -34,6 +34,13 @@ public class LevelController {
         setupLevelButtons();
     }
 
+    // THÊM METHOD PUBLIC NÀY ĐỂ REFRESH TỪ BÊN NGOÀI
+    public void refreshLevelButtons() {
+        setupLevelButtons();
+        System.out.println("Refreshing level buttons. Unlocked level: " +
+                GameManager.getInstance().getUnlockedLevel());
+    }
+
     private void setupLevelButtons() {
         GameManager gameManager = GameManager.getInstance();
         int unlockedLevel = gameManager.getUnlockedLevel();
@@ -93,7 +100,8 @@ public class LevelController {
         }
     }
 
-    @FXML private void handleLevel1(ActionEvent event) { startLevel(1, event); }
+    @FXML
+    private void handleLevel1(ActionEvent event) { startLevel(1, event); }
     @FXML private void handleLevel2(ActionEvent event) { startLevel(2, event); }
     @FXML private void handleLevel3(ActionEvent event) { startLevel(3, event); }
     @FXML private void handleLevel4(ActionEvent event) { startLevel(4, event); }
@@ -118,7 +126,6 @@ public class LevelController {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void handleContinue(ActionEvent event) {
