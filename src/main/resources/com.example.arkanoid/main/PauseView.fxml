@@ -17,9 +17,11 @@
          </image>
       </ImageView>
       <Button fx:id="btnResume" layoutX="370.0" layoutY="221.0" mnemonicParsing="false"
-              onAction="#handleResume" prefHeight="67.0" prefWidth="172.0" style="-fx-background-color: transparent;" />
+              onAction="#handleResume" prefHeight="67.0" prefWidth="172.0"
+              style="-fx-background-color: transparent;" />
       <Button fx:id="btnRestart" layoutX="370.0" layoutY="320.0" mnemonicParsing="false"
-              onAction="#handleRestart" prefHeight="67.0" prefWidth="172.0" style="-fx-background-color: transparent;" />
+              onAction="#handleRestart" prefHeight="67.0" prefWidth="172.0"
+              style="-fx-background-color: transparent;" />
       <Button layoutX="370.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleBack"
               prefHeight="67.0" prefWidth="172.0" style="-fx-background-color: transparent;" />
    </children>

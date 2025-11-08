@@ -77,7 +77,6 @@ public class GameController {
             } else if (event.getCode() == KeyCode.RIGHT) {
                 goRight = true;
             }else if (event.getCode() == KeyCode.SPACE) {
-
                 // Nếu game win hoặc game over -> chuyển sang ván mới
                 if (gameManager.gameState == GameState.GAME_OVER ||
                         gameManager.gameState == GameState.WIN) {

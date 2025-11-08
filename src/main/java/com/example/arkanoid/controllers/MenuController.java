@@ -127,14 +127,13 @@ public class MenuController {
 
             Stage levelStage = new Stage();
             levelStage.initModality(Modality.APPLICATION_MODAL);
-            levelStage.initOwner(menuStage);  
+            levelStage.initOwner(menuStage);
             levelStage.setTitle("Select Level");
             levelStage.setScene(new Scene(root));
             levelStage.setResizable(false);
 
             menuStage.hide();
             levelStage.setOnShown(e -> levelController.refreshLevelButtons());
-
             levelStage.setOnHidden(e -> menuStage.show());
             levelStage.show();
         } catch (Exception e) {
