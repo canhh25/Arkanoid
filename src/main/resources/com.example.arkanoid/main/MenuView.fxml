@@ -23,7 +23,7 @@
               prefHeight="66.0" prefWidth="167.0" style="-fx-background-color: transparent;" />
       <Button fx:id="btnEsc" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleEsc" prefHeight="59.0"
               prefWidth="100.0" style="-fx-background-color: transparent;" />
-      <ImageView fitHeight="66.0" fitWidth="129.0" layoutX="815.0" layoutY="11.0" onMouseClicked="#toggleVolume"
+      <ImageView fx:id="btnVolume" fitHeight="66.0" fitWidth="129.0" layoutX="815.0" layoutY="11.0" onMouseClicked="#toggleVolume"
                  pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="815.0" AnchorPane.topAnchor="11.0">
          <image>
             <Image url="@../../images/menu/volume.png" />

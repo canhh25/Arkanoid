@@ -1,11 +1,8 @@
 package com.example.arkanoid.models;
 
-import com.example.arkanoid.utils.Particle;
 import javafx.scene.canvas.GraphicsContext;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class Ball extends MovableObject {
     public double dx, dy;
@@ -15,16 +12,20 @@ public class Ball extends MovableObject {
     public static final double BALL_HEIGHT = 14;
     private int collisionCooldown = 0;
 
-    private List<Particle> particles;
-    private boolean fireEffectEnabled = true;
-    private int particleSpawnRate = 2; // Số particle spawn mỗi frame
 
     public Ball(double x, double y, double speed) {
         super(x, y, BALL_WIDTH, BALL_HEIGHT, "/images/ball/ball.png");
         this.dx = 0;
         this.dy = 0;
         this.speed = speed;
-        this.particles = new ArrayList<>();
+    }
+
+
+    public Ball(double x, double y) {
+        super(x, y, BALL_WIDTH, BALL_HEIGHT, "/images/ball/ball.png");
+        this.dx = 0;
+        this.dy = 0;
+        this.speed = 3.0;
     }
 
     public double getPrevX() {
@@ -78,36 +79,16 @@ public class Ball extends MovableObject {
         prevY = y;
         x += dx;
         y += dy;
-
-        // THÊM: Update particles
-        updateParticles();
     }
 
-    private void updateParticles() {
-        Iterator<Particle> iterator = particles.iterator();
-        while (iterator.hasNext()) {
-            Particle particle = iterator.next();
-            particle.update();
-
-            if (!particle.isAlive()) {
-                iterator.remove();
-            }
-        }
-    }
 
     @Override
     public void render(GraphicsContext gc) {
-        renderParticles(gc);
         if (getImage() != null) {
             gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
         }
     }
 
-    private void renderParticles(GraphicsContext gc) {
-        for (Particle particle : particles) {
-            particle.render(gc);
-        }
-    }
 
     public void reverseX() {
         dx = -dx;
