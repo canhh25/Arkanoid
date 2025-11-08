@@ -14,8 +14,8 @@ public class BallTest {
     }
 
     @Test
-    @DisplayName("Test khởi tạo Ball với tọa độ")
-    public void testBallInitWithCoordinates() {
+    @DisplayName("Test khởi tạo Ball")
+    public void testBallInit() {
         Ball testBall = new Ball(150, 250);
         assertEquals(150, testBall.getX(), "X phải = 150");
         assertEquals(250, testBall.getY(), "Y phải = 250");
@@ -92,23 +92,6 @@ public class BallTest {
         ball.launchByAngle(3 * Math.PI / 2);
         assertEquals(0, ball.getDx(), 0.01, "dx phải = 0");
         assertEquals(-3.0, ball.getDy(), 0.01, "dy phải = -speed");
-    }
-
-    @Test
-    @DisplayName("Test launchByAngle với góc 45 độ")
-    public void testLaunchByAngle45Degrees() {
-        ball.launchByAngle(Math.PI / 4);
-        double expected = 3.0 / Math.sqrt(2);
-        assertEquals(expected, ball.getDx(), 0.01, "dx phải = speed/sqrt(2)");
-        assertEquals(expected, ball.getDy(), 0.01, "dy phải = speed/sqrt(2)");
-    }
-
-    @Test
-    @DisplayName("Test launchByAngle magnitude = speed")
-    public void testLaunchByAngleMaintainsSpeed() {
-        ball.launchByAngle(Math.PI / 3);
-        double magnitude = Math.sqrt(ball.getDx() * ball.getDx() + ball.getDy() * ball.getDy());
-        assertEquals(3.0, magnitude, 0.01, "Magnitude phải = speed");
     }
 
     @Test

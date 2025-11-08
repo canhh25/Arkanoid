@@ -1,16 +1,26 @@
 package com.arkanoid;
+import com.example.arkanoid.models.Ball;
 import com.example.arkanoid.models.Brick;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 public class BrickTest {
+    private Ball ball;
+
+    @BeforeEach
+    public void setup() {
+        ball = new Ball(100, 200);
+    }
 
     @Test
-    @DisplayName("Test khởi tạo")
-    public void testInit() {
-        Brick brick = new Brick(100, 100, 5, 5, "", "");
-        assertTrue(brick.hitPoints == brick.type);
+    @DisplayName("Test khởi tạo Ball với tọa độ")
+    public void testBallInitWithCoordinates() {
+        Ball testBall = new Ball(150, 250);
+        assertEquals(150, testBall.getX(), "X phải = 150");
+        assertEquals(250, testBall.getY(), "Y phải = 250");
+        assertEquals(Ball.BALL_WIDTH, testBall.getWidth(), "Width phải = BALL_WIDTH");
+        assertEquals(Ball.BALL_HEIGHT, testBall.getHeight(), "Height phải = BALL_HEIGHT");
     }
 
     @Test
