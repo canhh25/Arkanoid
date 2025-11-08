@@ -4,6 +4,8 @@ import com.example.arkanoid.models.GameManager;
 import com.example.arkanoid.utils.SoundManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -91,8 +93,7 @@ public class LevelController {
         }
     }
 
-    @FXML
-    private void handleLevel1(ActionEvent event) { startLevel(1, event); }
+    @FXML private void handleLevel1(ActionEvent event) { startLevel(1, event); }
     @FXML private void handleLevel2(ActionEvent event) { startLevel(2, event); }
     @FXML private void handleLevel3(ActionEvent event) { startLevel(3, event); }
     @FXML private void handleLevel4(ActionEvent event) { startLevel(4, event); }
@@ -107,9 +108,22 @@ public class LevelController {
     private void handleBack(ActionEvent event) {
         try {
             Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            stage.close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Arkanoid");
+            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @FXML
+    private void handleContinue(ActionEvent event) {
+        GameManager gameManager = GameManager.getInstance();
+        int unlockedLevel = gameManager.getUnlockedLevel();
+        startLevel(unlockedLevel, event);
     }
 }
