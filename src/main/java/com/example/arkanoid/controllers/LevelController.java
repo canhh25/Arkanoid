@@ -32,6 +32,13 @@ public class LevelController {
         setupLevelButtons();
     }
 
+    // THÊM METHOD PUBLIC NÀY ĐỂ REFRESH TỪ BÊN NGOÀI
+    public void refreshLevelButtons() {
+        setupLevelButtons();
+        System.out.println("Refreshing level buttons. Unlocked level: " +
+                GameManager.getInstance().getUnlockedLevel());
+    }
+
     private void setupLevelButtons() {
         GameManager gameManager = GameManager.getInstance();
         int unlockedLevel = gameManager.getUnlockedLevel();

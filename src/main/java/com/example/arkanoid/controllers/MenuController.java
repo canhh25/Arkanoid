@@ -123,10 +123,18 @@ public class MenuController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/LevelView.fxml"));
             Parent root = loader.load();
+
+            // LẤY CONTROLLER ĐỂ CÓ THỂ REFRESH SAU
+            LevelController levelController = loader.getController();
+
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Select Level");
             stage.setScene(new Scene(root));
+
+            // REFRESH NÚT KHI STAGE HIỂN THỊ (để cập nhật level đã mở khóa)
+            stage.setOnShown(e -> levelController.refreshLevelButtons());
+
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
