@@ -35,6 +35,8 @@ public class GameManager {
     private static final Random RANDOM = new Random();
     public GameState gameState = GameState.PAUSED;
 
+    private int unlockedLevel = 1;
+    private int selectedLevel = 1;
     public static GameManager instance;
 
     private GameManager() {
@@ -53,6 +55,22 @@ public class GameManager {
         return instance;
     }
 
+    public int getUnlockedLevel() {
+        return unlockedLevel;
+    }
+
+    public void unlockNextLevel() {
+        if (unlockedLevel < 10) unlockedLevel++;
+    }
+
+    public void setSelectedLevel(int level) {
+        this.selectedLevel = level;
+    }
+
+    public int getSelectedLevel() {
+        return selectedLevel;
+    }
+
     public void nextGame() {
         if (gameState == GameState.WIN) {
             this.level++;
@@ -65,10 +83,15 @@ public class GameManager {
         setupGame();
         startTimer();
     }
+    public void setupLevel(int level) {
+        this.selectedLevel = level;
+        setupGame();
+    }
 
     public void setupGame() {
         if (gameState != GameState.DEAD) {
-            bricks = LevelLoader.loadLevel(this.level);
+            bricks = LevelLoader.loadLevel(this.selectedLevel);
+            this.level = this.selectedLevel;
         }
         gameState = GameState.RUNNING;
         resetSoundFlags();

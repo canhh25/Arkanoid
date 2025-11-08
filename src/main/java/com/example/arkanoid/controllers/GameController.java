@@ -26,10 +26,11 @@ public class GameController {
     private final GraphicsContext gc;
     private AnimationTimer animationTimer;
 
-    public GameController(GraphicsContext gc) {
+    public GameController(GraphicsContext gc, int level) {
         this.gc = gc;
         this.gameManager = GameManager.getInstance();
         this.gameView = new GameView();
+        gameManager.setupLevel(level);
         setupInputHandling(gc.getCanvas().getScene());
     }
 
