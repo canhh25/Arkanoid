@@ -35,7 +35,7 @@ public class Paddle extends MovableObject {
         if (movingLeft && x > 0) {
             x -= PADDLE_SPEED;
         }
-        if (movingRight && x < gameWidth - this.paddle_width) {
+        if (movingRight && x < gameWidth - this.width) {
             x += PADDLE_SPEED;
         }
         frameTimer++;

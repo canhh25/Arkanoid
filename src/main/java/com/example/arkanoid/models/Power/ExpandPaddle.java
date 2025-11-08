@@ -2,7 +2,8 @@ package com.example.arkanoid.models.Power;
 
 import com.example.arkanoid.models.Paddle;
 
-public class ExpandPaddle extends Power<Paddle> {
+public class ExpandPaddle extends PowerUp<Paddle> {
+    private double originalWidth;
     private static final double EXTENDED_TIME = 3000;
     private static final double EXPAND_MULTIPLIER = 2.0;
 
@@ -12,15 +13,21 @@ public class ExpandPaddle extends Power<Paddle> {
     }
 
     @Override
-    public void applyDefaultEffect(Paddle paddle) {
+    public void applyEffect(Paddle paddle) {
         if (!isActive) {
-            double currWidth = paddle.getWidth();
-            double newWidth = currWidth * EXPAND_MULTIPLIER;
+            originalWidth = paddle.getWidth();
+            double newWidth = originalWidth * EXPAND_MULTIPLIER;
+
+            // Lưu vị trí trung tâm
+            double centerX = paddle.getX() + paddle.getWidth() / 2;
 
             paddle.setWidth(newWidth);
 
+            // Đặt lại vị trí để giữ nguyên trung tâm
+            paddle.setX(centerX - newWidth / 2);
+
             activate();
-            System.out.println("Paddle expanded: " + currWidth + " -> " + newWidth);
+            System.out.println("Paddle expanded: " + originalWidth + " -> " + newWidth);
         } else {
             extendTime(EXTENDED_TIME);
             System.out.println("Extended paddle time");
@@ -28,11 +35,13 @@ public class ExpandPaddle extends Power<Paddle> {
     }
 
     @Override
-    public void removeDefaultEffect(Paddle paddle) {
+    public void removeEffect(Paddle paddle) {
         if (isActive) {
-            double currWidth = paddle.getWidth();
-            double newWidth = currWidth / EXPAND_MULTIPLIER;
-            paddle.setWidth(newWidth);
+            double centerX = paddle.getX() + paddle.getWidth() / 2;
+            paddle.setWidth(originalWidth);
+            paddle.setX(centerX - originalWidth / 2);
+            System.out.println("Paddle returned to normal: " + originalWidth);
         }
     }
+
 }

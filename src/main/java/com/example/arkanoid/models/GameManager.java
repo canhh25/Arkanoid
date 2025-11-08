@@ -1,6 +1,6 @@
 package com.example.arkanoid.models;
 
-import com.example.arkanoid.models.Power.PowerManager;
+import com.example.arkanoid.models.Power.PowerUpManager;
 import com.example.arkanoid.utils.LevelLoader;
 import com.example.arkanoid.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,9 +10,9 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 public class GameManager {
+    public static final double BALL_SPEED = 3;
     private final int gameWidth = 960;
     private final int gameHeight = 640;
 
@@ -39,20 +39,12 @@ public class GameManager {
     private int selectedLevel = 1;
     public static GameManager instance;
 
-    // ĐỂ LƯU TIẾN TRÌNH
-    private static final Preferences prefs = Preferences.userNodeForPackage(GameManager.class);
-    private static final String PREF_UNLOCKED_LEVEL = "unlockedLevel";
-
     private GameManager() {
         this.score = 0;
         this.lives = 3;
         this.level = 1;
         this.balls = new ArrayList<>();
-
-
-        this.unlockedLevel = 10;
-
-        PowerManager.setGameManager(this);
+        PowerUpManager.setGameManager(this);
         setupGame();
     }
 
@@ -68,30 +60,7 @@ public class GameManager {
     }
 
     public void unlockNextLevel() {
-        if (unlockedLevel < 10) {
-            unlockedLevel++;
-            saveProgress();
-
-        }
-    }
-
-    // LƯU TIẾN TRÌNH
-    private void saveProgress() {
-        prefs.putInt(PREF_UNLOCKED_LEVEL, unlockedLevel);
-
-    }
-
-    // TẢI TIẾN TRÌNH
-    private void loadProgress() {
-        unlockedLevel = prefs.getInt(PREF_UNLOCKED_LEVEL, 1);
-
-    }
-
-    // RESET TIẾN TRÌNH (nếu muốn chơi lại từ đầu)
-    public void resetProgress() {
-        unlockedLevel = 1;
-        saveProgress();
-
+        if (unlockedLevel < 10) unlockedLevel++;
     }
 
     public void setSelectedLevel(int level) {
@@ -114,10 +83,8 @@ public class GameManager {
         setupGame();
         startTimer();
     }
-
     public void setupLevel(int level) {
         this.selectedLevel = level;
-        this.level = level;
         setupGame();
     }
 
@@ -129,12 +96,12 @@ public class GameManager {
         gameState = GameState.RUNNING;
         resetSoundFlags();
         movables = new ArrayList<>();
-        PowerManager.clearPowers(paddle, balls);
+        PowerUpManager.clearPowerUps();
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
 
         // Tạo bóng chính
         balls = new ArrayList<>();
-        Ball mainBall = new Ball(gameWidth / 2.0 - 10, gameHeight - 80);
+        Ball mainBall = new Ball(gameWidth / 2.0 - 10, gameHeight - 80, BALL_SPEED);
         balls.add(mainBall);
 
         waitingLaunch = true;
@@ -146,6 +113,8 @@ public class GameManager {
         mainBall.setPrevY(mainBall.getY());
         movables.add(paddle);
         movables.add(mainBall);
+
+
     }
 
     public void requestLaunch() {
@@ -193,7 +162,7 @@ public class GameManager {
             ball.update();
         }
 
-        PowerManager.updatePowers(paddle, balls.isEmpty() ? null : balls.get(0));
+        PowerUpManager.updatePowerUps(paddle, balls.isEmpty() ? null : balls.get(0));
         checkCollisions();
         playSounds();
     }
@@ -213,8 +182,8 @@ public class GameManager {
     private void normalizeBallSpeed(Ball ball) {
         double v = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
         if (v == 0) return;
-        ball.dx = ball.dx / v * ball.getSpeed();
-        ball.dy = ball.dy / v * ball.getSpeed();
+        ball.dx = ball.dx / v * BALL_SPEED;
+        ball.dy = ball.dy / v * BALL_SPEED;
     }
 
     private void resolveWalls(Ball ball) {
@@ -264,8 +233,8 @@ public class GameManager {
                 angle = (angle < -Math.PI / 2) ? -Math.PI / 2 - MIN_AWAY : -Math.PI / 2 + MIN_AWAY;
             }
 
-            ball.dx = ball.getSpeed() * Math.cos(angle);
-            ball.dy = ball.getSpeed() * Math.sin(angle);
+            ball.dx = BALL_SPEED * Math.cos(angle);
+            ball.dy = BALL_SPEED * Math.sin(angle);
             paddleHitThisFrame = true;
             normalizeBallSpeed(ball);
         } else {
@@ -387,7 +356,7 @@ public class GameManager {
         if (isEmptyBrick()) {
             gameState = GameState.WIN;
             timerRunning = false;
-            // KHÔNG GỌI nextGame() ở đây nữa, để GameView xử lý
+            nextGame();
         }
     }
 
@@ -419,7 +388,7 @@ public class GameManager {
     }
 
     public void renderPowerUps(GraphicsContext gc) {
-        PowerManager.renderPowers(gc);
+        PowerUpManager.renderPowerUps(gc);
     }
 
     public void renderBalls(GraphicsContext gc) {
@@ -484,7 +453,6 @@ public class GameManager {
         long seconds = sec % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
-
     public void startTimer() {
         startTime = System.currentTimeMillis();
         timerRunning = true;

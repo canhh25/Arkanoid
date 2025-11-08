@@ -92,10 +92,6 @@ public class GameView {
             if (gameManager.isEmptyBrick()) {
                 gameManager.gameState = GameState.WIN;
                 gc.fillText("YOU WIN!", WIDTH / 2.0, HEIGHT / 2.0);
-
-                // MỞ KHÓA LEVEL TIẾP THEO KHI WIN
-                gameManager.unlockNextLevel();
-                System.out.println("Level tiếp theo đã được mở khóa! Unlocked: " + gameManager.getUnlockedLevel());
             } else {
                 gc.fillText("GAME OVER", WIDTH / 2.0, HEIGHT / 2.0);
             }

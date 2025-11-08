@@ -207,19 +207,19 @@ public class GameManagerTest {
         assertEquals(0, ball.getY(), 0.1, "Ball phải dính trần");
     }
 
-//    @Test
-//    @DisplayName("Test ball speed được normalize")
-//    public void testBallSpeedNormalized() {
-//        gameManager.requestLaunch();
-//        Ball ball = gameManager.getBall();
-//        for (int i = 0; i < 50; i++) {
-//            gameManager.update(false, false);
-//            double speed = Math.sqrt(ball.getDx() * ball.getDx() +
-//                    ball.getDy() * ball.getDy());
-//            assertEquals(GameManager.BALL_SPEED, speed, 0.1,
-//                    "Ball speed phải được normalize");
-//        }
-//    }
+    @Test
+    @DisplayName("Test ball speed được normalize")
+    public void testBallSpeedNormalized() {
+        gameManager.requestLaunch();
+        Ball ball = gameManager.getBall();
+        for (int i = 0; i < 50; i++) {
+            gameManager.update(false, false);
+            double speed = Math.sqrt(ball.getDx() * ball.getDx() +
+                    ball.getDy() * ball.getDy());
+            assertEquals(GameManager.BALL_SPEED, speed, 0.1,
+                    "Ball speed phải được normalize");
+        }
+    }
 
     @Test
     @DisplayName("Test mất mạng khi ball rơi xuống đáy")
@@ -396,35 +396,35 @@ public class GameManagerTest {
         assertEquals(3, gameManager.lives, "Lives phải reset về 3");
     }
 
-//    @Test
-//    @DisplayName("Test addBall thêm ball mới")
-//    public void testAddBall() {
-//        int initialCount = gameManager.getBalls().size();
-//        gameManager.addBall(400, 300, GameManager.BALL_SPEED, -90);
-//        assertEquals(initialCount + 1, gameManager.getBalls().size(),
-//                "Phải thêm 1 ball");
-//
-//        Ball newBall = gameManager.getBalls().get(gameManager.getBalls().size() - 1);
-//        assertNotEquals(0, newBall.getDx());
-//        assertNotEquals(0, newBall.getDy());
-//    }
+    @Test
+    @DisplayName("Test addBall thêm ball mới")
+    public void testAddBall() {
+        int initialCount = gameManager.getBalls().size();
+        gameManager.addBall(400, 300, GameManager.BALL_SPEED, -90);
+        assertEquals(initialCount + 1, gameManager.getBalls().size(),
+                "Phải thêm 1 ball");
 
-//    @Test
-//    @DisplayName("Test multiple balls di chuyển độc lập")
-//    public void testMultipleBallsMove() {
-//        gameManager.requestLaunch();
-//        gameManager.addBall(400, 300, GameManager.BALL_SPEED, -45);
-//        gameManager.addBall(500, 300, GameManager.BALL_SPEED, -135);
-//        assertEquals(3, gameManager.getBalls().size(), "Phải có 3 balls");
-//        for (int i = 0; i < 10; i++) {
-//            gameManager.update(false, false);
-//        }
-//        for (Ball ball : gameManager.getBalls()) {
-//            double speed = Math.sqrt(ball.getDx() * ball.getDx() +
-//                    ball.getDy() * ball.getDy());
-//            assertTrue(speed > 0, "Mỗi ball phải có speed > 0");
-//        }
-//    }
+        Ball newBall = gameManager.getBalls().get(gameManager.getBalls().size() - 1);
+        assertNotEquals(0, newBall.getDx());
+        assertNotEquals(0, newBall.getDy());
+    }
+
+    @Test
+    @DisplayName("Test multiple balls di chuyển độc lập")
+    public void testMultipleBallsMove() {
+        gameManager.requestLaunch();
+        gameManager.addBall(400, 300, GameManager.BALL_SPEED, -45);
+        gameManager.addBall(500, 300, GameManager.BALL_SPEED, -135);
+        assertEquals(3, gameManager.getBalls().size(), "Phải có 3 balls");
+        for (int i = 0; i < 10; i++) {
+            gameManager.update(false, false);
+        }
+        for (Ball ball : gameManager.getBalls()) {
+            double speed = Math.sqrt(ball.getDx() * ball.getDx() +
+                    ball.getDy() * ball.getDy());
+            assertTrue(speed > 0, "Mỗi ball phải có speed > 0");
+        }
+    }
 
     @Test
     @DisplayName("Test getters")
