@@ -2,6 +2,7 @@ package com.example.arkanoid.controllers;
 
 import com.example.arkanoid.main.Main;
 import com.example.arkanoid.models.GameManager;
+import com.example.arkanoid.models.GameState;
 import com.example.arkanoid.views.GameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -25,10 +26,11 @@ public class GameController {
     private final GraphicsContext gc;
     private AnimationTimer animationTimer;
 
-    public GameController(GraphicsContext gc) {
+    public GameController(GraphicsContext gc, int level) {
         this.gc = gc;
         this.gameManager = GameManager.getInstance();
         this.gameView = new GameView();
+        gameManager.setupLevel(level);
         setupInputHandling(gc.getCanvas().getScene());
     }
 
@@ -63,12 +65,24 @@ public class GameController {
                 goLeft = true;
             } else if (event.getCode() == KeyCode.RIGHT) {
                 goRight = true;
-            } else if (event.getCode() == KeyCode.SPACE) {
-                if (gameManager.isGameOver()) {
-                    gameManager.setupGame();
-                } else {
-                    gameManager.requestLaunch();
+            }else if (event.getCode() == KeyCode.SPACE) {
+
+                // Nếu game win hoặc game over -> chuyển sang ván mới
+                if (gameManager.gameState == GameState.GAME_OVER ||
+                        gameManager.gameState == GameState.WIN) {
+
+                    gameManager.nextGame();
+                    return;
                 }
+
+                // Nếu đang ở trạng thái DEAD (mất 1 mạng, còn mạng)
+                if (gameManager.gameState == GameState.DEAD) {
+                    gameManager.setupGame();   // Setup lại bóng + paddle
+                    return;
+                }
+
+                // Nếu đang chạy → thả bóng
+                gameManager.requestLaunch();
             }
         });
 
@@ -91,16 +105,19 @@ public class GameController {
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Montserrat", FontWeight.BOLD, 28));
         gc.setTextAlign(TextAlignment.LEFT);
+
         String scoreText = "Score: " + gameManager.getScore();
         gc.fillText(scoreText, padding, y);
-        String timeText = "Time: " + formatTime(14);
 
+
+        String timeText = "Time: " + gameManager.getFormattedTime();
         double timeX = Main.WIDTH * 0.35;
         gc.fillText(timeText, timeX, y);
-        String levelText = "Level: " + gameManager.getLevel();
 
+        String levelText = "Level: " + gameManager.getLevel();
         double levelX = Main.WIDTH * 0.58;
         gc.fillText(levelText, levelX, y);
+
         drawHearts(Main.WIDTH - padding, y);
         gc.setTextAlign(TextAlignment.LEFT);
     }

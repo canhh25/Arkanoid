@@ -17,7 +17,7 @@
       </ImageView>
       <Button fx:id="btnStart" layoutX="377.0" layoutY="253.0" mnemonicParsing="false" onAction="#handleStart"
               prefHeight="66.0" prefWidth="167.0" style="-fx-background-color: transparent;" />
-      <Button fx:id="btnLevel" layoutX="377.0" layoutY="362.0" mnemonicParsing="false" onAction="#handleLevel"
+      <Button fx:id="btnLevel" layoutX="377.0" layoutY="362.0" mnemonicParsing="false" onAction="#selectLevel"
               prefHeight="59.0" prefWidth="167.0" style="-fx-background-color: transparent;" />
       <Button fx:id="btnHelp" layoutX="377.0" layoutY="465.0" mnemonicParsing="false" onAction="#handleHelp"
               prefHeight="66.0" prefWidth="167.0" style="-fx-background-color: transparent;" />
