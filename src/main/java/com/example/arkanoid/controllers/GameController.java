@@ -6,8 +6,6 @@ import com.example.arkanoid.models.GameState;
 import com.example.arkanoid.views.GameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -15,12 +13,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 public class GameController {
     private boolean goLeft = false;
     private boolean goRight = false;
-    private boolean isPaused = false;
 
     private final GameManager gameManager;
     private final GameView gameView;
@@ -62,16 +61,6 @@ public class GameController {
 
     private void setupInputHandling(Scene scene) {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.P) {
-                if (!isPaused) {
-                    pauseGame();
-                    showPauseWindow();
-                }
-                return;
-            }
-            if (isPaused) {
-                return;
-            }
             if (event.getCode() == KeyCode.LEFT) {
                 goLeft = true;
             } else if (event.getCode() == KeyCode.RIGHT) {
@@ -104,46 +93,8 @@ public class GameController {
                 goRight = false;
             }
         });
+
     }
-
-    private void pauseGame() {
-        isPaused = true;
-        if (animationTimer != null) {
-            animationTimer.stop();
-        }
-    }
-
-    public void resumeGame() {
-        isPaused = false;
-        if (animationTimer != null) {
-            animationTimer.start();
-        }
-    }
-
-    private void showPauseWindow() {
-        try {
-            Stage pauseStage = new Stage();
-            pauseStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/PauseView.fxml"));
-            Parent root = loader.load();
-
-            LevelController levelController = loader.getController();
-            levelController.setGameController(this);
-            levelController.setCurrentLevel(gameManager.getLevel());
-
-            Scene scene = new Scene(root);
-            pauseStage.setScene(scene);
-            pauseStage.setTitle("Paused");
-            pauseStage.setResizable(false);
-
-            pauseStage.setOnCloseRequest(e -> resumeGame());
-            pauseStage.showAndWait();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void render() {
         drawGameInfo();
     }
