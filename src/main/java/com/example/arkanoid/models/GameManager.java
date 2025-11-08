@@ -1,6 +1,6 @@
 package com.example.arkanoid.models;
 
-import com.example.arkanoid.models.Power.PowerUpManager;
+import com.example.arkanoid.models.Power.PowerManager;
 import com.example.arkanoid.utils.LevelLoader;
 import com.example.arkanoid.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
-    public static final double BALL_SPEED = 3;
     private final int gameWidth = 960;
     private final int gameHeight = 640;
 
@@ -44,7 +43,7 @@ public class GameManager {
         this.lives = 3;
         this.level = 1;
         this.balls = new ArrayList<>();
-        PowerUpManager.setGameManager(this);
+        PowerManager.setGameManager(this);
         setupGame();
     }
 
@@ -96,12 +95,12 @@ public class GameManager {
         gameState = GameState.RUNNING;
         resetSoundFlags();
         movables = new ArrayList<>();
-        PowerUpManager.clearPowerUps();
+        PowerManager.clearPowers(paddle, balls);
         paddle = new Paddle(gameWidth / 2.0 - 50, gameHeight - 50, gameWidth);
 
         // Tạo bóng chính
         balls = new ArrayList<>();
-        Ball mainBall = new Ball(gameWidth / 2.0 - 10, gameHeight - 80, BALL_SPEED);
+        Ball mainBall = new Ball(gameWidth / 2.0 - 10, gameHeight - 80);
         balls.add(mainBall);
 
         waitingLaunch = true;
@@ -162,7 +161,7 @@ public class GameManager {
             ball.update();
         }
 
-        PowerUpManager.updatePowerUps(paddle, balls.isEmpty() ? null : balls.get(0));
+        PowerManager.updatePowers(paddle, balls.isEmpty() ? null : balls.get(0));
         checkCollisions();
         playSounds();
     }
@@ -182,8 +181,8 @@ public class GameManager {
     private void normalizeBallSpeed(Ball ball) {
         double v = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
         if (v == 0) return;
-        ball.dx = ball.dx / v * BALL_SPEED;
-        ball.dy = ball.dy / v * BALL_SPEED;
+        ball.dx = ball.dx / v * ball.getSpeed();
+        ball.dy = ball.dy / v * ball.getSpeed();
     }
 
     private void resolveWalls(Ball ball) {
@@ -233,8 +232,8 @@ public class GameManager {
                 angle = (angle < -Math.PI / 2) ? -Math.PI / 2 - MIN_AWAY : -Math.PI / 2 + MIN_AWAY;
             }
 
-            ball.dx = BALL_SPEED * Math.cos(angle);
-            ball.dy = BALL_SPEED * Math.sin(angle);
+            ball.dx = ball.getSpeed() * Math.cos(angle);
+            ball.dy = ball.getSpeed() * Math.sin(angle);
             paddleHitThisFrame = true;
             normalizeBallSpeed(ball);
         } else {
@@ -388,7 +387,7 @@ public class GameManager {
     }
 
     public void renderPowerUps(GraphicsContext gc) {
-        PowerUpManager.renderPowerUps(gc);
+        PowerManager.renderPowers(gc);
     }
 
     public void renderBalls(GraphicsContext gc) {

@@ -17,6 +17,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root, WIDTH, HEIGHT);
+            primaryStage.setResizable(false);
             primaryStage.setTitle("Arkanoid Menu");
             primaryStage.setScene(scene);
             primaryStage.show();
