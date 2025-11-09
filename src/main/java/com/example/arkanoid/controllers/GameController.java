@@ -7,8 +7,10 @@ import com.example.arkanoid.views.GameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -38,25 +40,103 @@ public class GameController {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                // Kiểm tra WIN
+                if (gameManager.gameState == GameState.WIN) {
+                    animationTimer.stop();
+                    handleWin();
+                    return;
+                }
+
+                // Kiểm tra GAME OVER
                 if (gameManager.isGameOver()) {
                     animationTimer.stop();
                     showGameOver();
                     return;
                 }
+
                 gameManager.update(goLeft, goRight);
+
+                // VẼ GAME (background, paddle, balls, bricks, powerups)
                 gameView.render(gc, gameManager);
-                render();
+
+                // VẼ TEXT CUỐI CÙNG (để nó nằm trên cùng)
+                drawGameInfo();
             }
         };
         animationTimer.start();
     }
 
+    private void handleWin() {
+        Platform.runLater(() -> {
+            try {
+                int currentLevel = gameManager.getLevel();
+                int nextLevel = currentLevel + 1;
+
+                // Unlock level tiếp theo
+                gameManager.unlockNextLevel();
+
+                if (nextLevel <= 10) {
+                    // Tự động chuyển sang level tiếp theo
+                    System.out.println("✅ WIN! Chuyển sang level " + nextLevel);
+
+                    Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+
+                    Canvas canvas = new Canvas(960, 640);
+                    GraphicsContext newGc = canvas.getGraphicsContext2D();
+                    StackPane root = new StackPane(canvas);
+                    Scene scene = new Scene(root, 960, 640);
+
+                    gameManager.setupLevel(nextLevel);
+                    GameController gameController = new GameController(newGc, nextLevel);
+
+                    stage.setTitle("Arkanoid - Level " + nextLevel);
+                    stage.setScene(scene);
+
+                    gameController.start();
+                } else {
+                    // Hết level rồi, về menu
+                    System.out.println("🎉 Hoàn thành tất cả level!");
+                    Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
+                    Parent root = loader.load();
+                    stage.setScene(new Scene(root, 960, 640));
+                    stage.setTitle("Arkanoid Menu");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     private void showGameOver() {
         Platform.runLater(() -> {
-            Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-            MenuController menuController = new MenuController();
-            menuController.openGameOver(stage);
+            try {
+                Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+
+                // Load màn hình Game Over
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/GameOverView.fxml"));
+                Parent root = loader.load();
+
+                stage.setTitle("Game Over");
+                stage.setScene(new Scene(root, 960, 640));
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Nếu không load được FXML, quay về menu
+                backToMenu();
+            }
         });
+    }
+
+    private void backToMenu() {
+        try {
+            Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
+            Parent root = loader.load();
+            stage.setScene(new Scene(root, 960, 640));
+            stage.setTitle("Arkanoid Menu");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupInputHandling(Scene scene) {
@@ -95,20 +175,17 @@ public class GameController {
         });
 
     }
-    private void render() {
-        drawGameInfo();
-    }
 
     private void drawGameInfo() {
         double padding = 20;
-        double y = 35;
+        double y = 60; // TĂNG VỊ TRÍ Y ĐỂ TEXT Ở TRÊN CAO HƠN (tránh brick)
+
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Montserrat", FontWeight.BOLD, 28));
         gc.setTextAlign(TextAlignment.LEFT);
 
         String scoreText = "Score: " + gameManager.getScore();
         gc.fillText(scoreText, padding, y);
-
 
         String timeText = "Time: " + gameManager.getFormattedTime();
         double timeX = Main.WIDTH * 0.35;

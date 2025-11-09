@@ -96,13 +96,16 @@ public class GameView {
                 // MỞ KHÓA LEVEL TIẾP THEO KHI WIN
                 gameManager.unlockNextLevel();
                 System.out.println("Level tiếp theo đã được mở khóa! Unlocked: " + gameManager.getUnlockedLevel());
+
+                // ❌ XÓA nextGame() - để GameController xử lý auto chuyển level
             } else {
                 gc.fillText("GAME OVER", WIDTH / 2.0, HEIGHT / 2.0);
             }
 
-            if (gameManager.gameState == GameState.WIN || gameManager.gameState == GameState.GAME_OVER) {
-                gameManager.nextGame();
-            }
+            // ❌ XÓA phần này - không cần nextGame() nữa
+            // if (gameManager.gameState == GameState.WIN || gameManager.gameState == GameState.GAME_OVER) {
+            //     gameManager.nextGame();
+            // }
 
             gc.setFont(new Font("Arial", 20));
             gc.fillText("Press SPACE to Restart", WIDTH / 2.0, HEIGHT / 2.0 + 40);
