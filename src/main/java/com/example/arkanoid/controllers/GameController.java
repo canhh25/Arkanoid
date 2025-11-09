@@ -78,7 +78,7 @@ public class GameController {
 
                 if (nextLevel <= 10) {
                     // Tự động chuyển sang level tiếp theo
-                    System.out.println("✅ WIN! Chuyển sang level " + nextLevel);
+                    System.out.println(" WIN! Chuyển sang level " + nextLevel);
 
                     Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
 
@@ -187,6 +187,7 @@ public class GameController {
         });
 
     }
+
     private void pauseGame() {
         isPaused = true;
         if (animationTimer != null) {
@@ -201,10 +202,18 @@ public class GameController {
         }
     }
 
+    // ĐÃ FIX - Thêm initOwner để LevelController tìm được game stage
     private void showPauseWindow() {
         try {
+            // Lấy game stage trước
+            Stage gameStage = (Stage) gc.getCanvas().getScene().getWindow();
+
+            // Tạo pause stage
             Stage pauseStage = new Stage();
             pauseStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+            //  QUAN TRỌNG - Set owner để pauseStage.getOwner() trả về gameStage
+            pauseStage.initOwner(gameStage);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/PauseView.fxml"));
             Parent root = loader.load();
@@ -218,12 +227,17 @@ public class GameController {
             pauseStage.setTitle("Paused");
             pauseStage.setResizable(false);
 
+            // Resume game khi đóng pause window
             pauseStage.setOnCloseRequest(e -> resumeGame());
+
+            //  Dùng showAndWait() để block game cho đến khi pause đóng
             pauseStage.showAndWait();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void render() {
         drawGameInfo();
     }
