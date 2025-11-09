@@ -26,15 +26,15 @@
       <Button fx:id="btnLevel4" layoutX="560.0" layoutY="223.0" mnemonicParsing="false"
               onAction="#handleLevel4" prefHeight="109.0" prefWidth="113.0" style="-fx-background-color: transparent;" />
       <Button fx:id="btnLevel6" layoutX="137.0" layoutY="391.0" mnemonicParsing="false"
-              onAction="#handleLevel5" prefHeight="109.0" prefWidth="113.0" style="-fx-background-color: transparent;" />
-      <Button fx:id="btnLevel7" layoutX="276.0" layoutY="391.0" mnemonicParsing="false"
               onAction="#handleLevel6" prefHeight="109.0" prefWidth="113.0" style="-fx-background-color: transparent;" />
-      <Button fx:id="btnLevel8" layoutX="417.0" layoutY="385.0" mnemonicParsing="false"
+      <Button fx:id="btnLevel7" layoutX="276.0" layoutY="391.0" mnemonicParsing="false"
               onAction="#handleLevel7" prefHeight="109.0" prefWidth="113.0" style="-fx-background-color: transparent;" />
-      <Button fx:id="btnLevel9" layoutX="560.0" layoutY="391.0" mnemonicParsing="false"
+      <Button fx:id="btnLevel8" layoutX="417.0" layoutY="385.0" mnemonicParsing="false"
               onAction="#handleLevel8" prefHeight="109.0" prefWidth="113.0" style="-fx-background-color: transparent;" />
-      <Button fx:id="btnLevel5" layoutX="696.0" layoutY="223.0" mnemonicParsing="false"
+      <Button fx:id="btnLevel9" layoutX="560.0" layoutY="391.0" mnemonicParsing="false"
               onAction="#handleLevel9" prefHeight="109.0" prefWidth="113.0" style="-fx-background-color: transparent;" />
+      <Button fx:id="btnLevel5" layoutX="696.0" layoutY="223.0" mnemonicParsing="false"
+              onAction="#handleLevel5" prefHeight="109.0" prefWidth="113.0" style="-fx-background-color: transparent;" />
       <Button fx:id="btnLevel10" layoutX="696.0" layoutY="385.0" mnemonicParsing="false"
               onAction="#handleLevel10" prefHeight="109.0" prefWidth="113.0" style="-fx-background-color: transparent;" />
    </children>
