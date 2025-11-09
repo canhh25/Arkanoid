@@ -39,7 +39,7 @@ public class GameManager {
     private int selectedLevel = 1;
     public static GameManager instance;
 
-    // ĐỂ LƯU TIẾN TRÌNH
+
     private static final Preferences prefs = Preferences.userNodeForPackage(GameManager.class);
     private static final String PREF_UNLOCKED_LEVEL = "unlockedLevel";
 
@@ -50,7 +50,9 @@ public class GameManager {
         this.balls = new ArrayList<>();
 
 
-        this.unlockedLevel = 10;
+        this.unlockedLevel = 10; // Mở tất cả 10 level
+
+
 
         PowerManager.setGameManager(this);
         setupGame();
@@ -211,10 +213,14 @@ public class GameManager {
     }
 
     private void normalizeBallSpeed(Ball ball) {
-        double v = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
-        if (v == 0) return;
-        ball.dx = ball.dx / v * ball.getSpeed();
-        ball.dy = ball.dy / v * ball.getSpeed();
+        double currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+        if (currentSpeed < 0.01) return;
+
+
+        double targetSpeed = ball.getSpeed();
+        double ratio = targetSpeed / currentSpeed;
+        ball.dx = ball.dx * ratio;
+        ball.dy = ball.dy * ratio;
     }
 
     private void resolveWalls(Ball ball) {
@@ -264,10 +270,11 @@ public class GameManager {
                 angle = (angle < -Math.PI / 2) ? -Math.PI / 2 - MIN_AWAY : -Math.PI / 2 + MIN_AWAY;
             }
 
+            // Set velocity theo angle, ĐÃ ĐÚNG SPEED RỒI
             ball.dx = ball.getSpeed() * Math.cos(angle);
             ball.dy = ball.getSpeed() * Math.sin(angle);
             paddleHitThisFrame = true;
-            normalizeBallSpeed(ball);
+            // ✅ ĐÃ XÓA normalizeBallSpeed(ball); - không cần normalize vì đã set đúng speed
         } else {
             double overlapLeft = (ball.getX() + ball.getWidth()) - pLeft;
             double overlapRight = pRight - ball.getX();
@@ -289,7 +296,7 @@ public class GameManager {
                 ball.setX(pRight);
                 ball.reverseX();
             }
-            normalizeBallSpeed(ball);
+
         }
     }
 
@@ -329,7 +336,7 @@ public class GameManager {
             // fallback (nếu không xác định được)
             ball.reverseY();
         }
-        normalizeBallSpeed(ball);
+        // ✅ ĐÃ XÓA normalizeBallSpeed(ball); - không cần vì chỉ đảo chiều
 
         // Sound & Score
         brickHitThisFrame = true;
