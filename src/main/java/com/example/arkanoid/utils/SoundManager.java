@@ -14,7 +14,6 @@ public class SoundManager {
 
     private static final int POOL_SIZE = 10;
 
-    // Thêm MediaPlayer cho nhạc nền
     private static MediaPlayer backgroundMusicPlayer;
     private static boolean isMuted = false;
 
@@ -47,17 +46,16 @@ public class SoundManager {
             String resourcePath = SoundManager.class.getResource(path).toExternalForm();
             AudioClip clip = new AudioClip(resourcePath);
 
-            // Preload bằng cách phát im lặng
-            clip.setVolume(0.0); // Thay 0.001 = 0.0
+            clip.setVolume(0.0);
             clip.play();
             try {
-                Thread.sleep(1); // Giảm từ 10ms xuống 1ms
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 
             clip.stop();
-            clip.setVolume(0.7); // Volume 70% cho game (1.0 có thể quá to)
+            clip.setVolume(0.7);
             return clip;
 
         } catch (Exception e) {
@@ -114,22 +112,20 @@ public class SoundManager {
         }
     }
 
-    // ===== PHƯƠNG THỨC MỚI CHO NHẠC NỀN =====
-
     /**
      * Phát nhạc nền (loop)
      * @param musicPath Đường dẫn file nhạc (ví dụ: "/sounds/menu_music.mp3")
      */
     public static void playBackgroundMusic(String musicPath) {
         try {
-            stopBackgroundMusic(); // Dừng nhạc cũ nếu có
+            stopBackgroundMusic();
 
             String resourcePath = SoundManager.class.getResource(musicPath).toExternalForm();
             Media media = new Media(resourcePath);
             backgroundMusicPlayer = new MediaPlayer(media);
 
-            backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Lặp vô hạn
-            backgroundMusicPlayer.setVolume(isMuted ? 0.0 : 0.3); // Volume 30%
+            backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            backgroundMusicPlayer.setVolume(isMuted ? 0.0 : 0.3);
             backgroundMusicPlayer.play();
 
         } catch (Exception e) {

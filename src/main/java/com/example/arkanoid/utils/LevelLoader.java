@@ -8,8 +8,7 @@ import java.util.List;
 public class LevelLoader {
     private static final List<int[][]> LEVELS = new ArrayList<>();
 
-    // OFFSET ĐỂ BRICK LUÔN Ở DƯỚI TEXT (tránh bị che)
-    private static final int Y_OFFSET = 80; // pixel offset từ trên xuống
+    private static final int Y_OFFSET = 80;
 
     static {
         int[][] level1 = {
@@ -139,7 +138,6 @@ public class LevelLoader {
                 if (cell <= 0) continue;
                 double x = col * Brick.BRICK_WIDTH;
 
-                // THÊM Y_OFFSET ĐỂ BRICK XUỐNG THẤP HƠN
                 double y = row * Brick.BRICK_HEIGHT + Y_OFFSET;
 
                 String imagePath;
@@ -162,7 +160,6 @@ public class LevelLoader {
                         crackedImagePath = "/images/brick/brick_red_cracked.png";
                     }
                     default -> {
-                        // Fallback
                         imagePath = "/images/brick/brick_green.png";
                         crackedImagePath = "/images/brick/brick_green_cracked.png";
                     }

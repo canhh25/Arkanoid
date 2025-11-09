@@ -100,10 +100,8 @@ public class MenuController {
         SoundManager.setMuted(mute);
         if (mute) {
             btnVolume.setViewport(new Rectangle2D(70, 0, 70, 70));
-            // xu li am thanh
         } else {
             btnVolume.setViewport(new Rectangle2D(0, 0, 70, 70));
-            // xu li am thanh
         }
     }
 

@@ -11,6 +11,11 @@ public class Ball extends MovableObject {
     public static final double BALL_WIDTH = 14;
     public static final double BALL_HEIGHT = 14;
 
+    private boolean isBlinking = false;
+
+    public void setBlinking(boolean blinking) {
+        this.isBlinking = blinking;
+    }
     public Ball(double x, double y, double speed) {
         super(x, y, BALL_WIDTH, BALL_HEIGHT, "/images/ball/ball.png");
         this.dx = 0;
@@ -42,13 +47,11 @@ public class Ball extends MovableObject {
     }
 
     public void setSpeed(double s) {
-        // Nếu bóng đang đứng yên (chưa launch), chỉ set speed
         if (Math.abs(dx) < 0.01 && Math.abs(dy) < 0.01) {
             this.speed = s;
             return;
         }
 
-        // Nếu bóng đang chạy, scale lại dx/dy theo tỷ lệ speed mới
         double currentSpeed = Math.sqrt(dx * dx + dy * dy);
         if (currentSpeed > 0.01) {
             double ratio = s / currentSpeed;

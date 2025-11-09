@@ -40,7 +40,7 @@ public class LevelController {
     public void setCurrentLevel(int level) {
         this.currentLevel = level;
     }
-    // THÊM METHOD PUBLIC NÀY ĐỂ REFRESH TỪ BÊN NGOÀI
+
     public void refreshLevelButtons() {
         setupLevelButtons();
         System.out.println("Refreshing level buttons. Unlocked level: " +
@@ -51,7 +51,6 @@ public class LevelController {
 
     @FXML
     private void initialize() {
-        // Khởi tạo mảng TRONG initialize(), SAU KHI các button đã được inject
         levelButtons = new Button[]{
                 btnLevel1, btnLevel2, btnLevel3, btnLevel4, btnLevel5,
                 btnLevel6, btnLevel7, btnLevel8, btnLevel9, btnLevel10
@@ -63,9 +62,6 @@ public class LevelController {
     private void setupLevelButtons() {
         GameManager gameManager = GameManager.getInstance();
         int unlockedLevel = gameManager.getUnlockedLevel();
-
-        // Bỏ dòng khai báo mảng này đi vì đã khai báo ở trên
-        // Button[] levelButtons = { ... }; // XÓA DÒNG NÀY
 
         for (int i = 0; i < levelButtons.length; i++) {
             if (levelButtons[i] == null) {
@@ -93,7 +89,6 @@ public class LevelController {
             SoundManager.playGameStart();
             SoundManager.stopBackgroundMusic();
 
-            // LẤY STAGE HIỆN TẠI thay vì tạo mới
             Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
 
             Canvas canvas = new Canvas(WIDTH, HEIGHT);
@@ -177,7 +172,6 @@ public class LevelController {
     @FXML
     private void handleBack(ActionEvent event) {
         try {
-            // Quay lại màn hình menu
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
             Parent root = loader.load();
 

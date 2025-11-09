@@ -41,14 +41,12 @@ public class GameController {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // Kiểm tra WIN
                 if (gameManager.gameState == GameState.WIN) {
                     animationTimer.stop();
                     handleWin();
                     return;
                 }
 
-                // Kiểm tra GAME OVER
                 if (gameManager.isGameOver()) {
                     animationTimer.stop();
                     showGameOver();
@@ -56,11 +54,8 @@ public class GameController {
                 }
 
                 gameManager.update(goLeft, goRight);
-
-                // VẼ GAME (background, paddle, balls, bricks, powerups)
                 gameView.render(gc, gameManager);
 
-                // VẼ TEXT CUỐI CÙNG (để nó nằm trên cùng)
                 drawGameInfo();
             }
         };
@@ -73,13 +68,9 @@ public class GameController {
                 int currentLevel = gameManager.getLevel();
                 int nextLevel = currentLevel + 1;
 
-                // Unlock level tiếp theo
                 gameManager.unlockNextLevel();
 
                 if (nextLevel <= 10) {
-                    // Tự động chuyển sang level tiếp theo
-                    System.out.println("✅ WIN! Chuyển sang level " + nextLevel);
-
                     Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
 
                     Canvas canvas = new Canvas(960, 640);
@@ -95,8 +86,6 @@ public class GameController {
 
                     gameController.start();
                 } else {
-                    // Hết level rồi, về menu
-                    System.out.println("🎉 Hoàn thành tất cả level!");
                     Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
                     Parent root = loader.load();
