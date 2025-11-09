@@ -91,7 +91,8 @@ public class GameController {
                     gameController.start();
                 } else {
                     Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass()
+                            .getResource("/com.example.arkanoid/main/MenuView.fxml"));
                     Parent root = loader.load();
                     stage.setScene(new Scene(root, 960, 640));
                     stage.setTitle("Arkanoid Menu");
@@ -108,7 +109,7 @@ public class GameController {
                 return sc.nextInt();
             }
         } catch (Exception e) {
-            System.out.println("Không có file max_score.txt, mặc định 0");
+            e.printStackTrace();
         }
         return 0;
     }
@@ -123,15 +124,14 @@ public class GameController {
     private void showGameOver() {
         Platform.runLater(() -> {
             try {
-                int currentScore = gameManager.getScore();        // lấy điểm hiện tại
+                int currentScore = gameManager.getScore();
                 int maxScore = Math.max(loadMaxScore(), currentScore);
                 saveMaxScore(maxScore);
 
-                // Load màn hình Game Over
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/GameOverView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass()
+                        .getResource("/com.example.arkanoid/main/GameOverView.fxml"));
                 Parent root = loader.load();
 
-                // Gửi dữ liệu điểm vào controller GameOverController
                 GameOverController controller = loader.getController();
                 controller.setScores(currentScore, maxScore);
 
@@ -148,7 +148,8 @@ public class GameController {
     private void backToMenu() {
         try {
             Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("/com.example.arkanoid/main/MenuView.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root, 960, 640));
             stage.setTitle("Arkanoid Menu");
@@ -176,7 +177,6 @@ public class GameController {
                 goRight = true;
             }else if (event.getCode() == KeyCode.SPACE) {
 
-                // Nếu game win hoặc game over -> chuyển sang ván mới
                 if (gameManager.gameState == GameState.GAME_OVER ||
                         gameManager.gameState == GameState.WIN) {
 
@@ -184,13 +184,11 @@ public class GameController {
                     return;
                 }
 
-                // Nếu đang ở trạng thái DEAD (mất 1 mạng, còn mạng)
                 if (gameManager.gameState == GameState.DEAD) {
-                    gameManager.setupGame();   // Setup lại bóng + paddle
+                    gameManager.setupGame();
                     return;
                 }
 
-                // Nếu đang chạy → thả bóng
                 gameManager.requestLaunch();
             }
         });
@@ -223,7 +221,8 @@ public class GameController {
             Stage pauseStage = new Stage();
             pauseStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/PauseView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("/com.example.arkanoid/main/PauseView.fxml"));
             Parent root = loader.load();
 
             LevelController levelController = loader.getController();
@@ -247,7 +246,7 @@ public class GameController {
 
     private void drawGameInfo() {
         double padding = 20;
-        double y = 60; // TĂNG VỊ TRÍ Y ĐỂ TEXT Ở TRÊN CAO HƠN (tránh brick)
+        double y = 60;
 
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Montserrat", FontWeight.BOLD, 28));

@@ -1,7 +1,6 @@
 package com.example.arkanoid.controllers;
 
 import com.example.arkanoid.utils.SoundManager;
-import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,7 +42,6 @@ public class MenuController {
 
             GameController gameController = new GameController(gc, 1);
 
-            // DÙNG LẠI STAGE HIỆN TẠI thay vì tạo mới
             stage.setTitle("Arkanoid - Level 1");
             stage.setScene(scene);
             stage.setResizable(false);
@@ -127,17 +125,14 @@ public class MenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/LevelView.fxml"));
             Parent root = loader.load();
 
-            // LẤY CONTROLLER ĐỂ CÓ THỂ REFRESH SAU
             LevelController levelController = loader.getController();
 
-            // DÙNG LẠI STAGE HIỆN TẠI thay vì tạo Stage mới
             Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             Scene levelScene = new Scene(root);
 
             currentStage.setTitle("Select Level");
             currentStage.setScene(levelScene);
 
-            // REFRESH NÚT KHI CHUYỂN SCENE
             levelController.refreshLevelButtons();
 
         } catch (Exception e) {
