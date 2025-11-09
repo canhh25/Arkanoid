@@ -44,7 +44,6 @@ public class Ball extends MovableObject {
         this.prevY = prevY;
     }
 
-    // ✅ FIX: Cập nhật lại dx/dy khi thay đổi speed
     public void setSpeed(double s) {
         // Nếu bóng đang đứng yên (chưa launch), chỉ set speed
         if (Math.abs(dx) < 0.01 && Math.abs(dy) < 0.01) {

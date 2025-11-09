@@ -6,11 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 public class BrickTest {
-    private Ball ball;
 
     @BeforeEach
     public void setup() {
-        ball = new Ball(100, 200);
+        Ball ball = new Ball(100, 200);
     }
 
     @Test
