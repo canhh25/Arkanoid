@@ -12,29 +12,38 @@ import javafx.stage.Stage;
 public class GameOverController {
 
     @FXML
-    private void handleStart(javafx.event.ActionEvent event) {
+    private void handleAgain(javafx.event.ActionEvent event) {
         try {
-            // Lấy Stage từ nút hiện tại
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Stage gameOverStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            gameOverStage.close();
+            Stage gameStage = (Stage) gameOverStage.getOwner();
+            if (gameStage != null) {
+                gameStage.close();
+            }
 
+            Stage newStage = new Stage();
             Canvas canvas = new Canvas(960, 640);
             GraphicsContext gc = canvas.getGraphicsContext2D();
             StackPane root = new StackPane(canvas);
             Scene scene = new Scene(root, 960, 640);
 
-            // Reset game
-            GameManager.getInstance().resetGame();
-            GameController controller = new GameController(gc, GameManager.getInstance().getLevel());
-            stage.setScene(scene);
-            controller.start();
+            GameManager gameManager = GameManager.getInstance();
+            gameManager.resetGameKeepLevel();
 
+            int levelToPlay = gameManager.getLevel();
+            GameController controller = new GameController(gc, levelToPlay);
+            newStage.setTitle("Arkanoid - Level " + levelToPlay);
+            newStage.setScene(scene);
+            newStage.setResizable(false);
+            newStage.show();
+            controller.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void handleEsc(javafx.event.ActionEvent event) {
+    private void handleQuit(javafx.event.ActionEvent event) {
         try {
             GameManager.getInstance().resetGame();
             Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
