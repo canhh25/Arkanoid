@@ -1,64 +1,117 @@
-# ARKANOID – OOP PROJECT
+# **Arkanoid Game – Object-Oriented Programming Project**
 
-## Thành viên
-MSSV: 24020134 — Name: Nguyễn Duy Hiệu <br>
-MSSV: 24020107 — Name: Trần Thùy Dương <br>
-MSSV: 24020044 — Name: Nguyễn Hữu Cảnh <br>
-MSSV: 24020350 — Name: Đặng Xuân Tùng 
+## 👥 **Authors**
+**Group** — Class **K69I-IT1**  
+1. **Nguyễn Duy Hiệu** – 24020134  
+2. **Trần Thùy Dương** – 24020107  
+3. **Nguyễn Hữu Cảnh** – 24020044  
+4. **Đặng Xuân Tùng** – 24020350  
 
-## 🎯 Mục tiêu  
-Phá vỡ tất cả các viên gạch bằng cách điều khiển thanh **paddle** đỡ bóng sao cho bóng không rơi xuống.  
-Game được viết bằng **JavaFX**, tuân theo mô hình **MVC**.
-
----
-
-## 🕹️ Cách chơi  
-| Hành động | Phím |
-|------------|------| 
-| Di chuyển sang trái | ←|
-| Di chuyển sang phải | →| 
-| Tạm dừng / Tiếp tục | P |
----
-
-## 🧱 Brick
-| Hình ảnh | Loại gạch | Độ bền |
-|-----------|------------|--------|
-| ![Normal Brick](src/main/resources/images/brick/brick_green.png) | **Gạch thường** | 1 lần chạm |
-| ![Hard Brick](src/main/resources/images/brick/brick_blue.png) | **Gạch cứng** | 2 lần chạm |
-| ![VeryHard Brick](src/main/resources/images/brick/brick_yellow.png) | **Gạch siêu cứng** | 3 lần chạm|
-| ![Unbreakable Brick](src/main/resources/images/brick/brick_red.png) | **Gạch không phá được** | Không thể phá |
----
-
-## 💥 Power-ups  
-
-| Hình ảnh | Tên | Hiệu ứng |
-|-----------|------|----------|
-| ![Expand](src/main/resources/images/powerups/powerup_expand/powerup_expand_1.png) | **Expand Paddle** | Làm **rộng paddle**  trong một khoảng thời gian nhất định |
-| ![Fast Ball](src/main/resources/images/powerups/powerup_fast_ball/powerup_fast_ball_1.png) | **Fast Ball** | Bóng **di chuyển nhanh hơn** |
-| ![Extra Life](src/main/resources/images/powerups/powerup_life/powerup_life_1.png) | **Extra Life** | Thêm **1 mạng** |
-| ![Multi Ball](src/main/resources/images/powerups/powerup_multi_ball/powerup_multi_ball_1.png) | **Multi Ball** | Tạo thêm nhiều bóng cùng lúc |
+**Instructor:** Kiều Văn Tuyên - Nguyễn Trung Hiếu
+**Semester:** HK1 – Năm học 2024–2025  
 
 ---
 
-## ❤️ Mạng sống  
-- Người chơi bắt đầu với **3 mạng**.  
-- Mỗi khi bóng rơi xuống dưới, mất 1 mạng.  
-- Khi hết mạng: **Game Over**.
+## 🎯 **Description**
+This is a classic Arkanoid game developed in Java as a final project for Object-Oriented Programming course. The project demonstrates the implementation of OOP principles and design patterns.
+**Key features:**
+The game is developed using Java 17+ with JavaFX for GUI.
+Implements core OOP principles: Encapsulation, Inheritance, Polymorphism, and Abstraction.
+Applies multiple design patterns: Singleton, Factory Method.
+Features multithreading for smooth gameplay and responsive UI.
+Includes sound effects, animations, and power-up systems.
+
+**Main Objective:**  
+Break all the destructible bricks by controlling the **paddle** to bounce the ball without letting it fall.
 
 ---
 
-## 🏆 Thắng cuộc  
-Phá **toàn bộ gạch có thể phá** để qua màn hoặc chiến thắng trò chơi.
+## 🧩 **OOP Concepts Used**
+1. **Encapsulation** – Private attributes and getters/setters for controlled access.  
+2. **Inheritance** – Common behaviors shared by game objects like `Ball`, `Brick`, `Paddle`, etc.  
+3. **Polymorphism** – Different brick types and power-ups override their unique behaviors.  
+4. **Abstraction** – Abstract base classes define core structure of game entities.  
 
 ---
 
-## 🎨 Giao diện menu  
+## 🧠 **Design Pattern**
+The game follows the **Model–View–Controller (MVC)** pattern:
 
+- **Model:** Game objects and logic (`Ball`, `Brick`, `Paddle`, etc.)  
+- **View:** Game rendering (JavaFX UI)  
+- **Controller:** Handles user input and game events  
+
+---
+
+## 🎮 **Game Controls**
+
+| Key | Action |
+|-----|--------|
+| ← | Move paddle left |
+| → | Move paddle right |
+| P | Pause / Resume game |
+
+---
+
+## 🧱 **Brick Types**
+
+| Image | Type | Durability |
+|--------|------|-------------|
+| ![Normal Brick](src/main/resources/images/brick/brick_green.png) | **Normal Brick** | Breaks after 1 hit |
+| ![Hard Brick](src/main/resources/images/brick/brick_blue.png) | **Hard Brick** | Breaks after 2 hits |
+| ![Very Hard Brick](src/main/resources/images/brick/brick_yellow.png) | **Very Hard Brick** | Breaks after 3 hits |
+| ![Unbreakable Brick](src/main/resources/images/brick/brick_red.png) | **Unbreakable Brick** | Cannot be destroyed |
+
+---
+
+## 💥 **Power-ups**
+
+| Image | Name | Effect |
+|--------|------|--------|
+| ![Expand](src/main/resources/images/powerups/powerup_expand/powerup_expand_1.png) | **Expand Paddle** | Increases paddle width for a short duration |
+| ![Fast Ball](src/main/resources/images/powerups/powerup_fast_ball/powerup_fast_ball_1.png) | **Fast Ball** | Increases ball speed temporarily |
+| ![Extra Life](src/main/resources/images/powerups/powerup_life/powerup_life_1.png) | **Extra Life** | Grants one extra life |
+| ![Multi Ball](src/main/resources/images/powerups/powerup_multi_ball/powerup_multi_ball_1.png) | **Multi Ball** | Spawns multiple balls simultaneously |
+
+---
+
+## ❤️ **Lives System**
+- Players start with **3 lives**.  
+- Losing the ball decreases one life.  
+- When lives reach **0**, the game ends with **Game Over**.  
+
+---
+
+## 🏆 **Winning Condition**
+Destroy **all breakable bricks** to complete the level and win the game.
+
+---
+
+## 🎨 **Game Interface**
+
+### Main Menu
 ![Menu](src/main/resources/images/menu/menu.png)  
-*Giao diện menu chính của game*  
+*Main menu screen of the game.*
 
-## 🎮 Giao diện gameplay
-
+### Gameplay Screens
 | Map 1 | Map 2 | Map 3 | Map 4 |
 |-------|-------|-------|-------|
 | ![Map 1](src/main/resources/images/background/Pixel-Art%20Background%201/frame0001.png) | ![Map 2](src/main/resources/images/background/Pixel-Art%20Background%202/frame0001.png) | ![Map 3](src/main/resources/images/background/Pixel-Art%20Background%203/frame0001.png) | ![Map 4](src/main/resources/images/background/Pixel-Art%20Background%204/preview.png) |
+
+---
+
+## ⚙️ **Technologies Used**
+
+| Technology | Version | Purpose |
+|-------------|----------|----------|
+| Java | 17+ | Core language |
+| JavaFX | 19.0.2 | GUI framework |
+| Maven | 3.9+ | Build tool |
+
+---
+
+## 🚀 **How to Run**
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/[username]/Arkanoid-OOP.git
