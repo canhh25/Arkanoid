@@ -39,7 +39,7 @@ public class GameOverController {
             Font gameFont = Font.loadFont(getClass().getResourceAsStream("/fonts/PressStart2P.ttf"), 32);
             maxScoreLabel.setFont(gameFont);
             yourScoreLabel.setFont(gameFont);
-            maxScoreLabel.setTextFill(Color.web("#FFD700")); // vàng pixel retro
+            maxScoreLabel.setTextFill(Color.web("#FFD700"));
             yourScoreLabel.setTextFill(Color.web("#FFD700"));
         }
     }
