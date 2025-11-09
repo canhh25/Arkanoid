@@ -17,11 +17,11 @@
 This is a classic Arkanoid game developed in Java as a final project for Object-Oriented Programming course. The project demonstrates the implementation of OOP principles and design patterns.
 
 **Key features:**
-The game is developed using Java 17+ with JavaFX for GUI.
-Implements core OOP principles: Encapsulation, Inheritance, Polymorphism, and Abstraction.
-Applies multiple design patterns: Singleton, Factory Method.
-Features multithreading for smooth gameplay and responsive UI.
-Includes sound effects, animations, and power-up systems.
+1. The game is developed using Java 17+ with JavaFX for GUI.
+2. Implements core OOP principles: Encapsulation, Inheritance, Polymorphism, and Abstraction.
+3. Applies multiple design patterns: Singleton, Factory Method.
+4. Features multithreading for smooth gameplay and responsive UI.
+5. Includes sound effects, animations, and power-up systems.
 
 **Main Objective:**  
 Break all the destructible bricks by controlling the **paddle** to bounce the ball without letting it fall.
