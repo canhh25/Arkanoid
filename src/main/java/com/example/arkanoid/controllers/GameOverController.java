@@ -6,11 +6,43 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class GameOverController {
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
+public class GameOverController {
+    @FXML
+    private Label maxScoreLabel;
+    @FXML
+    private Label yourScoreLabel;
+
+    private int currentScore;
+    private int maxScore;
+
+    public void setScores(int current, int max) {
+        this.currentScore = current;
+        this.maxScore = max;
+        updateLabels();
+    }
+
+    private void updateLabels() {
+        if (maxScoreLabel != null && yourScoreLabel != null) {
+            maxScoreLabel.setText("" + maxScore);
+            yourScoreLabel.setText("" + currentScore);
+            Font gameFont = Font.loadFont(getClass().getResourceAsStream("/fonts/PressStart2P.ttf"), 32);
+            maxScoreLabel.setFont(gameFont);
+            yourScoreLabel.setFont(gameFont);
+            maxScoreLabel.setTextFill(Color.web("#FFD700")); // vàng pixel retro
+            yourScoreLabel.setTextFill(Color.web("#FFD700"));
+        }
+    }
     @FXML
     private void handleStart(javafx.event.ActionEvent event) {
         try {

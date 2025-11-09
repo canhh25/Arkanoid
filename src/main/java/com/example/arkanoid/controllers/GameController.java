@@ -19,6 +19,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 public class GameController {
     private boolean goLeft = false;
     private boolean goRight = false;
@@ -98,20 +102,44 @@ public class GameController {
         });
     }
 
+    private int loadMaxScore() {
+        try (Scanner sc = new Scanner(new File("max_score.txt"))) {
+            if (sc.hasNextInt()) {
+                return sc.nextInt();
+            }
+        } catch (Exception e) {
+            System.out.println("Không có file max_score.txt, mặc định 0");
+        }
+        return 0;
+    }
+
+    private void saveMaxScore(int score) {
+        try (PrintWriter out = new PrintWriter("max_score.txt")) {
+            out.println(score);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private void showGameOver() {
         Platform.runLater(() -> {
             try {
-                Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+                int currentScore = gameManager.getScore();        // lấy điểm hiện tại
+                int maxScore = Math.max(loadMaxScore(), currentScore);
+                saveMaxScore(maxScore);
 
                 // Load màn hình Game Over
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/GameOverView.fxml"));
                 Parent root = loader.load();
 
+                // Gửi dữ liệu điểm vào controller GameOverController
+                GameOverController controller = loader.getController();
+                controller.setScores(currentScore, maxScore);
+
+                Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
                 stage.setTitle("Game Over");
                 stage.setScene(new Scene(root, 960, 640));
             } catch (Exception e) {
                 e.printStackTrace();
-                // Nếu không load được FXML, quay về menu
                 backToMenu();
             }
         });
