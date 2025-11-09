@@ -11,14 +11,15 @@ public abstract class Power<T> extends GameObject {
     protected double speed = 1.5;
     protected long activeTime = 4000;
     protected double maxActiveTime = 10000;
-    protected long duration = 3000;
+    protected long duration;
     protected PowerUpView view;
 
     protected PowerStrategy<T> strategy;
 
-    public Power(double x, double y, double width, double height, String type) {
+    public Power(double x, double y, double width, double height, String type, long duration) {
         super(x, y, width, height, null);
         this.type = type;
+        this.duration = duration;
         this.view = new PowerUpView(type);
     }
 
@@ -50,10 +51,6 @@ public abstract class Power<T> extends GameObject {
                 getX() + getWidth() > paddle.getX() &&
                 getY() < paddle.getY() + paddle.getHeight() &&
                 getY() + getHeight() > paddle.getY();
-    }
-
-    public void extendTime(double additionalTime) {
-        activeTime = (long) Math.max(0, activeTime + additionalTime);
     }
 
     public void activate() {
