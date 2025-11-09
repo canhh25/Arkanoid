@@ -79,7 +79,7 @@ The game uses multiple threads to ensure smooth performance:
 | ← | Move paddle left |
 | → | Move paddle right |
 | P | Pause / Resume game |
-| SPACE | Lauch Ball |
+| SPACE | Launch Ball |
 
 ### How to play
 1. Start the game: Click "Start" from the main menu.
