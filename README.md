@@ -23,36 +23,54 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 4. Features multithreading for smooth gameplay and responsive UI.
 5. Includes sound effects, animations, and power-up systems.
 
-**Main Objective:**  
-Break all the destructible bricks by controlling the **paddle** to bounce the ball without letting it fall.
-
+**Game mechanics:**  
+- Control a paddle to bounce a ball and destroy bricks
+- Collect power-ups for special abilities
+- Progress through multiple levels with increasing difficulty
+- Score points and compete on the leaderboard
 ---
 
-## 🧩 **OOP Concepts Used**
-1. **Encapsulation** – Private attributes and getters/setters for controlled access.  
-2. **Inheritance** – Common behaviors shared by game objects like `Ball`, `Brick`, `Paddle`, etc.  
-3. **Polymorphism** – Different brick types and power-ups override their unique behaviors.  
-4. **Abstraction** – Abstract base classes define core structure of game entities.  
+# UML Diagram
+## Class 
 
 ---
 
 ## 🧠 **Design Pattern**
-The game follows the **Model–View–Controller (MVC)** pattern:
+---
+## 1. Singleton
+**Used in:** Game Manager
 
-- **Model:** Game objects and logic (`Ball`, `Brick`, `Paddle`, etc.)  
-- **View:** Game rendering (JavaFX UI)  
-- **Controller:** Handles user input and game events  
+**Purpose:** 
 
+## 2. Abstract Factory
+
+**Used in:** abc
+
+**Purpose:** 
 ---
 
-## 🎮 **Game Controls**
+# Multithreading Implementation
+The game uses multiple threads to ensure smooth performance:
 
+1. Game Loop Thread: Updates game logic at 60 FPS
+2. Rendering Thread: Handles graphics rendering (EDT for JavaFX Application Thread)
+3. Audio Thread Pool: Plays sound effects asynchronously
+---
+# Installation
+1. Clone the project from the repository.
+2. Open the project in the IDE.
+3. Run the project.
+---
+
+# 🎮 **Usage**
+---
+## Controls
 | Key | Action |
 |-----|--------|
 | ← | Move paddle left |
 | → | Move paddle right |
 | P | Pause / Resume game |
-
+| SPACE | Lauch Ball |
 ---
 
 ## 🧱 **Brick Types**
