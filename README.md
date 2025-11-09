@@ -33,12 +33,17 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 
 # UML Diagram
 ## Class Diagram
+
 <Insert hình ảnh Class Diagram>
+
 ---
 
 ## Design Pattern Implementation
+
 ---
+
 ## 1. Singleton
+
 **Used in:** Game Manager
 
 **Purpose:** 
@@ -48,9 +53,11 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 **Used in:** abc
 
 **Purpose:** 
+
 ---
 
 # Multithreading Implementation
+
 The game uses multiple threads to ensure smooth performance:
 
 1. Game Loop Thread: Updates game logic at 60 FPS
@@ -58,6 +65,7 @@ The game uses multiple threads to ensure smooth performance:
 3. Audio Thread Pool: Plays sound effects asynchronously
    
 ---
+
 # Installation
 1. Clone the project from the repository.
 2. Open the project in the IDE.
@@ -130,6 +138,7 @@ The game uses multiple threads to ensure smooth performance:
 ---
 # Future Improvements
 ## Planned Features
+
 1. Enhanced gameplay
    - Support load/save game functionality and leaderboard system
    - Add shop and coins system to buy skins for paddle and ball
@@ -144,6 +153,7 @@ The game uses multiple threads to ensure smooth performance:
    - Add an online leaderboard
 
 ---
+
 # Technologies Used
 
 | Technology | Version | Purpose |
@@ -153,12 +163,14 @@ The game uses multiple threads to ensure smooth performance:
 | Maven | 3.9+ | Build tool |
 
 ---
+
 # License 
 This project is developed for educational purposes only.
 
 **Academic Integrity:** This code is provided as a reference. Please follow your institution's academic integrity policies.
 
 ---
+
 # Notes
 - The game was developed as part of the Object-Oriented Programming with Java course curriculum.
 - All code is written by group members with guidance from the instructor.
