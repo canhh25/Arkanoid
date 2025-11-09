@@ -32,10 +32,6 @@ public class LevelController {
     private GameController gameController;
     private int currentLevel;
 
-    @FXML
-    public void initialize() {
-        setupLevelButtons();
-    }
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
@@ -51,16 +47,32 @@ public class LevelController {
                 GameManager.getInstance().getUnlockedLevel());
     }
 
-    private void setupLevelButtons() {
-        GameManager gameManager = GameManager.getInstance();
-        int unlockedLevel = gameManager.getUnlockedLevel();
+    private Button[] levelButtons;
 
-        Button[] levelButtons = {
+    @FXML
+    private void initialize() {
+        // Khởi tạo mảng TRONG initialize(), SAU KHI các button đã được inject
+        levelButtons = new Button[]{
                 btnLevel1, btnLevel2, btnLevel3, btnLevel4, btnLevel5,
                 btnLevel6, btnLevel7, btnLevel8, btnLevel9, btnLevel10
         };
 
+        setupLevelButtons();
+    }
+
+    private void setupLevelButtons() {
+        GameManager gameManager = GameManager.getInstance();
+        int unlockedLevel = gameManager.getUnlockedLevel();
+
+        // Bỏ dòng khai báo mảng này đi vì đã khai báo ở trên
+        // Button[] levelButtons = { ... }; // XÓA DÒNG NÀY
+
         for (int i = 0; i < levelButtons.length; i++) {
+            if (levelButtons[i] == null) {
+                System.err.println("Button " + (i+1) + " is null!");
+                continue;
+            }
+
             int levelNumber = i + 1;
             if (levelNumber > unlockedLevel) {
                 levelButtons[i].setDisable(true);
@@ -121,29 +133,6 @@ public class LevelController {
     @FXML private void handleLevel8(ActionEvent event) { startLevel(8, event); }
     @FXML private void handleLevel9(ActionEvent event) { startLevel(9, event); }
     @FXML private void handleLevel10(ActionEvent event) { startLevel(10, event); }
-
-    @FXML
-    private void handleBack(ActionEvent event) {
-        try {
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Arkanoid");
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleContinue(ActionEvent event) {
-        GameManager gameManager = GameManager.getInstance();
-        int unlockedLevel = gameManager.getUnlockedLevel();
-        startLevel(unlockedLevel, event);
-    }
-
     @FXML
     private void handleRestart(ActionEvent event) {
         try {
@@ -172,7 +161,6 @@ public class LevelController {
             newStage.show();
 
             newGameController.start();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,5 +180,25 @@ public class LevelController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handleBack(ActionEvent event) {
+        try {
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Arkanoid");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    @FXML
+    private void handleContinue(ActionEvent event) {
+        GameManager gameManager = GameManager.getInstance();
+        int unlockedLevel = gameManager.getUnlockedLevel();
+        startLevel(unlockedLevel, event);
+    }
 }

@@ -6,8 +6,6 @@ import com.example.arkanoid.models.GameState;
 import com.example.arkanoid.views.GameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -15,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 public class GameController {
@@ -62,7 +62,7 @@ public class GameController {
 
     private void setupInputHandling(Scene scene) {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.P) {
+            if (event.getCode() == KeyCode.ESCAPE) {
                 if (!isPaused) {
                     pauseGame();
                     showPauseWindow();
@@ -72,6 +72,7 @@ public class GameController {
             if (isPaused) {
                 return;
             }
+
             if (event.getCode() == KeyCode.LEFT) {
                 goLeft = true;
             } else if (event.getCode() == KeyCode.RIGHT) {
@@ -103,8 +104,8 @@ public class GameController {
                 goRight = false;
             }
         });
-    }
 
+    }
     private void pauseGame() {
         isPaused = true;
         if (animationTimer != null) {
@@ -142,7 +143,6 @@ public class GameController {
             e.printStackTrace();
         }
     }
-
     private void render() {
         drawGameInfo();
     }

@@ -8,15 +8,15 @@ import javafx.scene.paint.Color;
 
 import java.awt.*;
 
-public class ExtraLifePowerUp extends PowerUp<GameManager> {
+public class ExtraLifePower extends Power<GameManager> {
     public int countLives = 2;
 
-    public ExtraLifePowerUp(double x, double y) {
-        super(x, y, 30, 19, "life");
+    public ExtraLifePower(double x, double y) {
+        super(x, y, 30, 19, "life", 0);
     }
 
     @Override
-    public void applyEffect(GameManager gameManager) {
+    public void applyDefaultEffect(GameManager gameManager) {
         if (!isActive()) {
             if (gameManager.getLives() < 5) {
                 gameManager.lives++;
@@ -25,7 +25,7 @@ public class ExtraLifePowerUp extends PowerUp<GameManager> {
     }
 
     @Override
-    public void removeEffect(GameManager gameManager) {
+    public void removeDefaultEffect(GameManager gameManager) {
         if (this.getCountLives() > 0) {
             this.isActive = false;
             this.setCountLives(this.countLives - 1);
