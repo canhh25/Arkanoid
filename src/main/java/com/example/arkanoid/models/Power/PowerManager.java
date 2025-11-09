@@ -101,7 +101,6 @@ public class PowerManager {
                                          Paddle paddle, Ball ball, String type) {
         entry.cancel();
 
-        entry.power.extendTime(3000);
         long remainingTime = entry.power.getActiveTime();
 
         Object target = entry.target;
@@ -132,7 +131,7 @@ public class PowerManager {
 
     private static <T> void scheduleTimedPower(Power<T> power, T target, String type) {
         power.applyEffect(target);
-        long duration = power.getActiveTime() > 0 ? power.getActiveTime() : 5000;
+        long duration = power.getActiveTime() > 0 ? power.getActiveTime() : 0000;
 
         ScheduledFuture<?> task = scheduler.schedule(() -> {
             power.removeEffect(target);

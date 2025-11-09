@@ -125,6 +125,7 @@ public class MenuController {
     @FXML
     private void selectLevel(ActionEvent event) {
         try {
+            Stage menuStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/LevelView.fxml"));
             Parent root = loader.load();
 

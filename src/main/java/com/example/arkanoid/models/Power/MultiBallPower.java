@@ -4,9 +4,8 @@ import com.example.arkanoid.models.Ball;
 import com.example.arkanoid.models.GameManager;
 
 public class MultiBallPower extends Power<GameManager> {
-
     public MultiBallPower(double x, double y) {
-        super(x, y, 30, 19, "multi_ball");
+        super(x, y, 30, 19, "multi_ball", 0);
     }
 
     @Override
