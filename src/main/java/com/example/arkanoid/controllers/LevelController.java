@@ -145,7 +145,7 @@ public class LevelController {
             Scene scene = new Scene(root, WIDTH, HEIGHT);
 
             GameManager gameManager = GameManager.getInstance();
-            gameManager.setupLevel(currentLevel);
+            gameManager.resetGameKeepLevel();
 
             GameController newGameController = new GameController(gc, currentLevel);
 
