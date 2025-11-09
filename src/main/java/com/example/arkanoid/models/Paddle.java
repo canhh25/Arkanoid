@@ -7,7 +7,7 @@ import java.awt.*;
 public class Paddle extends MovableObject {
     public static final double PADDLE_SPEED = 3;
     public static double paddle_width = 100;
-    public static double paddle_height= 30;
+    public static double paddle_height = 30;
 
     private boolean movingLeft = false;
     private boolean movingRight = false;
@@ -32,11 +32,11 @@ public class Paddle extends MovableObject {
 
     @Override
     public void update() {
-        if (movingLeft && x > 0) {
-            x -= PADDLE_SPEED;
+        if (movingLeft) {
+            this.x = Math.max(0, this.x - PADDLE_SPEED);
         }
-        if (movingRight && x < gameWidth - this.paddle_width) {
-            x += PADDLE_SPEED;
+        if (movingRight) {
+            this.x = Math.min(gameWidth - this.width, this.x + PADDLE_SPEED);
         }
         frameTimer++;
         if (frameTimer >= frameDelay) {
@@ -45,10 +45,7 @@ public class Paddle extends MovableObject {
             setImage("/images/paddle/bat" + frame + ".png");
         }
     }
-    public void draw(GraphicsContext gc) {
 
-        render(gc);
-    }
     public void render(GraphicsContext gc) {
         if (getImage() != null) {
             gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
