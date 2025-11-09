@@ -1,5 +1,6 @@
 package com.example.arkanoid.models.Power;
 
+import com.example.arkanoid.models.Ball;
 import com.example.arkanoid.models.GameObject;
 import com.example.arkanoid.models.Paddle;
 import com.example.arkanoid.views.PowerView;
@@ -10,10 +11,13 @@ public abstract class Power<T> extends GameObject {
     protected boolean isActive = false;
     protected double speed = 1.5;
     protected long activeTime = 4000;
-    protected double maxActiveTime = 10000;
     protected long duration;
     protected PowerView view;
+    private static final long BLINK_WARNING_TIME = 1000;
+    private static final long BLINK_INTERVAL = 200;
 
+    protected long activationTime;
+    protected boolean isBlinking;
     protected PowerStrategy<T> strategy;
 
     public Power(double x, double y, double width, double height, String type, long duration) {
@@ -53,6 +57,32 @@ public abstract class Power<T> extends GameObject {
                 getY() + getHeight() > paddle.getY();
     }
 
+    public void updateBlinkEffect(T object) {
+        if (!isActive) return;
+
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - activationTime;
+        long remainingTime = duration - elapsedTime;
+
+        if (remainingTime <= BLINK_WARNING_TIME && remainingTime > 0) {
+            isBlinking = true;
+            long blinkCycle = (currentTime / BLINK_INTERVAL) % 2;
+            if (object instanceof Ball) {
+                ((Ball) object).setBlinking(blinkCycle == 0);
+            } else  if (object instanceof Paddle) {
+                ((Paddle) object).setBlinking(blinkCycle == 0);
+            }
+        } else {
+            if (isBlinking) {
+                if (object instanceof Ball) {
+                    ((Ball) object).setBlinking(false);
+                } else   if (object instanceof Paddle) {
+                    ((Paddle) object).setBlinking(false);
+                }
+                isBlinking = false;
+            }
+        }
+    }
     public void activate() {
         isActive = true;
         activeTime = duration;

@@ -7,7 +7,7 @@ public class SlowBall extends Power<Ball> {
     private static final long DURATION = 3000;
 
     public SlowBall(double x, double y) {
-        super(x, y, 30, 19, "slow_ball", DURATION);
+        super(x, y, 30, 19, "slow", DURATION);
     }
 
 

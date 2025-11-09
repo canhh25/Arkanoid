@@ -52,8 +52,21 @@ public class PowerManager {
         powers.add(power);
     }
 
+    private static void updateBlinkEffects(Paddle paddle, Ball ball) {
+        for (ActivePowerEntry entry : activePowers.values()) {
+            Power<?> power = entry.power;
+
+            if (power != null && power.isActive()) {
+                if (power instanceof ExpandPaddle) {
+                    ((ExpandPaddle) power).updateBlinkEffect(paddle);
+                }
+            }
+        }
+    }
     public static void updatePowers(Paddle paddle, Ball ball) {
         if (gameManager == null || paddle == null) return;
+
+        updateBlinkEffects(paddle, ball);
 
         for (int i = powers.size() - 1; i >= 0; i--) {
             Power<?> power = powers.get(i);
@@ -88,6 +101,7 @@ public class PowerManager {
 
         switch (powerType) {
             case EXPAND:
+            case SLOW:
             case FAST_BALL:
                 extendTimedPower(entry, power, paddle, ball, type);
                 break;
@@ -123,7 +137,7 @@ public class PowerManager {
                 scheduleTimedPower((Power<Paddle>) power, paddle, type);
                 break;
 
-            case FAST_BALL:
+            case FAST_BALL, SLOW:
                 scheduleTimedPower((Power<Ball>) power, ball, type);
                 break;
         }
@@ -156,7 +170,7 @@ public class PowerManager {
             if (power != null && power.isActive()) {
                 power.removeDefaultEffect(paddle);
 
-                if (power instanceof FastBall) {
+                if (power instanceof FastBall || power instanceof SlowBall) {
                     for (Ball ball : balls) {
                         power.removeEffect(ball);
                     }
