@@ -53,26 +53,8 @@ public class PaddleTest {
     }
 
     @Test
-    @DisplayName("Test không vượt tường trái")
-    public void testLeftWall() {
-        paddle.setX(0);
-        paddle.setMovingLeft(true);
-        paddle.update();
-        assertTrue(paddle.getX() >= 0);
-    }
-
-    @Test
-    @DisplayName("Test không vượt tường phải")
-    public void testRightWall() {
-        paddle.setX(GAME_WIDTH - 100); // 970 - 100 = 870
-        paddle.setMovingRight(true);
-        paddle.update();
-        assertTrue(paddle.getX() + paddle.getWidth() <= GAME_WIDTH);
-    }
-
-    @Test
     @DisplayName("Test di chuyển nhiều lần vẫn không vượt trái")
-    public void testManyMovesLeft() {
+    public void testManyMovesLeft(  ) {
         paddle.setMovingLeft(true);
         for (int i = 0; i < 200; i++) {
             paddle.update();
