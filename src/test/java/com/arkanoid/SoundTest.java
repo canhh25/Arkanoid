@@ -8,13 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * LƯU Ý: Test này có thể cần JavaFX Toolkit được khởi tạo
- * Nếu gặp crash (exit code -1073740791), hãy:
- * 1. Chạy test với headless mode: -Djava.awt.headless=true
- * 2. Hoặc skip test này khi chạy mvn test
- * 3. Hoặc mock SoundManager thay vì test thật
- */
+
 public class SoundTest {
 
     @BeforeAll
