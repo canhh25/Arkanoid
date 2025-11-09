@@ -2,16 +2,15 @@ package com.example.arkanoid.views;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
-public class PowerUpView {
+public class PowerView {
     private Image[] frames;
     private int currentFrame = 0;
     private long lastFrameTime = 0;
-    private static final long FRAME_DELAY = 100; // 100ms between frames
+    private static final long FRAME_DELAY = 100;
     private String type;
 
-    public PowerUpView(String type) {
+    public PowerView(String type) {
         this.type = type;
         loadFrames();
     }
@@ -19,7 +18,6 @@ public class PowerUpView {
     private void loadFrames() {
         frames = new Image[8];
         try {
-            // Load 8 frame animation
             for (int i = 0; i < 8; i++) {
                 String imagePath = "/images/powerups/powerup_" + type +
                         "/powerup_" + type + "_" + (i + 1) + ".png";

@@ -2,7 +2,7 @@ package com.example.arkanoid.models.Power;
 
 import com.example.arkanoid.models.GameObject;
 import com.example.arkanoid.models.Paddle;
-import com.example.arkanoid.views.PowerUpView;
+import com.example.arkanoid.views.PowerView;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Power<T> extends GameObject {
@@ -12,7 +12,7 @@ public abstract class Power<T> extends GameObject {
     protected long activeTime = 4000;
     protected double maxActiveTime = 10000;
     protected long duration;
-    protected PowerUpView view;
+    protected PowerView view;
 
     protected PowerStrategy<T> strategy;
 
@@ -20,7 +20,7 @@ public abstract class Power<T> extends GameObject {
         super(x, y, width, height, null);
         this.type = type;
         this.duration = duration;
-        this.view = new PowerUpView(type);
+        this.view = new PowerView(type);
     }
 
     public void applyEffect(T object) {
@@ -72,6 +72,6 @@ public abstract class Power<T> extends GameObject {
     public long getDuration() { return duration; }
     public String getType() { return type; }
     public boolean isActive() { return isActive; }
-    public PowerUpView getView() { return view; }
+    public PowerView getView() { return view; }
     public long getActiveTime() { return activeTime; }
 }

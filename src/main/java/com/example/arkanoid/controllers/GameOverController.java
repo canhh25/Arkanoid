@@ -14,7 +14,6 @@ public class GameOverController {
     @FXML
     private void handleStart(javafx.event.ActionEvent event) {
         try {
-            // Lấy Stage từ nút hiện tại
             Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
 
             Canvas canvas = new Canvas(960, 640);
@@ -22,7 +21,6 @@ public class GameOverController {
             StackPane root = new StackPane(canvas);
             Scene scene = new Scene(root, 960, 640);
 
-            // Reset game
             GameManager.getInstance().resetGame();
             GameController controller = new GameController(gc, GameManager.getInstance().getLevel());
             stage.setScene(scene);
