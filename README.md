@@ -31,24 +31,22 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 
 ---
 
-# UML Diagram
-## Class Diagram
+## UML Diagram
+### Class Diagram
 
 <Insert hình ảnh Class Diagram>
 
 ---
 
-## Design Pattern Implementation
+### Design Pattern Implementation
 
----
-
-## 1. Singleton
+1. Singleton
 
 **Used in:** Game Manager
 
 **Purpose:** 
 
-## 2. Abstract Factory
+2. Abstract Factory
 
 **Used in:** abc
 
@@ -56,7 +54,7 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 
 ---
 
-# Multithreading Implementation
+## Multithreading Implementation
 
 The game uses multiple threads to ensure smooth performance:
 
@@ -66,16 +64,16 @@ The game uses multiple threads to ensure smooth performance:
    
 ---
 
-# Installation
+## Installation
 1. Clone the project from the repository.
 2. Open the project in the IDE.
 3. Run the project.
    
 ---
 
-# Usage
+## Usage
 
-## Controls
+### Controls
 | Key | Action |
 |-----|--------|
 | ← | Move paddle left |
@@ -83,7 +81,7 @@ The game uses multiple threads to ensure smooth performance:
 | P | Pause / Resume game |
 | SPACE | Lauch Ball |
 
-## How to play
+### How to play
 1. Start the game: Click "Start" from the main menu.
 2. Control the paddle: Use arrow keys to move left and right.
 3. Launch the ball: Press SPACE to launch the ball from the paddle.
@@ -92,7 +90,7 @@ The game uses multiple threads to ensure smooth performance:
 6. Avoid losing the ball: Keep the ball from falling below the paddle.
 7. Complete the level: Destroy all destructible bricks to advance.
 
-## Power-ups
+### Power-ups
 
 | Icon | Name | Effect |
 |--------|------|--------|
@@ -101,7 +99,7 @@ The game uses multiple threads to ensure smooth performance:
 | ![Extra Life](src/main/resources/images/powerups/powerup_life/powerup_life_1.png) | **Extra Life** | Grants one extra life |
 | ![Multi Ball](src/main/resources/images/powerups/powerup_multi_ball/powerup_multi_ball_1.png) | **Multi Ball** | Spawns multiple balls simultaneously |
 
-## Brick Types
+### Brick Types
 
 | Image | Type | Durability |
 |--------|------|-------------|
@@ -110,34 +108,34 @@ The game uses multiple threads to ensure smooth performance:
 | ![Very Hard Brick](src/main/resources/images/brick/brick_yellow.png) | **Very Hard Brick** | Breaks after 3 hits |
 | ![Unbreakable Brick](src/main/resources/images/brick/brick_red.png) | **Unbreakable Brick** | Cannot be destroyed |
 
-## Lives System
+### Lives System
 - Players start with **3 lives**.  
 - Losing the ball decreases one life.  
 - When lives reach **0**, the game ends with **Game Over**.  
 
-## Scoring System 
+### Scoring System 
 - Normal Brick: 10 points
 - Hard Brick: 20 points
 - Very Hard Brick: 30 points
   
 ---
 
-# **Demo**
+## **Demo**
 
-## Main Menu
+### Main Menu
 ![Menu](src/main/resources/images/menu/menu.png)  
 *Main menu screen of the game.*
 
-## Gameplay Screens
+### Gameplay Screens
 | Map 1 | Map 2 | Map 3 | Map 4 |
 |-------|-------|-------|-------|
 | ![Map 1](src/main/resources/images/background/Pixel-Art%20Background%201/frame0001.png) | ![Map 2](src/main/resources/images/background/Pixel-Art%20Background%202/frame0001.png) | ![Map 3](src/main/resources/images/background/Pixel-Art%20Background%203/frame0001.png) | ![Map 4](src/main/resources/images/background/Pixel-Art%20Background%204/preview.png) |
 
-## Video demo
+### Video demo
 
 ---
-# Future Improvements
-## Planned Features
+## Future Improvements
+### Planned Features
 
 1. Enhanced gameplay
    - Support load/save game functionality and leaderboard system
@@ -154,7 +152,7 @@ The game uses multiple threads to ensure smooth performance:
 
 ---
 
-# Technologies Used
+## Technologies Used
 
 | Technology | Version | Purpose |
 |-------------|----------|----------|
@@ -164,14 +162,15 @@ The game uses multiple threads to ensure smooth performance:
 
 ---
 
-# License 
+## License 
+
 This project is developed for educational purposes only.
 
 **Academic Integrity:** This code is provided as a reference. Please follow your institution's academic integrity policies.
 
 ---
 
-# Notes
+## Notes
 - The game was developed as part of the Object-Oriented Programming with Java course curriculum.
 - All code is written by group members with guidance from the instructor.
 - Some assets (images, sounds) may be used for educational purposes under fair use.
