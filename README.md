@@ -14,7 +14,6 @@
 ---
 
 ## 🎯 **Description**
-...
 This is a classic Arkanoid game developed in Java as a final project for Object-Oriented Programming course. The project demonstrates the implementation of OOP principles and design patterns.
 
 **Key features:**
