@@ -8,12 +8,14 @@
 4. **Đặng Xuân Tùng** – 24020350  
 
 **Instructor:** Kiều Văn Tuyên - Nguyễn Trung Hiếu
+
 **Semester:** HK1 – Năm học 2024–2025  
 
 ---
 
 ## 🎯 **Description**
 This is a classic Arkanoid game developed in Java as a final project for Object-Oriented Programming course. The project demonstrates the implementation of OOP principles and design patterns.
+
 **Key features:**
 The game is developed using Java 17+ with JavaFX for GUI.
 Implements core OOP principles: Encapsulation, Inheritance, Polymorphism, and Abstraction.
