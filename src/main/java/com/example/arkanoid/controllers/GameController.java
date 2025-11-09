@@ -6,17 +6,12 @@ import com.example.arkanoid.models.GameState;
 import com.example.arkanoid.views.GameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -32,6 +27,7 @@ public class GameController {
     private final GameView gameView;
     private final GraphicsContext gc;
     private AnimationTimer animationTimer;
+    private GameFacade navigationFacade;
 
     public GameController(GraphicsContext gc, int level) {
         this.gc = gc;
@@ -39,6 +35,10 @@ public class GameController {
         this.gameView = new GameView();
         gameManager.setupLevel(level);
         setupInputHandling(gc.getCanvas().getScene());
+
+        // Khởi tạo facade
+        Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+        this.navigationFacade = GameFacade.getInstance(stage);
     }
 
     public void start() {
@@ -59,7 +59,6 @@ public class GameController {
 
                 gameManager.update(goLeft, goRight);
                 gameView.render(gc, gameManager);
-
                 drawGameInfo();
             }
         };
@@ -75,27 +74,11 @@ public class GameController {
                 gameManager.unlockNextLevel();
 
                 if (nextLevel <= 10) {
-                    Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-
-                    Canvas canvas = new Canvas(960, 640);
-                    GraphicsContext newGc = canvas.getGraphicsContext2D();
-                    StackPane root = new StackPane(canvas);
-                    Scene scene = new Scene(root, 960, 640);
-
-                    gameManager.setupLevel(nextLevel);
-                    GameController gameController = new GameController(newGc, nextLevel);
-
-                    stage.setTitle("Arkanoid - Level " + nextLevel);
-                    stage.setScene(scene);
-
-                    gameController.start();
+                    // Sử dụng Facade để chuyển sang level tiếp theo
+                    navigationFacade.navigateToGame(nextLevel);
                 } else {
-                    Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader(getClass()
-                            .getResource("/com.example.arkanoid/main/MenuView.fxml"));
-                    Parent root = loader.load();
-                    stage.setScene(new Scene(root, 960, 640));
-                    stage.setTitle("Arkanoid Menu");
+                    // Hoàn thành tất cả level, về menu
+                    navigationFacade.navigateToMenu();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -121,6 +104,7 @@ public class GameController {
             e.printStackTrace();
         }
     }
+
     private void showGameOver() {
         Platform.runLater(() -> {
             try {
@@ -128,37 +112,18 @@ public class GameController {
                 int maxScore = Math.max(loadMaxScore(), currentScore);
                 saveMaxScore(maxScore);
 
-                FXMLLoader loader = new FXMLLoader(getClass()
-                        .getResource("/com.example.arkanoid/main/GameOverView.fxml"));
-                Parent root = loader.load();
+                // Sử dụng Facade để chuyển sang màn hình Game Over
+                navigationFacade.navigateToGameOver(currentScore, maxScore);
 
-                GameOverController controller = loader.getController();
-                controller.setScores(currentScore, maxScore);
-
-                Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-                stage.setTitle("Game Over");
-                stage.setScene(new Scene(root, 960, 640));
             } catch (Exception e) {
                 e.printStackTrace();
-                backToMenu();
+                // Fallback về menu nếu có lỗi
+                navigationFacade.navigateToMenu();
             }
         });
     }
 
-    private void backToMenu() {
-        try {
-            Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass()
-                    .getResource("/com.example.arkanoid/main/MenuView.fxml"));
-            Parent root = loader.load();
-            stage.setScene(new Scene(root, 960, 640));
-            stage.setTitle("Arkanoid Menu");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setupInputHandling(Scene scene) {
+    private void setupInputHandling(javafx.scene.Scene scene) {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 if (!isPaused) {
@@ -175,11 +140,9 @@ public class GameController {
                 goLeft = true;
             } else if (event.getCode() == KeyCode.RIGHT) {
                 goRight = true;
-            }else if (event.getCode() == KeyCode.SPACE) {
-
+            } else if (event.getCode() == KeyCode.SPACE) {
                 if (gameManager.gameState == GameState.GAME_OVER ||
                         gameManager.gameState == GameState.WIN) {
-
                     gameManager.nextGame();
                     return;
                 }
@@ -200,8 +163,8 @@ public class GameController {
                 goRight = false;
             }
         });
-
     }
+
     private void pauseGame() {
         isPaused = true;
         if (animationTimer != null) {
@@ -217,31 +180,11 @@ public class GameController {
     }
 
     private void showPauseWindow() {
-        try {
-            Stage pauseStage = new Stage();
-            pauseStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-
-            FXMLLoader loader = new FXMLLoader(getClass()
-                    .getResource("/com.example.arkanoid/main/PauseView.fxml"));
-            Parent root = loader.load();
-
-            LevelController levelController = loader.getController();
-            levelController.setGameController(this);
-            levelController.setCurrentLevel(gameManager.getLevel());
-
-            Scene scene = new Scene(root);
-            pauseStage.setScene(scene);
-            pauseStage.setTitle("Paused");
-            pauseStage.setResizable(false);
-
-            pauseStage.setOnCloseRequest(e -> resumeGame());
+        // Sử dụng Facade để hiển thị pause dialog
+        Stage pauseStage = navigationFacade.showPauseDialog(this, gameManager.getLevel());
+        if (pauseStage != null) {
             pauseStage.showAndWait();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-    }
-    private void render() {
-        drawGameInfo();
     }
 
     private void drawGameInfo() {
@@ -304,11 +247,5 @@ public class GameController {
         gc.setStroke(Color.rgb(200, 30, 60));
         gc.setLineWidth(2);
         gc.stroke();
-    }
-
-    private String formatTime(int seconds) {
-        int mins = seconds / 60;
-        int secs = seconds % 60;
-        return String.format("%d:%02d", mins, secs);
     }
 }
