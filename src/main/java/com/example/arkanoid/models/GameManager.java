@@ -483,4 +483,17 @@ public class GameManager {
         elapsedTime = 0;
         timerRunning = false;
     }
+
+    public void resetGame() {
+        this.score = 0;
+        this.lives = 3;
+        this.level = 1;
+        this.selectedLevel = 1;
+        this.waitingLaunch = true;
+        this.timerRunning = false;
+        this.elapsedTime = 0;
+
+        PowerManager.clearPowers(paddle, balls);
+        setupGame();
+    }
 }
