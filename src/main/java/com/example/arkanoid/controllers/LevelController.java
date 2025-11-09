@@ -71,13 +71,8 @@ public class LevelController {
             SoundManager.playGameStart();
             SoundManager.stopBackgroundMusic();
 
-            Stage levelStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            levelStage.close();
-
-            Stage mainStage = (Stage) levelStage.getOwner();
-            if (mainStage == null) {
-                mainStage = new Stage();
-            }
+            // LẤY STAGE HIỆN TẠI thay vì tạo mới
+            Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
 
             Canvas canvas = new Canvas(WIDTH, HEIGHT);
             GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -89,10 +84,9 @@ public class LevelController {
 
             GameController gameController = new GameController(gc, level);
 
-            mainStage.setTitle("Arkanoid - Level " + level);
-            mainStage.setScene(scene);
-            mainStage.setResizable(false);
-            mainStage.show();
+            currentStage.setTitle("Arkanoid - Level " + level);
+            currentStage.setScene(scene);
+            currentStage.setResizable(false);
 
             gameController.start();
         } catch (Exception e) {
@@ -115,22 +109,15 @@ public class LevelController {
     @FXML
     private void handleBack(ActionEvent event) {
         try {
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            // Quay lại màn hình menu
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Arkanoid");
-            stage.show();
+
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setTitle("Arkanoid Menu");
+            stage.setScene(new Scene(root));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void handleContinue(ActionEvent event) {
-        GameManager gameManager = GameManager.getInstance();
-        int unlockedLevel = gameManager.getUnlockedLevel();
-        startLevel(unlockedLevel, event);
     }
 }
