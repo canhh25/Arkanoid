@@ -1,21 +1,20 @@
 package com.example.arkanoid.controllers;
 
 import com.example.arkanoid.utils.SoundManager;
-import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MenuController {
     private static final int WIDTH = 960;
@@ -88,10 +87,12 @@ public class MenuController {
 
     @FXML
     public void initialize() {
-        volumeSprite = new Image(getClass().getResource("/images/menu/volume.png").toExternalForm());
-        btnVolume.setImage(volumeSprite);
-        btnVolume.setViewport(new Rectangle2D(0, 0, 70, 70));
-        SoundManager.playBackgroundMusic("/sounds/nen.mp3");
+        if (btnVolume != null) {
+            volumeSprite = new Image(getClass().getResource("/images/menu/volume.png").toExternalForm());
+            btnVolume.setImage(volumeSprite);
+            btnVolume.setViewport(new Rectangle2D(0, 0, 70, 70));
+            SoundManager.playBackgroundMusic("/sounds/nen.mp3");
+        }
     }
 
     @FXML
