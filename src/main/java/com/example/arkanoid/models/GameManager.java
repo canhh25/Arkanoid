@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 public class GameManager {
     private final int gameWidth = 960;
@@ -38,11 +39,19 @@ public class GameManager {
     private int selectedLevel = 1;
     public static GameManager instance;
 
+    // ĐỂ LƯU TIẾN TRÌNH
+    private static final Preferences prefs = Preferences.userNodeForPackage(GameManager.class);
+    private static final String PREF_UNLOCKED_LEVEL = "unlockedLevel";
+
     private GameManager() {
         this.score = 0;
         this.lives = 3;
         this.level = 1;
         this.balls = new ArrayList<>();
+
+
+        this.unlockedLevel = 10;
+
         PowerManager.setGameManager(this);
         setupGame();
     }
@@ -59,7 +68,30 @@ public class GameManager {
     }
 
     public void unlockNextLevel() {
-        if (unlockedLevel < 10) unlockedLevel++;
+        if (unlockedLevel < 10) {
+            unlockedLevel++;
+            saveProgress();
+
+        }
+    }
+
+    // LƯU TIẾN TRÌNH
+    private void saveProgress() {
+        prefs.putInt(PREF_UNLOCKED_LEVEL, unlockedLevel);
+
+    }
+
+    // TẢI TIẾN TRÌNH
+    private void loadProgress() {
+        unlockedLevel = prefs.getInt(PREF_UNLOCKED_LEVEL, 1);
+
+    }
+
+    // RESET TIẾN TRÌNH (nếu muốn chơi lại từ đầu)
+    public void resetProgress() {
+        unlockedLevel = 1;
+        saveProgress();
+
     }
 
     public void setSelectedLevel(int level) {
@@ -82,8 +114,10 @@ public class GameManager {
         setupGame();
         startTimer();
     }
+
     public void setupLevel(int level) {
         this.selectedLevel = level;
+        this.level = level;
         setupGame();
     }
 
@@ -112,8 +146,6 @@ public class GameManager {
         mainBall.setPrevY(mainBall.getY());
         movables.add(paddle);
         movables.add(mainBall);
-
-
     }
 
     public void requestLaunch() {
@@ -355,7 +387,7 @@ public class GameManager {
         if (isEmptyBrick()) {
             gameState = GameState.WIN;
             timerRunning = false;
-            nextGame();
+            // KHÔNG GỌI nextGame() ở đây nữa, để GameView xử lý
         }
     }
 
@@ -452,6 +484,7 @@ public class GameManager {
         long seconds = sec % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
+
     public void startTimer() {
         startTime = System.currentTimeMillis();
         timerRunning = true;
