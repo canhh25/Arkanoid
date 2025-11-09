@@ -33,6 +33,8 @@ public class MenuController {
     public void openGame(Stage stage) {
         try {
             SoundManager.stopBackgroundMusic();
+            SoundManager.playGameStart();
+
             Canvas canvas = new Canvas(WIDTH, HEIGHT);
             GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -41,8 +43,10 @@ public class MenuController {
 
             GameController gameController = new GameController(gc, 1);
 
-            stage.setTitle("Arkanoid");
+            // DÙNG LẠI STAGE HIỆN TẠI thay vì tạo mới
+            stage.setTitle("Arkanoid - Level 1");
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
 
             gameController.start();
@@ -128,18 +132,16 @@ public class MenuController {
             // LẤY CONTROLLER ĐỂ CÓ THỂ REFRESH SAU
             LevelController levelController = loader.getController();
 
-            Stage levelStage = new Stage();
-            levelStage.initModality(Modality.APPLICATION_MODAL);
-            levelStage.initOwner(menuStage);
-            levelStage.setTitle("Select Level");
-            levelStage.setScene(new Scene(root));
-            levelStage.setResizable(false);
+            // DÙNG LẠI STAGE HIỆN TẠI thay vì tạo Stage mới
+            Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Scene levelScene = new Scene(root);
 
-            menuStage.hide();
-            levelStage.setOnShown(e -> levelController.refreshLevelButtons());
+            currentStage.setTitle("Select Level");
+            currentStage.setScene(levelScene);
 
-            levelStage.setOnHidden(e -> menuStage.show());
-            levelStage.show();
+            // REFRESH NÚT KHI CHUYỂN SCENE
+            levelController.refreshLevelButtons();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
