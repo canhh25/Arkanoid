@@ -10,8 +10,6 @@ public class Ball extends MovableObject {
     private double speed;
     public static final double BALL_WIDTH = 14;
     public static final double BALL_HEIGHT = 14;
-    private int collisionCooldown = 0;
-
 
     public Ball(double x, double y, double speed) {
         super(x, y, BALL_WIDTH, BALL_HEIGHT, "/images/ball/ball.png");
@@ -20,12 +18,11 @@ public class Ball extends MovableObject {
         this.speed = speed;
     }
 
-
     public Ball(double x, double y) {
         super(x, y, BALL_WIDTH, BALL_HEIGHT, "/images/ball/ball.png");
         this.dx = 0;
         this.dy = 0;
-        this.speed = 3.0;
+        this.speed = 4.0;
     }
 
     public double getPrevX() {
@@ -95,14 +92,12 @@ public class Ball extends MovableObject {
         y += dy;
     }
 
-
     @Override
     public void render(GraphicsContext gc) {
         if (getImage() != null) {
             gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
         }
     }
-
 
     public void reverseX() {
         dx = -dx;
@@ -114,10 +109,9 @@ public class Ball extends MovableObject {
         printSpeed();
     }
 
-
     private void printSpeed() {
         double currentSpeed = Math.sqrt(dx * dx + dy * dy);
-        System.out.printf("⚡ Ball Speed: %.3f (target: %.3f) | dx: %.3f, dy: %.3f%n",
+        System.out.printf("Ball Speed: %.3f (target: %.3f) | dx: %.3f, dy: %.3f%n",
                 currentSpeed, speed, dx, dy);
     }
 }

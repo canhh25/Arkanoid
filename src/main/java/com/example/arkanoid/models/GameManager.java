@@ -67,7 +67,7 @@ public class GameManager {
         if (unlockedLevel < 10) {
             unlockedLevel++;
             saveProgress();
-            System.out.println("✅ Level " + unlockedLevel + " đã mở khóa và lưu!");
+            System.out.println("Level " + unlockedLevel + " đã mở khóa và lưu!");
         }
     }
 
@@ -198,22 +198,15 @@ public class GameManager {
         return (dx * dx + dy * dy) <= r * r;
     }
 
-    // ✅ GIẢI PHÁP MỚI: Force set lại speed sau va chạm
     private void forceResetSpeed(Ball ball) {
         double currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
         if (currentSpeed < 0.01) return;
 
         double targetSpeed = ball.getSpeed();
-
-        // Tính góc hiện tại
         double angle = Math.atan2(ball.dy, ball.dx);
 
-        // Set lại velocity với ĐÚNG speed gốc
         ball.dx = targetSpeed * Math.cos(angle);
         ball.dy = targetSpeed * Math.sin(angle);
-
-        // Debug log (có thể bỏ sau khi test)
-        // System.out.println("Speed: " + currentSpeed + " -> " + targetSpeed);
     }
 
     private void resolveWalls(Ball ball) {
@@ -296,7 +289,6 @@ public class GameManager {
         if (!ball.getBounds().intersects(brick.getBounds())) {
             return false;
         }
-
         double prevX = ball.getPrevX();
         double prevY = ball.getPrevY();
         double nextX = ball.getX();
