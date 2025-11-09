@@ -12,7 +12,7 @@ public class ExtraLifePower extends Power<GameManager> {
     public int countLives = 2;
 
     public ExtraLifePower(double x, double y) {
-        super(x, y, 30, 19, "life");
+        super(x, y, 30, 19, "life", 0);
     }
 
     @Override

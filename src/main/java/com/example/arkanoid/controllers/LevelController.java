@@ -29,11 +29,17 @@ public class LevelController {
     @FXML private Button btnLevel10;
     @FXML private Button btnBack;
 
-    @FXML
-    public void initialize() {
-        setupLevelButtons();
+    private GameController gameController;
+    private int currentLevel;
+
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
     }
 
+    public void setCurrentLevel(int level) {
+        this.currentLevel = level;
+    }
     // THÊM METHOD PUBLIC NÀY ĐỂ REFRESH TỪ BÊN NGOÀI
     public void refreshLevelButtons() {
         setupLevelButtons();
@@ -41,16 +47,32 @@ public class LevelController {
                 GameManager.getInstance().getUnlockedLevel());
     }
 
-    private void setupLevelButtons() {
-        GameManager gameManager = GameManager.getInstance();
-        int unlockedLevel = gameManager.getUnlockedLevel();
+    private Button[] levelButtons;
 
-        Button[] levelButtons = {
+    @FXML
+    private void initialize() {
+        // Khởi tạo mảng TRONG initialize(), SAU KHI các button đã được inject
+        levelButtons = new Button[]{
                 btnLevel1, btnLevel2, btnLevel3, btnLevel4, btnLevel5,
                 btnLevel6, btnLevel7, btnLevel8, btnLevel9, btnLevel10
         };
 
+        setupLevelButtons();
+    }
+
+    private void setupLevelButtons() {
+        GameManager gameManager = GameManager.getInstance();
+        int unlockedLevel = gameManager.getUnlockedLevel();
+
+        // Bỏ dòng khai báo mảng này đi vì đã khai báo ở trên
+        // Button[] levelButtons = { ... }; // XÓA DÒNG NÀY
+
         for (int i = 0; i < levelButtons.length; i++) {
+            if (levelButtons[i] == null) {
+                System.err.println("Button " + (i+1) + " is null!");
+                continue;
+            }
+
             int levelNumber = i + 1;
             if (levelNumber > unlockedLevel) {
                 levelButtons[i].setDisable(true);
@@ -111,7 +133,53 @@ public class LevelController {
     @FXML private void handleLevel8(ActionEvent event) { startLevel(8, event); }
     @FXML private void handleLevel9(ActionEvent event) { startLevel(9, event); }
     @FXML private void handleLevel10(ActionEvent event) { startLevel(10, event); }
+    @FXML
+    private void handleRestart(ActionEvent event) {
+        try {
+            Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            pauseStage.close();
 
+            Stage gameStage = (Stage) pauseStage.getOwner();
+            if (gameStage != null) {
+                gameStage.close();
+            }
+
+            Stage newStage = new Stage();
+            Canvas canvas = new Canvas(WIDTH, HEIGHT);
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+            StackPane root = new StackPane(canvas);
+            Scene scene = new Scene(root, WIDTH, HEIGHT);
+
+            GameManager gameManager = GameManager.getInstance();
+            gameManager.setupLevel(currentLevel);
+
+            GameController newGameController = new GameController(gc, currentLevel);
+
+            newStage.setTitle("Level " + currentLevel);
+            newStage.setScene(scene);
+            newStage.setResizable(false);
+            newStage.show();
+
+            newGameController.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleResume(ActionEvent event) {
+        try {
+            Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            pauseStage.close();
+
+            if (gameController != null) {
+                gameController.resumeGame();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     private void handleBack(ActionEvent event) {
         try {

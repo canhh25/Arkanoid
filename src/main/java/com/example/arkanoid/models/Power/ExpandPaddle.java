@@ -3,12 +3,11 @@ package com.example.arkanoid.models.Power;
 import com.example.arkanoid.models.Paddle;
 
 public class ExpandPaddle extends Power<Paddle> {
-    private static final double EXTENDED_TIME = 3000;
+    private static final long DURATION = 3000;
     private static final double EXPAND_MULTIPLIER = 2.0;
 
     public ExpandPaddle(double x, double y) {
-        super(x, y, 30, 19, "expand");
-        this.duration = 5000;
+        super(x, y, 30, 19, "expand", DURATION);
     }
 
     @Override
@@ -21,9 +20,6 @@ public class ExpandPaddle extends Power<Paddle> {
 
             activate();
             System.out.println("Paddle expanded: " + currWidth + " -> " + newWidth);
-        } else {
-            extendTime(EXTENDED_TIME);
-            System.out.println("Extended paddle time");
         }
     }
 
