@@ -40,13 +40,13 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 
 ### Design Pattern Implementation
 
-1. Singleton
+#### 1. Singleton
 
 **Used in:** Game Manager
 
 **Purpose:** 
 
-2. Abstract Factory
+#### 2. Abstract Factory
 
 **Used in:** abc
 
