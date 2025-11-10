@@ -89,7 +89,7 @@ The game uses multiple threads to ensure smooth performance:
 |--------|------|--------|
 | ![Expand](src/main/resources/images/powerups/powerup_expand/powerup_expand_1.png) | **Expand Paddle** | Increases paddle width for a short duration |
 | ![Fast Ball](src/main/resources/images/powerups/powerup_fast_ball/powerup_fast_ball_1.png) | **Fast Ball** | Increases ball speed temporarily |
-| ![Slow Ball](src/main/resources/images/powerups/powerup_slow_ball/powerup_slow_1.png) | **Slow Ball** | Decrease ball speed temporarily |
+| ![Slow Ball](src/main/resources/images/powerups/powerup_slow/powerup_slow_1.png) | **Slow Ball** | Decrease ball speed temporarily |
 | ![Extra Life](src/main/resources/images/powerups/powerup_life/powerup_life_1.png) | **Extra Life** | Grants one extra life |
 | ![Multi Ball](src/main/resources/images/powerups/powerup_multi_ball/powerup_multi_ball_1.png) | **Multi Ball** | Spawns multiple balls simultaneously |
 
