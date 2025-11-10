@@ -67,24 +67,20 @@ public class GameManager {
         if (unlockedLevel < 10) {
             unlockedLevel++;
             saveProgress();
-            System.out.println("Level " + unlockedLevel + " đã mở khóa và lưu!");
         }
     }
 
     private void saveProgress() {
         prefs.putInt(PREF_UNLOCKED_LEVEL, unlockedLevel);
-        System.out.println("Đã lưu tiến trình: unlocked level = " + unlockedLevel);
     }
 
     private void loadProgress() {
         unlockedLevel = prefs.getInt(PREF_UNLOCKED_LEVEL, 1);
-        System.out.println("Đã tải tiến trình: unlocked level = " + unlockedLevel);
     }
 
     public void resetProgress() {
         unlockedLevel = 1;
         saveProgress();
-        System.out.println("Đã reset tiến trình về level 1");
     }
 
     public void setSelectedLevel(int level) {
