@@ -266,8 +266,12 @@ public class GameManager {
             double MIN_AWAY = Math.toRadians(10);
             double away = Math.abs(angle + Math.PI / 2);
             if (away < MIN_AWAY) {
-                angle = (angle < -Math.PI / 2) ? -Math.PI / 2 - MIN_AWAY : -Math.PI / 2 + MIN_AWAY;
+                if (angle < -Math.PI / 2)
+                    angle = -Math.PI / 2 - MIN_AWAY;
+                else
+                    angle = -Math.PI / 2 + MIN_AWAY;
             }
+
 
 
             ball.dx = ball.getSpeed() * Math.cos(angle);

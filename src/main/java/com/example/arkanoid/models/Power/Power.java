@@ -9,7 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 public abstract class Power<T> extends GameObject {
     protected String type;
     protected boolean isActive = false;
-    protected double speed = 1.5;
+    protected double speed = 3.5;
     protected long activeTime = 4000;
     protected long duration;
     protected PowerView view;
