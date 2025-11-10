@@ -109,6 +109,8 @@ public class LevelController {
             Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             pauseStage.close();
 
+            GameManager.getInstance().resetLives();
+
             if (gameController != null) {
                 gameController.restartLevel();
             }
