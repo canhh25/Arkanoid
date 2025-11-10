@@ -173,11 +173,19 @@ public class GameController {
         }
     }
 
+    // ĐÃ FIX - Thêm initOwner để LevelController tìm được game stage
     private void showPauseWindow() {
         Stage pauseStage = navigationFacade.showPauseDialog(this, gameManager.getLevel());
         if (pauseStage != null) {
             pauseStage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    private void render() {
+        drawGameInfo();
     }
 
     private void drawGameInfo() {
