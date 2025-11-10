@@ -20,7 +20,7 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 **Key features:**
 1. The game is developed using Java 17+ with JavaFX for GUI.
 2. Implements core OOP principles: Encapsulation, Inheritance, Polymorphism, and Abstraction.
-3. Applies multiple design patterns: Singleton, Factory Method.
+3. Applies multiple design patterns: Singleton, Factory Method, Facade. 
 4. Features multithreading for smooth gameplay and responsive UI.
 5. Includes sound effects, animations, and power-up systems.
 
@@ -35,7 +35,7 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 
 #### 1. Singleton
 
-**Used in:** Game Manager
+**Used in:** Game Manager, Game Facade
 
 **Purpose:** 
 
@@ -44,6 +44,10 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 **Used in:** abc
 
 **Purpose:** 
+
+#### 3. Facade
+**Used in:** Game Controller
+**Purpose:** A central GameFacade class manages all scene navigation (e.g., MapsToMenu(), MapsToGame()), making the controllers simple and decoupled.
 
 ---
 
