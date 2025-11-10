@@ -10,6 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
 
 public class GameFacade {
     private static final int WIDTH = 960;
@@ -126,6 +127,12 @@ public class GameFacade {
             helpStage.setTitle("Instructions");
             helpStage.setScene(new Scene(root));
             helpStage.setResizable(false);
+
+            Button btnBack = (Button) root.lookup("#btnBack");
+            if (btnBack != null) {
+                btnBack.setOnAction(e -> helpStage.close());
+            }
+
             helpStage.show();
 
         } catch (Exception e) {
