@@ -25,7 +25,7 @@ public class PowerManager {
     private static class ActivePowerEntry {
         Power<?> power;
         ScheduledFuture<?> scheduledTask;
-        Object target; // Lưu target để remove effect
+        Object target;
 
         ActivePowerEntry(Power<?> power, ScheduledFuture<?> task, Object target) {
             this.power = power;

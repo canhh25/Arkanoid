@@ -26,8 +26,7 @@ public class ExpandPaddle extends Power<Paddle> {
     @Override
     public void removeDefaultEffect(Paddle paddle) {
         if (isActive) {
-            double currWidth = paddle.getWidth();
-            double newWidth = currWidth / EXPAND_MULTIPLIER;
+            double newWidth = paddle.PADDLE_WIDTH;
             paddle.setWidth(newWidth);
             isBlinking = false;
         }
