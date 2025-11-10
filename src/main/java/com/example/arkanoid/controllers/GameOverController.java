@@ -2,57 +2,59 @@ package com.example.arkanoid.controllers;
 
 import com.example.arkanoid.models.GameManager;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class GameOverController {
+    @FXML private Label maxScoreLabel;
+    @FXML private Label yourScoreLabel;
 
-    @FXML
-    private void handleAgain(javafx.event.ActionEvent event) {
-        try {
-            Stage gameOverStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            gameOverStage.close();
-            Stage gameStage = (Stage) gameOverStage.getOwner();
-            if (gameStage != null) {
-                gameStage.close();
-            }
+    private int currentScore;
+    private int maxScore;
+    private GameFacade navigationFacade;
 
-            Stage newStage = new Stage();
-            Canvas canvas = new Canvas(960, 640);
-            GraphicsContext gc = canvas.getGraphicsContext2D();
-            StackPane root = new StackPane(canvas);
-            Scene scene = new Scene(root, 960, 640);
+    public void setNavigationFacade(GameFacade facade) {
+        this.navigationFacade = facade;
+    }
 
-            GameManager gameManager = GameManager.getInstance();
-            gameManager.resetGameKeepLevel();
+    public void setScores(int current, int max) {
+        this.currentScore = current;
+        this.maxScore = max;
+        updateLabels();
+    }
 
-            int levelToPlay = gameManager.getLevel();
-            GameController controller = new GameController(gc, levelToPlay);
-            newStage.setTitle("Arkanoid - Level " + levelToPlay);
-            newStage.setScene(scene);
-            newStage.setResizable(false);
-            newStage.show();
-            controller.start();
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void updateLabels() {
+        if (maxScoreLabel != null && yourScoreLabel != null) {
+            maxScoreLabel.setText("" + maxScore);
+            yourScoreLabel.setText("" + currentScore);
+
+            Font gameFont = Font.loadFont(
+                    getClass().getResourceAsStream("/fonts/PressStart2P.ttf"), 32
+            );
+
+            maxScoreLabel.setFont(gameFont);
+            yourScoreLabel.setFont(gameFont);
+            maxScoreLabel.setTextFill(Color.web("#FFD700"));
+            yourScoreLabel.setTextFill(Color.web("#FFD700"));
         }
     }
 
     @FXML
-    private void handleQuit(javafx.event.ActionEvent event) {
-        try {
-            GameManager.getInstance().resetGame();
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            javafx.fxml.FXMLLoader loader =
-                    new javafx.fxml.FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
-            stage.setScene(new Scene(loader.load(), 960, 640));
-            stage.setTitle("Arkanoid Menu");
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void handleStart(javafx.event.ActionEvent event) {
+        GameManager.getInstance().resetGame();
+
+        if (navigationFacade != null) {
+            navigationFacade.navigateToGame(1);
+        }
+    }
+
+    @FXML
+    private void handleEsc(javafx.event.ActionEvent event) {
+        GameManager.getInstance().resetGame();
+
+        if (navigationFacade != null) {
+            navigationFacade.navigateToMenu();
         }
     }
 }

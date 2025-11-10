@@ -1,37 +1,19 @@
 package com.example.arkanoid.controllers;
 
 import com.example.arkanoid.models.GameManager;
-import com.example.arkanoid.utils.SoundManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class LevelController {
-    private static final int WIDTH = 960;
-    private static final int HEIGHT = 640;
-
-    @FXML private Button btnLevel1;
-    @FXML private Button btnLevel2;
-    @FXML private Button btnLevel3;
-    @FXML private Button btnLevel4;
-    @FXML private Button btnLevel5;
-    @FXML private Button btnLevel6;
-    @FXML private Button btnLevel7;
-    @FXML private Button btnLevel8;
-    @FXML private Button btnLevel9;
-    @FXML private Button btnLevel10;
+    @FXML private Button btnLevel1, btnLevel2, btnLevel3, btnLevel4, btnLevel5;
+    @FXML private Button btnLevel6, btnLevel7, btnLevel8, btnLevel9, btnLevel10;
     @FXML private Button btnBack;
 
     private GameController gameController;
     private int currentLevel;
-
+    private Button[] levelButtons;
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
@@ -40,32 +22,25 @@ public class LevelController {
     public void setCurrentLevel(int level) {
         this.currentLevel = level;
     }
-    // THÊM METHOD PUBLIC NÀY ĐỂ REFRESH TỪ BÊN NGOÀI
+
     public void refreshLevelButtons() {
         setupLevelButtons();
         System.out.println("Refreshing level buttons. Unlocked level: " +
                 GameManager.getInstance().getUnlockedLevel());
     }
 
-    private Button[] levelButtons;
-
     @FXML
     private void initialize() {
-        // Khởi tạo mảng TRONG initialize(), SAU KHI các button đã được inject
         levelButtons = new Button[]{
                 btnLevel1, btnLevel2, btnLevel3, btnLevel4, btnLevel5,
                 btnLevel6, btnLevel7, btnLevel8, btnLevel9, btnLevel10
         };
-
         setupLevelButtons();
     }
 
     private void setupLevelButtons() {
         GameManager gameManager = GameManager.getInstance();
         int unlockedLevel = gameManager.getUnlockedLevel();
-
-        // Bỏ dòng khai báo mảng này đi vì đã khai báo ở trên
-        // Button[] levelButtons = { ... }; // XÓA DÒNG NÀY
 
         for (int i = 0; i < levelButtons.length; i++) {
             if (levelButtons[i] == null) {
@@ -88,12 +63,11 @@ public class LevelController {
 
     private void startLevel(int level, ActionEvent event) {
         try {
-            System.out.println("Starting level " + level + "...");
+            System.out.println("Starting level " + level + " from menu...");
 
             SoundManager.playGameStart();
             SoundManager.stopBackgroundMusic();
 
-            // LẤY STAGE HIỆN TẠI thay vì tạo mới
             Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
 
             Canvas canvas = new Canvas(WIDTH, HEIGHT);
@@ -116,29 +90,20 @@ public class LevelController {
         }
     }
 
-    @FXML
-    private void handleLevel1(ActionEvent event) { startLevel(1, event); }
-    @FXML private void handleLevel2(ActionEvent event) { startLevel(2, event); }
-    @FXML private void handleLevel3(ActionEvent event) { startLevel(3, event); }
-    @FXML private void handleLevel4(ActionEvent event) { startLevel(4, event); }
-    @FXML private void handleLevel5(ActionEvent event) { startLevel(5, event); }
-    @FXML private void handleLevel6(ActionEvent event) { startLevel(6, event); }
-    @FXML private void handleLevel7(ActionEvent event) { startLevel(7, event); }
-    @FXML private void handleLevel8(ActionEvent event) { startLevel(8, event); }
-    @FXML private void handleLevel9(ActionEvent event) { startLevel(9, event); }
-    @FXML private void handleLevel10(ActionEvent event) { startLevel(10, event); }
-    @FXML
-    private void handleRestart(ActionEvent event) {
+    private void startLevelFromPause(int level, ActionEvent event) {
         try {
+            System.out.println("Starting level " + level + " from pause...");
+
             Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             pauseStage.close();
 
             Stage gameStage = (Stage) pauseStage.getOwner();
-            if (gameStage != null) {
-                gameStage.close();
+
+            if (gameStage == null) {
+                System.err.println(" Không tìm thấy game stage!");
+                return;
             }
 
-            Stage newStage = new Stage();
             Canvas canvas = new Canvas(WIDTH, HEIGHT);
             GraphicsContext gc = canvas.getGraphicsContext2D();
             StackPane root = new StackPane(canvas);
@@ -147,15 +112,101 @@ public class LevelController {
             GameManager gameManager = GameManager.getInstance();
             gameManager.resetGameKeepLevel();
 
-            GameController newGameController = new GameController(gc, currentLevel);
+            GameController newGameController = new GameController(gc, level);
 
-            newStage.setTitle("Level " + currentLevel);
-            newStage.setScene(scene);
-            newStage.setResizable(false);
-            newStage.show();
+            gameStage.setTitle("Arkanoid - Level " + level);
+            gameStage.setScene(scene);
+            gameStage.setResizable(false);
 
             newGameController.start();
+
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleLevelSelection(int level, ActionEvent event) {
+        Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+
+        if (currentStage.getOwner() != null) {
+            startLevelFromPause(level, event);
+        } else {
+            startLevel(level, event);
+        }
+    }
+
+    @FXML
+    private void handleLevel1(ActionEvent event) { handleLevelSelection(1, event); }
+
+    @FXML
+    private void handleLevel2(ActionEvent event) { handleLevelSelection(2, event); }
+
+    @FXML
+    private void handleLevel3(ActionEvent event) { handleLevelSelection(3, event); }
+
+    @FXML
+    private void handleLevel4(ActionEvent event) { handleLevelSelection(4, event); }
+
+    @FXML
+    private void handleLevel5(ActionEvent event) { handleLevelSelection(5, event); }
+
+    @FXML
+    private void handleLevel6(ActionEvent event) { handleLevelSelection(6, event); }
+
+    @FXML
+    private void handleLevel7(ActionEvent event) { handleLevelSelection(7, event); }
+
+    @FXML
+    private void handleLevel8(ActionEvent event) { handleLevelSelection(8, event); }
+
+    @FXML
+    private void handleLevel9(ActionEvent event) { handleLevelSelection(9, event); }
+
+    @FXML
+    private void handleLevel10(ActionEvent event) { handleLevelSelection(10, event); }
+
+    @FXML
+    private void handleRestart(ActionEvent event) {
+        try {
+            System.out.println(" Restarting level " + currentLevel + "...");
+
+            Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            pauseStage.close();
+
+            Stage gameStage = (Stage) pauseStage.getOwner();
+
+            if (gameStage == null) {
+                System.err.println(" Không tìm thấy game stage!");
+                return;
+            }
+
+            GameManager gameManager = GameManager.getInstance();
+            gameManager.resetTimer();
+
+            gameManager.gameState = com.example.arkanoid.models.GameState.RUNNING;
+            gameManager.setupLevel(currentLevel);
+
+            System.out.println(" GameManager reset: Lives=" + gameManager.getLives() +
+                    ", Score=" + gameManager.getScore() +
+                    ", State=" + gameManager.gameState);
+
+            Canvas canvas = new Canvas(WIDTH, HEIGHT);
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+            StackPane root = new StackPane(canvas);
+            Scene scene = new Scene(root, WIDTH, HEIGHT);
+
+            GameController newGameController = new GameController(gc, currentLevel);
+
+            gameStage.setTitle("Arkanoid - Level " + currentLevel);
+            gameStage.setScene(scene);
+            gameStage.setResizable(false);
+
+            newGameController.start();
+
+            System.out.println(" Game started successfully!");
+
+        } catch (Exception e) {
+            System.err.println(" Lỗi khi restart: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -169,23 +220,13 @@ public class LevelController {
             if (gameController != null) {
                 gameController.resumeGame();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleBack(ActionEvent event) {
-        try {
-            // Quay lại màn hình menu
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            stage.setTitle("Arkanoid Menu");
-            stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        getNavigationFacade().navigateToMenu();
     }
 }

@@ -6,18 +6,16 @@ import com.example.arkanoid.models.GameState;
 import com.example.arkanoid.views.GameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class GameController {
     private boolean goLeft = false;
@@ -28,6 +26,7 @@ public class GameController {
     private final GameView gameView;
     private final GraphicsContext gc;
     private AnimationTimer animationTimer;
+    private GameFacade navigationFacade;
 
     public GameController(GraphicsContext gc, int level) {
         this.gc = gc;
@@ -35,20 +34,21 @@ public class GameController {
         this.gameView = new GameView();
         gameManager.setupLevel(level);
         setupInputHandling(gc.getCanvas().getScene());
+
+        Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+        this.navigationFacade = GameFacade.getInstance(stage);
     }
 
     public void start() {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // Kiểm tra WIN
                 if (gameManager.gameState == GameState.WIN) {
                     animationTimer.stop();
                     handleWin();
                     return;
                 }
 
-                // Kiểm tra GAME OVER
                 if (gameManager.isGameOver()) {
                     animationTimer.stop();
                     showGameOver();
@@ -56,11 +56,7 @@ public class GameController {
                 }
 
                 gameManager.update(goLeft, goRight);
-
-                // VẼ GAME (background, paddle, balls, bricks, powerups)
                 gameView.render(gc, gameManager);
-
-                // VẼ TEXT CUỐI CÙNG (để nó nằm trên cùng)
                 drawGameInfo();
             }
         };
@@ -73,35 +69,12 @@ public class GameController {
                 int currentLevel = gameManager.getLevel();
                 int nextLevel = currentLevel + 1;
 
-                // Unlock level tiếp theo
                 gameManager.unlockNextLevel();
 
                 if (nextLevel <= 10) {
-                    // Tự động chuyển sang level tiếp theo
-                    System.out.println("✅ WIN! Chuyển sang level " + nextLevel);
-
-                    Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-
-                    Canvas canvas = new Canvas(960, 640);
-                    GraphicsContext newGc = canvas.getGraphicsContext2D();
-                    StackPane root = new StackPane(canvas);
-                    Scene scene = new Scene(root, 960, 640);
-
-                    gameManager.setupLevel(nextLevel);
-                    GameController gameController = new GameController(newGc, nextLevel);
-
-                    stage.setTitle("Arkanoid - Level " + nextLevel);
-                    stage.setScene(scene);
-
-                    gameController.start();
+                    navigationFacade.navigateToGame(nextLevel);
                 } else {
-                    // Hết level rồi, về menu
-                    System.out.println("🎉 Hoàn thành tất cả level!");
-                    Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
-                    Parent root = loader.load();
-                    stage.setScene(new Scene(root, 960, 640));
-                    stage.setTitle("Arkanoid Menu");
+                    navigationFacade.navigateToMenu();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -109,38 +82,42 @@ public class GameController {
         });
     }
 
-    private void showGameOver() {
-        Platform.runLater(() -> {
-            try {
-                Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-
-                // Load màn hình Game Over
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/GameOverView.fxml"));
-                Parent root = loader.load();
-
-                stage.setTitle("Game Over");
-                stage.setScene(new Scene(root, 960, 640));
-            } catch (Exception e) {
-                e.printStackTrace();
-                // Nếu không load được FXML, quay về menu
-                backToMenu();
+    private int loadMaxScore() {
+        try (Scanner sc = new Scanner(new File("max_score.txt"))) {
+            if (sc.hasNextInt()) {
+                return sc.nextInt();
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
-    private void backToMenu() {
-        try {
-            Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
-            Parent root = loader.load();
-            stage.setScene(new Scene(root, 960, 640));
-            stage.setTitle("Arkanoid Menu");
+    private void saveMaxScore(int score) {
+        try (PrintWriter out = new PrintWriter("max_score.txt")) {
+            out.println(score);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void setupInputHandling(Scene scene) {
+    private void showGameOver() {
+        Platform.runLater(() -> {
+            try {
+                int currentScore = gameManager.getScore();
+                int maxScore = Math.max(loadMaxScore(), currentScore);
+                saveMaxScore(maxScore);
+
+                navigationFacade.navigateToGameOver(currentScore, maxScore);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                navigationFacade.navigateToMenu();
+            }
+        });
+    }
+
+    private void setupInputHandling(javafx.scene.Scene scene) {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 if (!isPaused) {
@@ -158,21 +135,17 @@ public class GameController {
             } else if (event.getCode() == KeyCode.RIGHT) {
                 goRight = true;
             }else if (event.getCode() == KeyCode.SPACE) {
-                // Nếu game win hoặc game over -> chuyển sang ván mới
                 if (gameManager.gameState == GameState.GAME_OVER ||
                         gameManager.gameState == GameState.WIN) {
-
                     gameManager.nextGame();
                     return;
                 }
 
-                // Nếu đang ở trạng thái DEAD (mất 1 mạng, còn mạng)
                 if (gameManager.gameState == GameState.DEAD) {
-                    gameManager.setupGame();   // Setup lại bóng + paddle
+                    gameManager.setupGame();
                     return;
                 }
 
-                // Nếu đang chạy → thả bóng
                 gameManager.requestLaunch();
             }
         });
@@ -184,8 +157,8 @@ public class GameController {
                 goRight = false;
             }
         });
-
     }
+
     private void pauseGame() {
         isPaused = true;
         if (animationTimer != null) {
@@ -201,45 +174,36 @@ public class GameController {
     }
 
     private void showPauseWindow() {
-        try {
-            Stage pauseStage = new Stage();
-            pauseStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/PauseView.fxml"));
-            Parent root = loader.load();
-
-            LevelController levelController = loader.getController();
-            levelController.setGameController(this);
-            levelController.setCurrentLevel(gameManager.getLevel());
-
-            Scene scene = new Scene(root);
-            pauseStage.setScene(scene);
-            pauseStage.setTitle("Paused");
-            pauseStage.setResizable(false);
-
-            pauseStage.setOnCloseRequest(e -> resumeGame());
+        Stage pauseStage = navigationFacade.showPauseDialog(this, gameManager.getLevel());
+        if (pauseStage != null) {
             pauseStage.showAndWait();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void render() {
         drawGameInfo();
     }
 
     private void drawGameInfo() {
         double padding = 20;
-        double y = 60; // TĂNG VỊ TRÍ Y ĐỂ TEXT Ở TRÊN CAO HƠN (tránh brick)
+        double y = 60;
+
+        Font gameFont = Font.loadFont(
+                getClass().getResourceAsStream("/fonts/PressStart2P.ttf"), 18
+        );
 
         gc.setFill(Color.WHITE);
-        gc.setFont(Font.font("Montserrat", FontWeight.BOLD, 28));
+        gc.setFont(gameFont);
         gc.setTextAlign(TextAlignment.LEFT);
 
         String scoreText = "Score: " + gameManager.getScore();
         gc.fillText(scoreText, padding, y);
 
         String timeText = "Time: " + gameManager.getFormattedTime();
-        double timeX = Main.WIDTH * 0.35;
+        double timeX = Main.WIDTH * 0.25;
         gc.fillText(timeText, timeX, y);
 
         String levelText = "Level: " + gameManager.getLevel();
@@ -252,46 +216,15 @@ public class GameController {
 
     private void drawHearts(double rightX, double y) {
         int lives = gameManager.getLives();
-        double heartSize = 25;
-        double spacing = 8;
-        double heartWidth = heartSize;
-        for (int i = 0; i < lives; i++) {
-            double heartX = rightX - (i * (heartWidth + spacing)) - heartSize;
-            drawHeart(heartX, y - heartSize + 5, heartSize);
-        }
-    }
+        double heartSize = 28;
+        double spacing = 10;
 
-    private void drawHeart(double x, double y, double size) {
+        gc.setFont(Font.font("Arial Unicode MS", heartSize));
         gc.setFill(Color.rgb(255, 50, 80));
-        double centerX = x + size / 2;
-        double centerY = y + size / 2;
 
-        gc.beginPath();
-        double topLeftX = centerX - size * 0.25;
-        double topLeftY = centerY - size * 0.25;
-        double topRightX = centerX + size * 0.25;
-        double topRightY = centerY - size * 0.25;
-        double bottomX = centerX;
-        double bottomY = centerY + size * 0.4;
-
-        gc.moveTo(centerX, centerY);
-        gc.arc(topLeftX, topLeftY, size * 0.25, size * 0.25, 230, 180);
-        gc.lineTo(bottomX, bottomY);
-
-        gc.lineTo(centerX, centerY);
-        gc.arc(topRightX, topRightY, size * 0.25, size * 0.25, 310, 180);
-        gc.lineTo(bottomX, bottomY);
-
-        gc.closePath();
-        gc.fill();
-        gc.setStroke(Color.rgb(200, 30, 60));
-        gc.setLineWidth(2);
-        gc.stroke();
-    }
-
-    private String formatTime(int seconds) {
-        int mins = seconds / 60;
-        int secs = seconds % 60;
-        return String.format("%d:%02d", mins, secs);
+        for (int i = 0; i < lives; i++) {
+            double heartX = rightX - (i * (heartSize + spacing)) - heartSize;
+            gc.fillText("❤", heartX, y);
+        }
     }
 }

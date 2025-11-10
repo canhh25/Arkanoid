@@ -3,19 +3,31 @@ package com.example.arkanoid.models;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.awt.*;
+import javafx.scene.paint.Color;
 
 public class Paddle extends MovableObject {
     public static final double PADDLE_SPEED = 3;
     public static double paddle_width = 100;
-    public static double paddle_height= 30;
+    public static double paddle_height = 30;
 
     private boolean movingLeft = false;
     private boolean movingRight = false;
     private final double gameWidth;
+
     private int frame = 0;
-    private int frameCount = 3; // số frame (bat0, bat1, bat2)
+    private int frameCount = 3;
     private int frameDelay = 10;
     private int frameTimer = 0;
+
+    private boolean isBlinking = false;
+
+    public void setBlinking(boolean blinking) {
+        this.isBlinking = blinking;
+    }
+
+    public boolean isBlinking() {
+        return isBlinking;
+    }
 
     public Paddle(double x, double y, double gameWidth) {
         super(x, y, paddle_width, paddle_height, "/images/paddle/bat0.png");
@@ -32,11 +44,11 @@ public class Paddle extends MovableObject {
 
     @Override
     public void update() {
-        if (movingLeft && x > 0) {
-            x -= PADDLE_SPEED;
+        if (movingLeft) {
+            this.x = Math.max(0, this.x - PADDLE_SPEED);
         }
-        if (movingRight && x < gameWidth - this.paddle_width) {
-            x += PADDLE_SPEED;
+        if (movingRight) {
+            this.x = Math.min(gameWidth - this.width, this.x + PADDLE_SPEED);
         }
         frameTimer++;
         if (frameTimer >= frameDelay) {
@@ -45,16 +57,30 @@ public class Paddle extends MovableObject {
             setImage("/images/paddle/bat" + frame + ".png");
         }
     }
-    public void draw(GraphicsContext gc) {
 
+    public void draw(GraphicsContext gc) {
         render(gc);
     }
+
     public void render(GraphicsContext gc) {
         if (getImage() != null) {
-            gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
+            if (isBlinking) {
+                gc.setGlobalAlpha(0.3);
+                gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
+                gc.setGlobalAlpha(1.0);
+            } else {
+                gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
+            }
         } else {
-            gc.setFill(javafx.scene.paint.Color.BLUE);
-            gc.fillRect(getX(), getY(), getWidth(), getHeight());
+            if (isBlinking) {
+                gc.setFill(Color.YELLOW);
+                gc.setGlobalAlpha(0.5);
+                gc.fillRect(getX(), getY(), getWidth(), getHeight());
+                gc.setGlobalAlpha(1.0);
+            } else {
+                gc.setFill(Color.BLUE);
+                gc.fillRect(getX(), getY(), getWidth(), getHeight());
+            }
         }
     }
 
