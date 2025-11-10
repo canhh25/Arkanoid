@@ -90,6 +90,9 @@ public class GameManager {
     public int getSelectedLevel() {
         return selectedLevel;
     }
+    public void resetLives() {
+        this.lives = 3;
+    }
 
     public void resetGameKeepLevel() {
         int currentLevel = this.level;
