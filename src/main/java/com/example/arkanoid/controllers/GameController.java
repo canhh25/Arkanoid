@@ -10,7 +10,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
@@ -36,7 +35,6 @@ public class GameController {
         gameManager.setupLevel(level);
         setupInputHandling(gc.getCanvas().getScene());
 
-        // Khởi tạo facade
         Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
         this.navigationFacade = GameFacade.getInstance(stage);
     }
@@ -74,10 +72,8 @@ public class GameController {
                 gameManager.unlockNextLevel();
 
                 if (nextLevel <= 10) {
-                    // Sử dụng Facade để chuyển sang level tiếp theo
                     navigationFacade.navigateToGame(nextLevel);
                 } else {
-                    // Hoàn thành tất cả level, về menu
                     navigationFacade.navigateToMenu();
                 }
             } catch (Exception e) {
@@ -112,12 +108,10 @@ public class GameController {
                 int maxScore = Math.max(loadMaxScore(), currentScore);
                 saveMaxScore(maxScore);
 
-                // Sử dụng Facade để chuyển sang màn hình Game Over
                 navigationFacade.navigateToGameOver(currentScore, maxScore);
 
             } catch (Exception e) {
                 e.printStackTrace();
-                // Fallback về menu nếu có lỗi
                 navigationFacade.navigateToMenu();
             }
         });
@@ -180,7 +174,6 @@ public class GameController {
     }
 
     private void showPauseWindow() {
-        // Sử dụng Facade để hiển thị pause dialog
         Stage pauseStage = navigationFacade.showPauseDialog(this, gameManager.getLevel());
         if (pauseStage != null) {
             pauseStage.showAndWait();
@@ -191,15 +184,19 @@ public class GameController {
         double padding = 20;
         double y = 60;
 
+        Font gameFont = Font.loadFont(
+                getClass().getResourceAsStream("/fonts/PressStart2P.ttf"), 18
+        );
+
         gc.setFill(Color.WHITE);
-        gc.setFont(Font.font("Montserrat", FontWeight.BOLD, 28));
+        gc.setFont(gameFont);
         gc.setTextAlign(TextAlignment.LEFT);
 
         String scoreText = "Score: " + gameManager.getScore();
         gc.fillText(scoreText, padding, y);
 
         String timeText = "Time: " + gameManager.getFormattedTime();
-        double timeX = Main.WIDTH * 0.35;
+        double timeX = Main.WIDTH * 0.25;
         gc.fillText(timeText, timeX, y);
 
         String levelText = "Level: " + gameManager.getLevel();
@@ -212,40 +209,15 @@ public class GameController {
 
     private void drawHearts(double rightX, double y) {
         int lives = gameManager.getLives();
-        double heartSize = 25;
-        double spacing = 8;
-        double heartWidth = heartSize;
-        for (int i = 0; i < lives; i++) {
-            double heartX = rightX - (i * (heartWidth + spacing)) - heartSize;
-            drawHeart(heartX, y - heartSize + 5, heartSize);
-        }
-    }
+        double heartSize = 28;
+        double spacing = 10;
 
-    private void drawHeart(double x, double y, double size) {
+        gc.setFont(Font.font("Arial Unicode MS", heartSize));
         gc.setFill(Color.rgb(255, 50, 80));
-        double centerX = x + size / 2;
-        double centerY = y + size / 2;
 
-        gc.beginPath();
-        double topLeftX = centerX - size * 0.25;
-        double topLeftY = centerY - size * 0.25;
-        double topRightX = centerX + size * 0.25;
-        double topRightY = centerY - size * 0.25;
-        double bottomX = centerX;
-        double bottomY = centerY + size * 0.4;
-
-        gc.moveTo(centerX, centerY);
-        gc.arc(topLeftX, topLeftY, size * 0.25, size * 0.25, 230, 180);
-        gc.lineTo(bottomX, bottomY);
-
-        gc.lineTo(centerX, centerY);
-        gc.arc(topRightX, topRightY, size * 0.25, size * 0.25, 310, 180);
-        gc.lineTo(bottomX, bottomY);
-
-        gc.closePath();
-        gc.fill();
-        gc.setStroke(Color.rgb(200, 30, 60));
-        gc.setLineWidth(2);
-        gc.stroke();
+        for (int i = 0; i < lives; i++) {
+            double heartX = rightX - (i * (heartSize + spacing)) - heartSize;
+            gc.fillText("❤", heartX, y);
+        }
     }
 }
