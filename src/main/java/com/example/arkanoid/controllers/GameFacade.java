@@ -23,6 +23,26 @@ public class GameFacade {
         this.primaryStage = stage;
     }
 
+    public void navigateToLevelUp() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com.example.arkanoid/main/LevelUpView.fxml")
+            );
+            Parent root = loader.load();
+
+            // Lấy controller và gán navigationFacade
+            LevelController controller = loader.getController();
+            controller.setNavigationFacade(this);
+
+            Scene scene = new Scene(root, WIDTH, HEIGHT);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static GameFacade getInstance(Stage stage) {
         if (instance == null) {
             instance = new GameFacade(stage);
@@ -191,6 +211,24 @@ public class GameFacade {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void navigateToNextLevel() {
+        try {
+            int nextLevel = GameManager.getInstance().getLevel() + 1;
+
+            // Nếu đã qua hết level, trở về menu
+//            if (nextLevel > GameManager.getInstance().getMaxLevel()) {
+//                navigateToMenu();
+//                return;
+//            }
+
+            navigateToGame(nextLevel);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            navigateToMenu();
         }
     }
 

@@ -39,6 +39,8 @@ public class GameController {
 
         Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
         this.navigationFacade = GameFacade.getInstance(stage);
+        gameManager.setGameFacade(this.navigationFacade);
+
     }
 
     public void start() {
@@ -68,16 +70,8 @@ public class GameController {
     private void handleWin() {
         Platform.runLater(() -> {
             try {
-                int currentLevel = gameManager.getLevel();
-                int nextLevel = currentLevel + 1;
-
                 gameManager.unlockNextLevel();
-
-                if (nextLevel <= 10) {
-                    navigationFacade.navigateToGame(nextLevel);
-                } else {
-                    navigationFacade.navigateToMenu();
-                }
+                navigationFacade.navigateToLevelUp();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -154,8 +148,7 @@ public class GameController {
             } else if (event.getCode() == KeyCode.RIGHT) {
                 goRight = true;
             }else if (event.getCode() == KeyCode.SPACE) {
-                if (gameManager.gameState == GameState.GAME_OVER ||
-                        gameManager.gameState == GameState.WIN) {
+                if (gameManager.gameState == GameState.GAME_OVER) {
                     gameManager.nextGame();
                     return;
                 }
