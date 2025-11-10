@@ -15,6 +15,7 @@ public class PowerImpl implements PowerFactory {
         init.put("fast_ball", FastBall::new);
         init.put("multi_ball", MultiBallPower::new);
         init.put("extra_life", ExtraLifePower::new);
+        init.put("slow", SlowBall::new);
     }
 
     @Override

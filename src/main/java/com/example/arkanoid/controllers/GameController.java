@@ -6,18 +6,17 @@ import com.example.arkanoid.models.GameState;
 import com.example.arkanoid.views.GameView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class GameController {
     private boolean goLeft = false;
@@ -28,6 +27,7 @@ public class GameController {
     private final GameView gameView;
     private final GraphicsContext gc;
     private AnimationTimer animationTimer;
+    private GameFacade navigationFacade;
 
     public GameController(GraphicsContext gc, int level) {
         this.gc = gc;
@@ -35,20 +35,22 @@ public class GameController {
         this.gameView = new GameView();
         gameManager.setupLevel(level);
         setupInputHandling(gc.getCanvas().getScene());
+
+        // Khởi tạo facade
+        Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+        this.navigationFacade = GameFacade.getInstance(stage);
     }
 
     public void start() {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // Kiểm tra WIN
                 if (gameManager.gameState == GameState.WIN) {
                     animationTimer.stop();
                     handleWin();
                     return;
                 }
 
-                // Kiểm tra GAME OVER
                 if (gameManager.isGameOver()) {
                     animationTimer.stop();
                     showGameOver();
@@ -56,11 +58,7 @@ public class GameController {
                 }
 
                 gameManager.update(goLeft, goRight);
-
-                // VẼ GAME (background, paddle, balls, bricks, powerups)
                 gameView.render(gc, gameManager);
-
-                // VẼ TEXT CUỐI CÙNG (để nó nằm trên cùng)
                 drawGameInfo();
             }
         };
@@ -73,7 +71,6 @@ public class GameController {
                 int currentLevel = gameManager.getLevel();
                 int nextLevel = currentLevel + 1;
 
-                // Unlock level tiếp theo
                 gameManager.unlockNextLevel();
 
                 if (nextLevel <= 10) {
@@ -95,13 +92,8 @@ public class GameController {
 
                     gameController.start();
                 } else {
-                    // Hết level rồi, về menu
-                    System.out.println("🎉 Hoàn thành tất cả level!");
-                    Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
-                    Parent root = loader.load();
-                    stage.setScene(new Scene(root, 960, 640));
-                    stage.setTitle("Arkanoid Menu");
+                    // Hoàn thành tất cả level, về menu
+                    navigationFacade.navigateToMenu();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -109,38 +101,44 @@ public class GameController {
         });
     }
 
-    private void showGameOver() {
-        Platform.runLater(() -> {
-            try {
-                Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-
-                // Load màn hình Game Over
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/GameOverView.fxml"));
-                Parent root = loader.load();
-
-                stage.setTitle("Game Over");
-                stage.setScene(new Scene(root, 960, 640));
-            } catch (Exception e) {
-                e.printStackTrace();
-                // Nếu không load được FXML, quay về menu
-                backToMenu();
+    private int loadMaxScore() {
+        try (Scanner sc = new Scanner(new File("max_score.txt"))) {
+            if (sc.hasNextInt()) {
+                return sc.nextInt();
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
-    private void backToMenu() {
-        try {
-            Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/MenuView.fxml"));
-            Parent root = loader.load();
-            stage.setScene(new Scene(root, 960, 640));
-            stage.setTitle("Arkanoid Menu");
+    private void saveMaxScore(int score) {
+        try (PrintWriter out = new PrintWriter("max_score.txt")) {
+            out.println(score);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void setupInputHandling(Scene scene) {
+    private void showGameOver() {
+        Platform.runLater(() -> {
+            try {
+                int currentScore = gameManager.getScore();
+                int maxScore = Math.max(loadMaxScore(), currentScore);
+                saveMaxScore(maxScore);
+
+                // Sử dụng Facade để chuyển sang màn hình Game Over
+                navigationFacade.navigateToGameOver(currentScore, maxScore);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Fallback về menu nếu có lỗi
+                navigationFacade.navigateToMenu();
+            }
+        });
+    }
+
+    private void setupInputHandling(javafx.scene.Scene scene) {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 if (!isPaused) {
@@ -157,23 +155,18 @@ public class GameController {
                 goLeft = true;
             } else if (event.getCode() == KeyCode.RIGHT) {
                 goRight = true;
-            }else if (event.getCode() == KeyCode.SPACE) {
-
-                // Nếu game win hoặc game over -> chuyển sang ván mới
+            } else if (event.getCode() == KeyCode.SPACE) {
                 if (gameManager.gameState == GameState.GAME_OVER ||
                         gameManager.gameState == GameState.WIN) {
-
                     gameManager.nextGame();
                     return;
                 }
 
-                // Nếu đang ở trạng thái DEAD (mất 1 mạng, còn mạng)
                 if (gameManager.gameState == GameState.DEAD) {
-                    gameManager.setupGame();   // Setup lại bóng + paddle
+                    gameManager.setupGame();
                     return;
                 }
 
-                // Nếu đang chạy → thả bóng
                 gameManager.requestLaunch();
             }
         });
@@ -185,7 +178,6 @@ public class GameController {
                 goRight = false;
             }
         });
-
     }
 
     private void pauseGame() {
@@ -244,7 +236,7 @@ public class GameController {
 
     private void drawGameInfo() {
         double padding = 20;
-        double y = 60; // TĂNG VỊ TRÍ Y ĐỂ TEXT Ở TRÊN CAO HƠN (tránh brick)
+        double y = 60;
 
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Montserrat", FontWeight.BOLD, 28));
@@ -302,11 +294,5 @@ public class GameController {
         gc.setStroke(Color.rgb(200, 30, 60));
         gc.setLineWidth(2);
         gc.stroke();
-    }
-
-    private String formatTime(int seconds) {
-        int mins = seconds / 60;
-        int secs = seconds % 60;
-        return String.format("%d:%02d", mins, secs);
     }
 }

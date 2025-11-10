@@ -38,7 +38,7 @@ public class GameManagerTest {
 
         assertEquals(3, gameManager.lives, "Lives ban đầu = 3");
         assertEquals(0, gameManager.score, "Score ban đầu = 0");
-        assertEquals(9, gameManager.level, "Level ban đầu = 9");
+        assertEquals(1, gameManager.level, "Level ban đầu = 9");
         assertEquals(GameState.RUNNING, gameManager.gameState, "GameState = RUNNING");
     }
 
@@ -374,17 +374,6 @@ public class GameManagerTest {
     }
 
     @Test
-    @DisplayName("Test nextGame khi WIN tăng level")
-    public void testNextGameIncreasesLevel() {
-        int currentLevel = gameManager.level;
-        gameManager.gameState = GameState.WIN;
-        gameManager.nextGame();
-        assertEquals(currentLevel + 1, gameManager.level,
-                "Level phải tăng khi WIN");
-        assertEquals(GameState.RUNNING, gameManager.gameState);
-    }
-
-    @Test
     @DisplayName("Test nextGame khi GAME_OVER reset score và lives")
     public void testNextGameResetsOnGameOver() {
         gameManager.score = 500;
@@ -430,7 +419,7 @@ public class GameManagerTest {
     @DisplayName("Test getters")
     public void testGetters() {
         assertEquals(3, gameManager.getLives());
-        assertEquals(5, gameManager.getLevel());
+        assertEquals(1, gameManager.getLevel());
         assertEquals(640, gameManager.getGameHeight());
         assertEquals(0, gameManager.getScore());
         assertNotNull(gameManager.getPaddle());

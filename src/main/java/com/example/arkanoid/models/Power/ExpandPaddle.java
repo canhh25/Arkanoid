@@ -8,6 +8,7 @@ public class ExpandPaddle extends Power<Paddle> {
 
     public ExpandPaddle(double x, double y) {
         super(x, y, 30, 19, "expand", DURATION);
+        this.isBlinking = false;
     }
 
     @Override
@@ -15,10 +16,9 @@ public class ExpandPaddle extends Power<Paddle> {
         if (!isActive) {
             double currWidth = paddle.getWidth();
             double newWidth = currWidth * EXPAND_MULTIPLIER;
-
             paddle.setWidth(newWidth);
-
             activate();
+            activationTime = System.currentTimeMillis();
             System.out.println("Paddle expanded: " + currWidth + " -> " + newWidth);
         }
     }
@@ -29,6 +29,7 @@ public class ExpandPaddle extends Power<Paddle> {
             double currWidth = paddle.getWidth();
             double newWidth = currWidth / EXPAND_MULTIPLIER;
             paddle.setWidth(newWidth);
+            isBlinking = false;
         }
     }
 }
