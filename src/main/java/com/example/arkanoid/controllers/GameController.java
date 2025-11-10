@@ -14,7 +14,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.Scanner;
 
 public class GameController {
@@ -82,11 +84,27 @@ public class GameController {
         });
     }
 
-    private int loadMaxScore() {
-        try (Scanner sc = new Scanner(new File("max_score.txt"))) {
-            if (sc.hasNextInt()) {
-                return sc.nextInt();
+    private File getScoreFile() {
+        String userDir = System.getProperty("user.home") + "/ArkanoidData";
+        File file = new File(userDir, "max_score.txt");
+        file.getParentFile().mkdirs();
+
+        if (!file.exists()) {
+            try (InputStream in = getClass().getResourceAsStream("/utils/max_score.txt")) {
+                if (in != null) {
+                    Files.copy(in, file.toPath());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
+        return file;
+    }
+
+    private int loadMaxScore() {
+        File file = getScoreFile();
+        try (Scanner sc = new Scanner(file)) {
+            if (sc.hasNextInt()) return sc.nextInt();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,7 +112,8 @@ public class GameController {
     }
 
     private void saveMaxScore(int score) {
-        try (PrintWriter out = new PrintWriter("max_score.txt")) {
+        File file = getScoreFile();
+        try (PrintWriter out = new PrintWriter(file)) {
             out.println(score);
         } catch (Exception e) {
             e.printStackTrace();
