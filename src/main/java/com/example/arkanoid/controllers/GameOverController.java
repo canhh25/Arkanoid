@@ -2,9 +2,13 @@ package com.example.arkanoid.controllers;
 
 import com.example.arkanoid.models.GameManager;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class GameOverController {
     @FXML private Label maxScoreLabel;
@@ -41,16 +45,22 @@ public class GameOverController {
     }
 
     @FXML
-    private void handleStart(javafx.event.ActionEvent event) {
-        GameManager.getInstance().resetGame();
+    private void handleAgain(javafx.event.ActionEvent event) {
+        try {
+            GameManager gameManager = GameManager.getInstance();
+            gameManager.resetGameKeepLevel();
+            int levelToPlay = gameManager.getLevel();
 
-        if (navigationFacade != null) {
-            navigationFacade.navigateToGame(1);
+            if (navigationFacade != null) {
+                navigationFacade.restartCurrentLevel(levelToPlay);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @FXML
-    private void handleEsc(javafx.event.ActionEvent event) {
+    private void handleQuit(javafx.event.ActionEvent event) {
         GameManager.getInstance().resetGame();
 
         if (navigationFacade != null) {

@@ -1,5 +1,6 @@
 package com.example.arkanoid.models;
 
+import com.example.arkanoid.controllers.GameFacade;
 import com.example.arkanoid.models.Power.PowerManager;
 import com.example.arkanoid.utils.LevelLoader;
 import com.example.arkanoid.utils.SoundManager;
@@ -38,6 +39,11 @@ public class GameManager {
     private int unlockedLevel = 1;
     private int selectedLevel = 1;
     public static GameManager instance;
+    private GameFacade gameFacade;
+
+    public void setGameFacade(GameFacade gameFacade) {
+        this.gameFacade = gameFacade;
+    }
 
     private static final Preferences prefs = Preferences.userNodeForPackage(GameManager.class);
     private static final String PREF_UNLOCKED_LEVEL = "unlockedLevel";
@@ -388,10 +394,12 @@ public class GameManager {
             return;
         }
 
+
         if (isEmptyBrick()) {
             gameState = GameState.WIN;
             timerRunning = false;
         }
+
     }
 
     public boolean isEmptyBrick() {

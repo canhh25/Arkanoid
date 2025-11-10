@@ -13,8 +13,8 @@
             <Image url="@../../images/menu/game_over.png" />
          </image>
       </ImageView>
-      <Button layoutX="201.0" layoutY="358.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="101.0" prefWidth="237.0" style="-fx-background-color: transparent;" />
-      <Button layoutX="544.0" layoutY="358.0" mnemonicParsing="false" onAction="#handleEsc" prefHeight="101.0" prefWidth="237.0" style="-fx-background-color: transparent;" />
+      <Button layoutX="201.0" layoutY="358.0" mnemonicParsing="false" onAction="#handleAgain" prefHeight="101.0" prefWidth="237.0" style="-fx-background-color: transparent;" />
+      <Button layoutX="544.0" layoutY="358.0" mnemonicParsing="false" onAction="#handleQuit" prefHeight="101.0" prefWidth="237.0" style="-fx-background-color: transparent;" />
       <Label fx:id="maxScoreLabel" layoutX="536.0" layoutY="243.0" prefHeight="22.0" prefWidth="38.0"/>
       <Label fx:id="yourScoreLabel" layoutX="560.0" layoutY="298.0" prefHeight="22.0" prefWidth="50.0"/>
    </children>
