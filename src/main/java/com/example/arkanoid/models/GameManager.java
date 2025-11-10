@@ -47,7 +47,7 @@ public class GameManager {
         this.lives = 3;
         this.level = 1;
         this.balls = new ArrayList<>();
-        this.unlockedLevel = 10;
+        loadProgress();
         PowerManager.setGameManager(this);
         setupGame();
     }
