@@ -5,7 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="640.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/25"
+<AnchorPane prefHeight="640.0" prefWidth="960.0" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.arkanoid.controllers.LevelController">
     <children>
@@ -20,7 +20,7 @@
                 onAction="#handleResume" prefHeight="67.0" prefWidth="172.0" style="-fx-background-color: transparent;" />
         <Button fx:id="btnRestart" layoutX="370.0" layoutY="320.0" mnemonicParsing="false"
                 onAction="#handleRestart" prefHeight="67.0" prefWidth="172.0" style="-fx-background-color: transparent;" />
-        <Button layoutX="370.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleBack"
+        <Button fx:id="btnExit" layoutX="370.0" layoutY="424.0" mnemonicParsing="false" onAction="#handleExit"
                 prefHeight="67.0" prefWidth="172.0" style="-fx-background-color: transparent;" />
     </children>
 </AnchorPane>

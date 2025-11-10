@@ -173,6 +173,18 @@ public class GameController {
         }
     }
 
+    public void restartLevel() {
+        if (animationTimer != null) {
+            animationTimer.stop();
+        }
+        isPaused = false;
+        goLeft = false;
+        goRight = false;
+
+        int currentLevel = gameManager.getLevel();
+        navigationFacade.restartCurrentLevel(currentLevel);
+    }
+
     private void showPauseWindow() {
         Stage pauseStage = navigationFacade.showPauseDialog(this, gameManager.getLevel());
         if (pauseStage != null) {

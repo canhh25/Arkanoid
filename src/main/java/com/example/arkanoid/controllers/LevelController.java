@@ -16,16 +16,10 @@ public class LevelController {
     private Button[] levelButtons;
     private GameFacade navigationFacade;
 
-    /**
-     * Inject facade vào controller
-     */
     public void setNavigationFacade(GameFacade facade) {
         this.navigationFacade = facade;
     }
 
-    /**
-     * Tự động tạo facade nếu chưa có
-     */
     private GameFacade getNavigationFacade() {
         if (navigationFacade == null && btnBack != null) {
             Stage stage = (Stage) btnBack.getScene().getWindow();
@@ -57,6 +51,20 @@ public class LevelController {
         setupLevelButtons();
     }
 
+    @FXML
+    private void handleExit(ActionEvent event) {
+        try {
+            Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            pauseStage.close();
+
+            com.example.arkanoid.models.GameManager.getInstance().resetGame();
+            getNavigationFacade().navigateToMenu();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setupLevelButtons() {
         GameManager gameManager = GameManager.getInstance();
         int unlockedLevel = gameManager.getUnlockedLevel();
@@ -81,7 +89,6 @@ public class LevelController {
     }
 
     private void startLevel(int level, ActionEvent event) {
-        // Sử dụng Facade thay vì code dài dòng
         getNavigationFacade().navigateToGame(level);
     }
 
@@ -102,15 +109,9 @@ public class LevelController {
             Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             pauseStage.close();
 
-            Stage gameStage = (Stage) pauseStage.getOwner();
-            if (gameStage != null) {
-                gameStage.close();
+            if (gameController != null) {
+                gameController.restartLevel();
             }
-
-            Stage newStage = new Stage();
-            GameFacade newFacade = GameFacade.getInstance(newStage);
-            newStage.show();
-            newFacade.restartCurrentLevel(currentLevel);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,15 +120,11 @@ public class LevelController {
 
     @FXML
     private void handleResume(ActionEvent event) {
-        try {
-            Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            pauseStage.close();
+        Stage pauseStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        pauseStage.close();
 
-            if (gameController != null) {
-                gameController.resumeGame();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (gameController != null) {
+            gameController.resumeGame();
         }
     }
 
