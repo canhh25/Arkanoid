@@ -91,6 +91,23 @@ public class GameManager {
         return selectedLevel;
     }
 
+    public void resetGameKeepLevel() {
+        int currentLevel = this.level;
+        int currentSelectedLevel = this.selectedLevel;
+
+        this.score = 0;
+        this.lives = 3;
+        this.waitingLaunch = true;
+        this.timerRunning = false;
+        this.elapsedTime = 0;
+
+        this.level = currentLevel;
+        this.selectedLevel = currentSelectedLevel;
+
+        PowerManager.clearPowers(paddle, balls);
+        setupGame();
+    }
+
     public void nextGame() {
         if (gameState == GameState.WIN) {
             this.level++;
