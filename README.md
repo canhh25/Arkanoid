@@ -31,13 +31,6 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 
 ---
 
-## UML Diagram
-### Class Diagram
-
-<Insert hình ảnh Class Diagram>
-
----
-
 ### Design Pattern Implementation
 
 #### 1. Singleton
@@ -78,7 +71,7 @@ The game uses multiple threads to ensure smooth performance:
 |-----|--------|
 | ← | Move paddle left |
 | → | Move paddle right |
-| P | Pause / Resume game |
+| ESC | Pause game |
 | SPACE | Launch Ball |
 
 ### How to play
