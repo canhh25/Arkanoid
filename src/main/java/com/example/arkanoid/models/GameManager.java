@@ -90,6 +90,26 @@ public class GameManager {
     public int getSelectedLevel() {
         return selectedLevel;
     }
+    public void resetLives() {
+        this.lives = 3;
+    }
+
+    public void resetGameKeepLevel() {
+        int currentLevel = this.level;
+        int currentSelectedLevel = this.selectedLevel;
+
+        this.score = 0;
+        this.lives = 3;
+        this.waitingLaunch = true;
+        this.timerRunning = false;
+        this.elapsedTime = 0;
+
+        this.level = currentLevel;
+        this.selectedLevel = currentSelectedLevel;
+
+        PowerManager.clearPowers(paddle, balls);
+        setupGame();
+    }
 
     public void nextGame() {
         if (gameState == GameState.WIN) {
@@ -249,8 +269,12 @@ public class GameManager {
             double MIN_AWAY = Math.toRadians(10);
             double away = Math.abs(angle + Math.PI / 2);
             if (away < MIN_AWAY) {
-                angle = (angle < -Math.PI / 2) ? -Math.PI / 2 - MIN_AWAY : -Math.PI / 2 + MIN_AWAY;
+                if (angle < -Math.PI / 2)
+                    angle = -Math.PI / 2 - MIN_AWAY;
+                else
+                    angle = -Math.PI / 2 + MIN_AWAY;
             }
+
 
 
             ball.dx = ball.getSpeed() * Math.cos(angle);

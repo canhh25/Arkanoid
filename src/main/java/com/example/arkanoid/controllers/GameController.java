@@ -153,7 +153,7 @@ public class GameController {
                 goLeft = true;
             } else if (event.getCode() == KeyCode.RIGHT) {
                 goRight = true;
-            } else if (event.getCode() == KeyCode.SPACE) {
+            }else if (event.getCode() == KeyCode.SPACE) {
                 if (gameManager.gameState == GameState.GAME_OVER ||
                         gameManager.gameState == GameState.WIN) {
                     gameManager.nextGame();
@@ -208,7 +208,12 @@ public class GameController {
         Stage pauseStage = navigationFacade.showPauseDialog(this, gameManager.getLevel());
         if (pauseStage != null) {
             pauseStage.showAndWait();
+
         }
+    }
+
+    private void render() {
+        drawGameInfo();
     }
 
     private void drawGameInfo() {

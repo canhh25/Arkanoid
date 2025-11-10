@@ -8,7 +8,7 @@ Group: 6 - Class: 2526_INT2204_1
 3. **Nguyễn Hữu Cảnh** – 24020044  
 4. **Đặng Xuân Tùng** – 24020350  
 
-**Instructor:** Kiều Văn Tuyên - Nguyễn Trung Hiếu
+**Instructor:** Kiều Văn Tuyên - Vũ Đức Hiếu
 
 **Semester:** HK1 – Năm học 2024–2025  
 
@@ -28,13 +28,6 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 - Control a paddle to bounce a ball and destroy bricks
 - Collect power-ups for special abilities
 - Progress through multiple levels with increasing difficulty
-
----
-
-## UML Diagram
-### Class Diagram
-
-<Insert hình ảnh Class Diagram>
 
 ---
 
@@ -78,7 +71,7 @@ The game uses multiple threads to ensure smooth performance:
 |-----|--------|
 | ← | Move paddle left |
 | → | Move paddle right |
-| P | Pause / Resume game |
+| ESC | Pause game |
 | SPACE | Launch Ball |
 
 ### How to play
@@ -96,6 +89,7 @@ The game uses multiple threads to ensure smooth performance:
 |--------|------|--------|
 | ![Expand](src/main/resources/images/powerups/powerup_expand/powerup_expand_1.png) | **Expand Paddle** | Increases paddle width for a short duration |
 | ![Fast Ball](src/main/resources/images/powerups/powerup_fast_ball/powerup_fast_ball_1.png) | **Fast Ball** | Increases ball speed temporarily |
+| ![Slow Ball](src/main/resources/images/powerups/powerup_slow/powerup_slow_1.png) | **Slow Ball** | Decrease ball speed temporarily |
 | ![Extra Life](src/main/resources/images/powerups/powerup_life/powerup_life_1.png) | **Extra Life** | Grants one extra life |
 | ![Multi Ball](src/main/resources/images/powerups/powerup_multi_ball/powerup_multi_ball_1.png) | **Multi Ball** | Spawns multiple balls simultaneously |
 
