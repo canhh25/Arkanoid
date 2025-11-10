@@ -209,8 +209,6 @@ public class GameController {
         if (pauseStage != null) {
             pauseStage.showAndWait();
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

@@ -25,7 +25,7 @@ public class Ball extends MovableObject {
         super(x, y, BALL_WIDTH, BALL_HEIGHT, "/images/ball/ball.png");
         this.dx = 0;
         this.dy = 0;
-        this.speed = 4.0;
+        this.speed = 5.0;
     }
 
     public double getPrevX() {
