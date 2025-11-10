@@ -74,8 +74,23 @@ public class GameController {
                 gameManager.unlockNextLevel();
 
                 if (nextLevel <= 10) {
-                    // Sử dụng Facade để chuyển sang level tiếp theo
-                    navigationFacade.navigateToGame(nextLevel);
+                    // Tự động chuyển sang level tiếp theo
+                    System.out.println(" WIN! Chuyển sang level " + nextLevel);
+
+                    Stage stage = (Stage) gc.getCanvas().getScene().getWindow();
+
+                    Canvas canvas = new Canvas(960, 640);
+                    GraphicsContext newGc = canvas.getGraphicsContext2D();
+                    StackPane root = new StackPane(canvas);
+                    Scene scene = new Scene(root, 960, 640);
+
+                    gameManager.setupLevel(nextLevel);
+                    GameController gameController = new GameController(newGc, nextLevel);
+
+                    stage.setTitle("Arkanoid - Level " + nextLevel);
+                    stage.setScene(scene);
+
+                    gameController.start();
                 } else {
                     // Hoàn thành tất cả level, về menu
                     navigationFacade.navigateToMenu();
@@ -179,12 +194,44 @@ public class GameController {
         }
     }
 
+    // ĐÃ FIX - Thêm initOwner để LevelController tìm được game stage
     private void showPauseWindow() {
-        // Sử dụng Facade để hiển thị pause dialog
-        Stage pauseStage = navigationFacade.showPauseDialog(this, gameManager.getLevel());
-        if (pauseStage != null) {
+        try {
+            // Lấy game stage trước
+            Stage gameStage = (Stage) gc.getCanvas().getScene().getWindow();
+
+            // Tạo pause stage
+            Stage pauseStage = new Stage();
+            pauseStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+            //  QUAN TRỌNG - Set owner để pauseStage.getOwner() trả về gameStage
+            pauseStage.initOwner(gameStage);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.arkanoid/main/PauseView.fxml"));
+            Parent root = loader.load();
+
+            LevelController levelController = loader.getController();
+            levelController.setGameController(this);
+            levelController.setCurrentLevel(gameManager.getLevel());
+
+            Scene scene = new Scene(root);
+            pauseStage.setScene(scene);
+            pauseStage.setTitle("Paused");
+            pauseStage.setResizable(false);
+
+            // Resume game khi đóng pause window
+            pauseStage.setOnCloseRequest(e -> resumeGame());
+
+            //  Dùng showAndWait() để block game cho đến khi pause đóng
             pauseStage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    private void render() {
+        drawGameInfo();
     }
 
     private void drawGameInfo() {
