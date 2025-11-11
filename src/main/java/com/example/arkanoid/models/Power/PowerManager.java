@@ -168,7 +168,9 @@ public class PowerManager {
             Power power = entry.power;
 
             if (power != null && power.isActive()) {
-                power.removeDefaultEffect(paddle);
+                if (power instanceof ExpandPaddle || power instanceof ShrinkPaddle) {
+                    power.removeDefaultEffect(paddle);
+                }
 
                 if (power instanceof FastBall || power instanceof SlowBall) {
                     for (Ball ball : balls) {
