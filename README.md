@@ -64,6 +64,7 @@ The game uses multiple threads to ensure smooth performance:
 1. Game Loop Thread: Updates game logic at 60 FPS
 2. Rendering Thread: Handles graphics rendering (EDT for JavaFX Application Thread)
 3. Audio Thread Pool: Plays sound effects asynchronously
+4. Power-Up Timer Thread: Each power-up uses a separate timing mechanism — implemented via ScheduledExecutorService or a TimerTask — to manage activation and expiration.
    
 ---
 
