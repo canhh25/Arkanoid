@@ -2,6 +2,7 @@
 package com.example.arkanoid.models;
 
 import com.example.arkanoid.models.Power.*;
+
 import java.util.Random;
 
 public class Brick extends GameObject {
@@ -11,7 +12,7 @@ public class Brick extends GameObject {
     public int type;
 
     private final String crackedImagePath;
-    private static final double POWERUP_CHANCE = 0.76;
+    private static final double POWERUP_CHANCE = 0.2;
     private static final Random random = new Random();
 
     private static final PowerFactory powerFactory = new PowerImpl();
@@ -60,8 +61,19 @@ public class Brick extends GameObject {
         double centerY = getY() + BRICK_HEIGHT / 2;
 
         String powerType = POWER_TYPES[random.nextInt(POWER_TYPES.length)];
-        Power<?> power = powerFactory.createPowerUp(powerType, centerX, centerY);
-        PowerManager.addPower(power);
+        boolean active = true;
+        for (Power power : PowerManager.getPowers()) {
+            if (((power.getType().equals("fast_ball") || power.getType().equals("slow"))
+                    && powerType.equals("multi_ball")) || (power.getType().equals("multi_ball")
+                    && (power.getType().equals("fast_ball") || power.getType().equals("slow")))) {
+                active = false;
+            }
+        }
+
+        if (active) {
+            Power<?> power = powerFactory.createPowerUp(powerType, centerX, centerY);
+            PowerManager.addPower(power);
+        }
     }
 
     public boolean isDestroyed() {

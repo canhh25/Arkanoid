@@ -23,8 +23,9 @@ public class FastBall extends Power<Ball> {
 
     @Override
     public void removeDefaultEffect(Ball ball) {
+        ball.setSpeed(ball.BALL_SPEED);
         if (isActive) {
-            ball.setSpeed(ball.BALL_SPEED);
+
 
             ball.setBlinking(false);
             isBlinking = false;
