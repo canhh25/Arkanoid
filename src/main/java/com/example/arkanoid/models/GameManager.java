@@ -309,7 +309,7 @@ public class GameManager {
     }
 
     private boolean resolveBrickCollision(Ball ball, Brick brick) {
-        if (!ball.getBounds().intersects(brick.getBounds())) {
+        if (!circleIntersectsRect(ball, brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight())) {
             return false;
         }
         double prevX = ball.getPrevX();
