@@ -24,7 +24,6 @@ public class PowerView {
                 frames[i] = new Image(getClass().getResourceAsStream(imagePath));
             }
         } catch (Exception e) {
-            System.out.println("Cannot load powerup images: " + type);
             frames = null;
         }
     }
@@ -43,14 +42,5 @@ public class PowerView {
         if (frames != null && frames[currentFrame] != null) {
             gc.drawImage(frames[currentFrame], x, y, width, height);
         }
-    }
-
-    public void resetAnimation() {
-        currentFrame = 0;
-        lastFrameTime = System.currentTimeMillis();
-    }
-
-    public boolean hasFrames() {
-        return frames != null && frames.length > 0;
     }
 }

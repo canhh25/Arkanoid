@@ -103,17 +103,9 @@ public class Ball extends MovableObject {
 
     public void reverseX() {
         dx = -dx;
-        printSpeed();
     }
 
     public void reverseY() {
         dy = -dy;
-        printSpeed();
-    }
-
-    private void printSpeed() {
-        double currentSpeed = Math.sqrt(dx * dx + dy * dy);
-        System.out.printf("Ball Speed: %.3f (target: %.3f) | dx: %.3f, dy: %.3f%n",
-                currentSpeed, speed, dx, dy);
     }
 }

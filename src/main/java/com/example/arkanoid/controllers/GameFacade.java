@@ -64,7 +64,6 @@ public class GameFacade {
             SoundManager.playBackgroundMusic("/sounds/nen.mp3");
 
         } catch (Exception e) {
-            System.err.println("Error navigating to menu: " + e.getMessage());
             e.printStackTrace();
         }
     }

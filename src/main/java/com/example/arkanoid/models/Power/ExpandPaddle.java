@@ -19,7 +19,6 @@ public class ExpandPaddle extends Power<Paddle> {
             paddle.setWidth(newWidth);
             activate();
             activationTime = System.currentTimeMillis();
-            System.out.println("Paddle expanded: " + currWidth + " -> " + newWidth);
         }
     }
 

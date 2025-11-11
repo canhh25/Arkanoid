@@ -48,7 +48,7 @@ public class GameView {
             try {
                 backgroundFrames.add(new Image(getClass().getResource(fileName).toExternalForm()));
             } catch (Exception e) {
-                System.err.println("Lỗi tải frame: " + fileName + " (Folder đã chọn: " + selectedFolder + ")");
+                e.printStackTrace();
             }
         }
         if (!backgroundFrames.isEmpty()) {
@@ -91,16 +91,9 @@ public class GameView {
 
             if (gameManager.isEmptyBrick()) {
                 gameManager.gameState = GameState.WIN;
-                gc.fillText("YOU WIN!", WIDTH / 2.0, HEIGHT / 2.0);
-
                 gameManager.unlockNextLevel();
-
-            } else {
-                gc.fillText("GAME OVER", WIDTH / 2.0, HEIGHT / 2.0);
             }
 
-            gc.setFont(new Font("Arial", 20));
-            gc.fillText("Press SPACE to Restart", WIDTH / 2.0, HEIGHT / 2.0 + 40);
         }
     }
 }

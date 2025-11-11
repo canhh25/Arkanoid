@@ -8,10 +8,12 @@ import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Power<T> extends GameObject {
     protected String type;
-    protected boolean isActive = false;
     protected double speed = 3.5;
+
+    protected boolean isActive = false;
     protected long activeTime = 4000;
     protected long duration;
+
     protected PowerView view;
     private static final long BLINK_WARNING_TIME = 1000;
     private static final long BLINK_INTERVAL = 200;
@@ -45,10 +47,6 @@ public abstract class Power<T> extends GameObject {
 
     protected abstract void applyDefaultEffect(T object);
     protected abstract void removeDefaultEffect(T object);
-
-    public void setStrategy(PowerStrategy<T> strategy) {
-        this.strategy = strategy;
-    }
 
     public boolean intersects(Paddle paddle) {
         return getX() < paddle.getX() + paddle.getWidth() &&
