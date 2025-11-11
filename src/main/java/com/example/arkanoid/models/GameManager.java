@@ -113,6 +113,7 @@ public class GameManager {
     public void resetScore() {
         this.score = 0;
     }
+
     public void nextGame() {
         if (gameState == GameState.WIN || gameState == GameState.GAME_OVER) {
             resetLives();
@@ -228,7 +229,7 @@ public class GameManager {
         ball.dy = targetSpeed * Math.sin(angle);
     }
 
-    private void resolveWalls(Ball ball) {
+    private void resolveWallCollision(Ball ball) {
         if (ball.getX() <= 0) {
             ball.setX(0);
             ball.reverseX();
@@ -279,7 +280,6 @@ public class GameManager {
             }
 
 
-
             ball.dx = ball.getSpeed() * Math.cos(angle);
             ball.dy = ball.getSpeed() * Math.sin(angle);
             paddleHitThisFrame = true;
@@ -309,7 +309,7 @@ public class GameManager {
     }
 
     private boolean resolveBrickCollision(Ball ball, Brick brick) {
-        if (!ball.getBounds().intersects(brick.getBounds())) {
+        if (!circleIntersectsRect(ball, brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight())) {
             return false;
         }
         double prevX = ball.getPrevX();
@@ -360,7 +360,7 @@ public class GameManager {
         while (ballIterator.hasNext()) {
             Ball ball = ballIterator.next();
 
-            resolveWalls(ball);
+            resolveWallCollision(ball);
             resolvePaddleCollision(ball);
 
             for (Brick brick : bricks) {
