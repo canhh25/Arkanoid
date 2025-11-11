@@ -235,4 +235,8 @@ public class PowerManager {
             return PowerType.valueOf(type.toUpperCase());
         }
     }
+
+    public static List<Power<?>> getPowers() {
+        return powers;
+    }
 }
