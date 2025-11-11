@@ -28,6 +28,8 @@ public class ExpandPaddle extends Power<Paddle> {
             double newWidth = paddle.PADDLE_WIDTH;
             paddle.setWidth(newWidth);
             isBlinking = false;
+            paddle.setBlinking(false);
+            isActive = false;
         }
     }
 }

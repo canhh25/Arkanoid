@@ -114,7 +114,6 @@ public class SoundManager {
 
     /**
      * Phát nhạc nền (loop)
-     * @param musicPath Đường dẫn file nhạc (ví dụ: "/sounds/menu_music.mp3")
      */
     public static void playBackgroundMusic(String musicPath) {
         try {
@@ -129,7 +128,7 @@ public class SoundManager {
             backgroundMusicPlayer.play();
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
