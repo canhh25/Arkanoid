@@ -13,7 +13,7 @@ public class MultiBallPower extends Power<GameManager> {
         if (gameManager.getBalls().isEmpty()) return;
         Ball originalBall = gameManager.getBall();
 
-        gameManager.addBall(originalBall.getX(), originalBall.getY(), originalBall.getSpeed(), -120);
+        gameManager.addBall(originalBall.getX(), originalBall.getY(), originalBall.getSpeed(), -60);
 
     }
 

@@ -200,7 +200,7 @@ public class GameManager {
             ball.update();
         }
 
-        PowerManager.updatePowers(paddle, balls.isEmpty() ? null : balls);
+        PowerManager.updatePowers(paddle, balls);
         checkCollisions();
         playSounds();
     }
