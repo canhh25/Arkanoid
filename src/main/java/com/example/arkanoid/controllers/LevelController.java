@@ -139,6 +139,6 @@ public class LevelController {
         getNavigationFacade().navigateToNextLevel();
 
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-        stage.close();
+         stage.close();
     }
 }

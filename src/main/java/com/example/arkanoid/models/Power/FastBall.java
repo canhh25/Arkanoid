@@ -3,8 +3,8 @@ package com.example.arkanoid.models.Power;
 import com.example.arkanoid.models.Ball;
 
 public class FastBall extends Power<Ball> {
-    private static final double SPEED_SCALE = 1.1;
-    private static final long DURATION = 3000;
+    private static final double SPEED_SCALE = 2;
+    private static final long DURATION = 1000;
     public FastBall(double x, double y) {
         super(x, y, 30, 19, "fast_ball", DURATION);
         this.isBlinking = false;

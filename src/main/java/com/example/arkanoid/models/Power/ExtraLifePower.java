@@ -17,19 +17,15 @@ public class ExtraLifePower extends Power<GameManager> {
 
     @Override
     public void applyDefaultEffect(GameManager gameManager) {
-        if (!isActive()) {
-            if (gameManager.getLives() < 5) {
-                gameManager.lives++;
-            }
+        if (getCountLives() > 0 && gameManager.getLives() < 4) {
+            setCountLives(getCountLives() - 1);
+            gameManager.lives++;
         }
     }
 
     @Override
     public void removeDefaultEffect(GameManager gameManager) {
-        if (this.getCountLives() > 0) {
-            this.isActive = false;
-            this.setCountLives(this.countLives - 1);
-        }
+
     }
 
     public int getCountLives() {
