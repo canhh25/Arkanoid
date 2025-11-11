@@ -43,7 +43,7 @@ public class Paddle extends MovableObject {
             this.x = Math.max(0, this.x - PADDLE_SPEED);
         }
         if (movingRight) {
-            this.x = Math.min(gameWidth - this.width, this.x + PADDLE_SPEED);
+            this.x = Math.min(gameWidth - this.paddle_width, this.x + PADDLE_SPEED);
         }
         frameTimer++;
         if (frameTimer >= frameDelay) {
