@@ -177,6 +177,7 @@ public class LevelController {
 
     @FXML
     private void handleContinue(ActionEvent event) {
+        GameManager.getInstance().resetLives();
         getNavigationFacade().navigateToNextLevel();
 
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
