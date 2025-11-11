@@ -113,6 +113,7 @@ public class GameManager {
     public void resetScore() {
         this.score = 0;
     }
+
     public void nextGame() {
         if (gameState == GameState.WIN || gameState == GameState.GAME_OVER) {
             resetLives();
@@ -228,7 +229,7 @@ public class GameManager {
         ball.dy = targetSpeed * Math.sin(angle);
     }
 
-    private void resolveWalls(Ball ball) {
+    private void resolveWallCollision(Ball ball) {
         if (ball.getX() <= 0) {
             ball.setX(0);
             ball.reverseX();
@@ -277,7 +278,6 @@ public class GameManager {
                 else
                     angle = -Math.PI / 2 + MIN_AWAY;
             }
-
 
 
             ball.dx = ball.getSpeed() * Math.cos(angle);
@@ -360,7 +360,7 @@ public class GameManager {
         while (ballIterator.hasNext()) {
             Ball ball = ballIterator.next();
 
-            resolveWalls(ball);
+            resolveWallCollision(ball);
             resolvePaddleCollision(ball);
 
             for (Brick brick : bricks) {
