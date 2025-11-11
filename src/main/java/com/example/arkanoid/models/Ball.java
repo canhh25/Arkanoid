@@ -1,6 +1,7 @@
 package com.example.arkanoid.models;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Ball extends MovableObject {
     public static final double BALL_SPEED = 7.0;
@@ -97,7 +98,23 @@ public class Ball extends MovableObject {
     @Override
     public void render(GraphicsContext gc) {
         if (getImage() != null) {
-            gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
+            if (isBlinking) {
+                gc.setGlobalAlpha(0.3);
+                gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
+                gc.setGlobalAlpha(1.0);
+            } else {
+                gc.drawImage(getImage(), getX(), getY(), getWidth(), getHeight());
+            }
+        } else {
+            if (isBlinking) {
+                gc.setFill(Color.YELLOW);
+                gc.setGlobalAlpha(0.5);
+                gc.fillRect(getX(), getY(), getWidth(), getHeight());
+                gc.setGlobalAlpha(1.0);
+            } else {
+                gc.setFill(Color.BLUE);
+                gc.fillRect(getX(), getY(), getWidth(), getHeight());
+            }
         }
     }
 
