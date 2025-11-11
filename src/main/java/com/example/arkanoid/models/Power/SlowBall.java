@@ -22,7 +22,7 @@ public class SlowBall extends Power<Ball> {
     @Override
     public void removeDefaultEffect(Ball ball) {
         if (isActive) {
-            ball.setSpeed(ball.getSpeed() * SPEED_SCALE);
+            ball.setSpeed(ball.BALL_SPEED);
             isActive = false;
         }
     }

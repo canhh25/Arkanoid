@@ -7,9 +7,12 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class LevelController {
-    @FXML private Button btnLevel1, btnLevel2, btnLevel3, btnLevel4, btnLevel5;
-    @FXML private Button btnLevel6, btnLevel7, btnLevel8, btnLevel9, btnLevel10;
-    @FXML private Button btnBack;
+    @FXML
+    private Button btnLevel1, btnLevel2, btnLevel3, btnLevel4, btnLevel5;
+    @FXML
+    private Button btnLevel6, btnLevel7, btnLevel8, btnLevel9, btnLevel10;
+    @FXML
+    private Button btnBack;
 
     private GameController gameController;
     private int currentLevel;
@@ -59,7 +62,7 @@ public class LevelController {
             getNavigationFacade().navigateToMenu();
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -69,7 +72,6 @@ public class LevelController {
 
         for (int i = 0; i < levelButtons.length; i++) {
             if (levelButtons[i] == null) {
-                System.err.println("Button " + (i+1) + " is null!");
                 continue;
             }
 
@@ -90,16 +92,55 @@ public class LevelController {
         getNavigationFacade().navigateToGame(level);
     }
 
-    @FXML private void handleLevel1(ActionEvent event) { startLevel(1, event); }
-    @FXML private void handleLevel2(ActionEvent event) { startLevel(2, event); }
-    @FXML private void handleLevel3(ActionEvent event) { startLevel(3, event); }
-    @FXML private void handleLevel4(ActionEvent event) { startLevel(4, event); }
-    @FXML private void handleLevel5(ActionEvent event) { startLevel(5, event); }
-    @FXML private void handleLevel6(ActionEvent event) { startLevel(6, event); }
-    @FXML private void handleLevel7(ActionEvent event) { startLevel(7, event); }
-    @FXML private void handleLevel8(ActionEvent event) { startLevel(8, event); }
-    @FXML private void handleLevel9(ActionEvent event) { startLevel(9, event); }
-    @FXML private void handleLevel10(ActionEvent event) { startLevel(10, event); }
+    @FXML
+    private void handleLevel1(ActionEvent event) {
+        startLevel(1, event);
+    }
+
+    @FXML
+    private void handleLevel2(ActionEvent event) {
+        startLevel(2, event);
+    }
+
+    @FXML
+    private void handleLevel3(ActionEvent event) {
+        startLevel(3, event);
+    }
+
+    @FXML
+    private void handleLevel4(ActionEvent event) {
+        startLevel(4, event);
+    }
+
+    @FXML
+    private void handleLevel5(ActionEvent event) {
+        startLevel(5, event);
+    }
+
+    @FXML
+    private void handleLevel6(ActionEvent event) {
+        startLevel(6, event);
+    }
+
+    @FXML
+    private void handleLevel7(ActionEvent event) {
+        startLevel(7, event);
+    }
+
+    @FXML
+    private void handleLevel8(ActionEvent event) {
+        startLevel(8, event);
+    }
+
+    @FXML
+    private void handleLevel9(ActionEvent event) {
+        startLevel(9, event);
+    }
+
+    @FXML
+    private void handleLevel10(ActionEvent event) {
+        startLevel(10, event);
+    }
 
     @FXML
     private void handleRestart(ActionEvent event) {
@@ -108,13 +149,14 @@ public class LevelController {
             pauseStage.close();
 
             GameManager.getInstance().resetLives();
-
+            GameManager.getInstance().resetScore();
+            GameManager.getInstance().resetTimer();
             if (gameController != null) {
                 gameController.restartLevel();
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -132,11 +174,14 @@ public class LevelController {
     private void handleBack(ActionEvent event) {
         getNavigationFacade().navigateToMenu();
     }
+
     @FXML
     private void handleContinue(ActionEvent event) {
         getNavigationFacade().navigateToNextLevel();
 
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-         stage.close();
+        if (stage != null) {
+            stage.close();
+        }
     }
 }

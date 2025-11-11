@@ -48,7 +48,7 @@ public class PowerManager {
         powers.add(power);
     }
 
-    private static void updateBlinkEffects(Paddle paddle, Ball ball) {
+    private static void updateBlinkEffects(Paddle paddle, List<Ball> balls) {
         for (ActivePowerEntry entry : activePowers.values()) {
             Power<?> power = entry.power;
 
@@ -56,21 +56,26 @@ public class PowerManager {
                 if (power instanceof ExpandPaddle) {
                     ((ExpandPaddle) power).updateBlinkEffect(paddle);
                 }
+                if (power instanceof FastBall || power instanceof SlowBall) {
+                    for (Ball ball : balls) {
+                        ((Power<Ball>) power).updateBlinkEffect(ball);
+                    }
+                }
             }
         }
     }
 
-    public static void updatePowers(Paddle paddle, Ball ball) {
+    public static void updatePowers(Paddle paddle, List<Ball> balls) {
         if (gameManager == null || paddle == null) return;
 
-        updateBlinkEffects(paddle, ball);
+        updateBlinkEffects(paddle, balls);
 
         for (int i = powers.size() - 1; i >= 0; i--) {
             Power<?> power = powers.get(i);
             power.update();
 
             if (power.intersects(paddle)) {
-                collectPowerUp(power, paddle, ball);
+                collectPowerUp(power, paddle, balls);
                 powers.remove(i);
                 continue;
             }
@@ -81,18 +86,18 @@ public class PowerManager {
         }
     }
 
-    private static void collectPowerUp(Power<?> power, Paddle paddle, Ball ball) {
+    private static void collectPowerUp(Power<?> power, Paddle paddle, List<Ball> balls) {
         String type = power.getType();
         PowerType powerType = PowerType.fromString(type);
 
         if (activePowers.containsKey(type)) {
-            handleExistingPower(power, paddle, ball, type, powerType);
+            handleExistingPower(power, paddle, balls, type, powerType);
         } else {
-            activateNewPower(power, paddle, ball, type, powerType);
+            activateNewPower(power, paddle, balls, type, powerType);
         }
     }
 
-    private static void handleExistingPower(Power<?> power, Paddle paddle, Ball ball,
+    private static void handleExistingPower(Power<?> power, Paddle paddle, List<Ball> balls,
                                             String type, PowerType powerType) {
         ActivePowerEntry entry = activePowers.get(type);
 
@@ -100,7 +105,7 @@ public class PowerManager {
             case EXPAND:
             case SLOW:
             case FAST_BALL:
-                extendTimedPower(entry, power, paddle, ball, type);
+                extendTimedPower(entry, power, paddle, balls, type);
                 break;
             case LIFE, MULTI_BALL:
                 ((Power<GameManager>) power).applyEffect(gameManager);
@@ -109,21 +114,32 @@ public class PowerManager {
     }
 
     private static void extendTimedPower(ActivePowerEntry entry, Power<?> power,
-                                         Paddle paddle, Ball ball, String type) {
+                                         Paddle paddle, List<Ball> balls, String type) {
         entry.cancel();
 
         long remainingTime = entry.power.getActiveTime();
 
         Object target = entry.target;
         ScheduledFuture<?> newTask = scheduler.schedule(() -> {
-            ((Power<Object>) entry.power).removeEffect(target);
+
+            if (target instanceof Paddle) {
+                ((Power<Paddle>) entry.power).removeEffect((Paddle) target);
+                ((Paddle) target).setBlinking(false);
+            } else if (target instanceof List) {
+                List<Ball> targetBalls = (List<Ball>) target;
+                for (Ball ball : targetBalls) {
+                    ((Power<Ball>) entry.power).removeEffect(ball);
+                    ball.setBlinking(false);
+                }
+            }
+
             activePowers.remove(type);
         }, remainingTime, TimeUnit.MILLISECONDS);
 
         entry.scheduledTask = newTask;
     }
 
-    private static void activateNewPower(Power<?> power, Paddle paddle, Ball ball,
+    private static void activateNewPower(Power<?> power, Paddle paddle, List<Ball> balls,
                                          String type, PowerType powerType) {
         switch (powerType) {
             case LIFE, MULTI_BALL:
@@ -135,9 +151,28 @@ public class PowerManager {
                 break;
 
             case FAST_BALL, SLOW:
-                scheduleTimedPower((Power<Ball>) power, ball, type);
+                scheduleTimedPowerForBalls((Power<Ball>) power, balls, type);
                 break;
         }
+    }
+
+    private static void scheduleTimedPowerForBalls(Power<Ball> power, List<Ball> balls, String type) {
+        for (Ball ball : balls) {
+            power.applyEffect(ball);
+        }
+
+        long duration = power.getActiveTime() > 0 ? power.getActiveTime() : 0;
+
+        ScheduledFuture<?> task = scheduler.schedule(() -> {
+            for (Ball ball : balls) {
+                power.removeEffect(ball);
+                ball.setBlinking(false);
+            }
+
+            activePowers.remove(type);
+        }, duration, TimeUnit.MILLISECONDS);
+
+        activePowers.put(type, new ActivePowerEntry(power, task, balls));
     }
 
     private static <T> void scheduleTimedPower(Power<T> power, T target, String type) {
@@ -173,14 +208,25 @@ public class PowerManager {
                     }
                 }
             }
-
+            paddle.setBlinking(false);
+            for (Ball ball : balls) {
+                ball.setBlinking(false);
+            }
             entry.cancel();
         }
 
         powers.clear();
         activePowers.clear();
     }
+    public static void applyActiveBallPowersToNewBall(Ball newBall) {
+        for (Map.Entry<String, ActivePowerEntry> entry : activePowers.entrySet()) {
+            Power<?> power = entry.getValue().power;
 
+            if (power instanceof FastBall || power instanceof SlowBall) {
+                ((Power<Ball>) power).applyEffect(newBall);
+            }
+        }
+    }
 
     private enum PowerType {
         EXPAND, FAST_BALL, MULTI_BALL, LIFE, SLOW, SHRINK;

@@ -89,13 +89,6 @@ public class GameManager {
         saveProgress();
     }
 
-    public void setSelectedLevel(int level) {
-        this.selectedLevel = level;
-    }
-
-    public int getSelectedLevel() {
-        return selectedLevel;
-    }
     public void resetLives() {
         this.lives = 3;
     }
@@ -117,13 +110,17 @@ public class GameManager {
         setupGame();
     }
 
+    public void resetScore() {
+        this.score = 0;
+    }
     public void nextGame() {
-        if (gameState == GameState.WIN) {
-            this.level++;
-        } else if (gameState == GameState.GAME_OVER) {
-            this.score = 0;
-            this.lives = 3;
+        if (gameState == GameState.WIN || gameState == GameState.GAME_OVER) {
+            resetLives();
             resetTimer();
+            resetScore();
+            if (gameState == GameState.WIN) {
+                this.level++;
+            }
         }
         setupGame();
         startTimer();
@@ -203,7 +200,7 @@ public class GameManager {
             ball.update();
         }
 
-        PowerManager.updatePowers(paddle, balls.isEmpty() ? null : balls.get(0));
+        PowerManager.updatePowers(paddle, balls.isEmpty() ? null : balls);
         checkCollisions();
         playSounds();
     }
@@ -443,6 +440,8 @@ public class GameManager {
         ball.launchByAngle(angle_ball);
         ball.setPrevX(ball.getX());
         ball.setPrevY(ball.getY());
+
+        PowerManager.applyActiveBallPowersToNewBall(ball);
         balls.add(ball);
         movables.add(ball);
     }

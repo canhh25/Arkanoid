@@ -30,7 +30,6 @@ public class GameFacade {
             );
             Parent root = loader.load();
 
-            // Lấy controller và gán navigationFacade
             LevelController controller = loader.getController();
             controller.setNavigationFacade(this);
 
@@ -39,7 +38,7 @@ public class GameFacade {
             primaryStage.show();
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -64,7 +63,7 @@ public class GameFacade {
             SoundManager.playBackgroundMusic("/sounds/nen.mp3");
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -88,7 +87,7 @@ public class GameFacade {
             gameController.start();
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -108,7 +107,7 @@ public class GameFacade {
             primaryStage.setScene(scene);
 
         } catch (Exception e) {
-            e.printStackTrace();
+
             navigateToMenu();
         }
     }
@@ -129,7 +128,7 @@ public class GameFacade {
             primaryStage.setScene(scene);
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -155,7 +154,7 @@ public class GameFacade {
             helpStage.show();
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -185,7 +184,7 @@ public class GameFacade {
             return pauseStage;
 
         } catch (Exception e) {
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -209,7 +208,7 @@ public class GameFacade {
             gameController.start();
 
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -217,16 +216,10 @@ public class GameFacade {
         try {
             int nextLevel = GameManager.getInstance().getLevel() + 1;
 
-            // Nếu đã qua hết level, trở về menu
-//            if (nextLevel > GameManager.getInstance().getMaxLevel()) {
-//                navigateToMenu();
-//                return;
-//            }
-
             navigateToGame(nextLevel);
 
         } catch (Exception e) {
-            e.printStackTrace();
+
             navigateToMenu();
         }
     }

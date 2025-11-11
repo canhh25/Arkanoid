@@ -48,7 +48,7 @@ public class GameView {
             try {
                 backgroundFrames.add(new Image(getClass().getResource(fileName).toExternalForm()));
             } catch (Exception e) {
-                e.printStackTrace();
+
             }
         }
         if (!backgroundFrames.isEmpty()) {
