@@ -71,6 +71,8 @@ public class GameController {
         Platform.runLater(() -> {
             try {
                 gameManager.unlockNextLevel();
+                gameManager.resetTimer();
+                gameManager.resetScore();
                 navigationFacade.navigateToLevelUp();
             } catch (Exception e) {
 
