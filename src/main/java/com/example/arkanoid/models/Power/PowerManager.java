@@ -44,10 +44,6 @@ public class PowerManager {
         gameManager = gm;
     }
 
-    public static void setPowerFactory(PowerFactory factory) {
-        powerFactory = factory;
-    }
-
     public static void addPower(Power<?> power) {
         powers.add(power);
     }
@@ -63,6 +59,7 @@ public class PowerManager {
             }
         }
     }
+
     public static void updatePowers(Paddle paddle, Ball ball) {
         if (gameManager == null || paddle == null) return;
 
@@ -150,11 +147,9 @@ public class PowerManager {
         ScheduledFuture<?> task = scheduler.schedule(() -> {
             power.removeEffect(target);
             activePowers.remove(type);
-            System.out.println("PowerUp expired: " + type);
         }, duration, TimeUnit.MILLISECONDS);
 
         activePowers.put(type, new ActivePowerEntry(power, task, target));
-        System.out.println("Activated timed PowerUp: " + type + " - Duration: " + duration + "ms");
     }
 
     public static void renderPowers(GraphicsContext gc) {

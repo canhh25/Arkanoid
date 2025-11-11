@@ -129,7 +129,6 @@ public class SoundManager {
             backgroundMusicPlayer.play();
 
         } catch (Exception e) {
-            System.err.println("Không thể phát nhạc nền: " + musicPath);
             e.printStackTrace();
         }
     }
@@ -190,7 +189,6 @@ public class SoundManager {
     }
 
     public static void testAllSounds() {
-        System.out.println("🔊 Testing all sounds...");
         new Thread(() -> {
             try {
                 Thread.sleep(100);

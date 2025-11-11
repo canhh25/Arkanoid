@@ -80,7 +80,7 @@ public class GameController {
 
     private File getScoreFile() {
         String userDir = System.getProperty("user.home") + "/ArkanoidData";
-        File file = new File(userDir, "max_score.txt");
+        File file = new File(userDir, "/utils/max_score.txt");
         file.getParentFile().mkdirs();
 
         if (!file.exists()) {

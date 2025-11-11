@@ -38,8 +38,6 @@ public class LevelController {
 
     public void refreshLevelButtons() {
         setupLevelButtons();
-        System.out.println("Refreshing level buttons. Unlocked level: " +
-                GameManager.getInstance().getUnlockedLevel());
     }
 
     @FXML

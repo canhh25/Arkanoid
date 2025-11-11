@@ -2,7 +2,6 @@ package com.example.arkanoid.models;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import java.awt.*;
 import javafx.scene.paint.Color;
 
 public class Paddle extends MovableObject {
@@ -23,10 +22,6 @@ public class Paddle extends MovableObject {
 
     public void setBlinking(boolean blinking) {
         this.isBlinking = blinking;
-    }
-
-    public boolean isBlinking() {
-        return isBlinking;
     }
 
     public Paddle(double x, double y, double gameWidth) {
@@ -56,10 +51,6 @@ public class Paddle extends MovableObject {
             frame = (frame + 1) % frameCount;
             setImage("/images/paddle/bat" + frame + ".png");
         }
-    }
-
-    public void draw(GraphicsContext gc) {
-        render(gc);
     }
 
     public void render(GraphicsContext gc) {

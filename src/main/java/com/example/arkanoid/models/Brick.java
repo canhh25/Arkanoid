@@ -20,7 +20,8 @@ public class Brick extends GameObject {
             "expand_paddle",
             "fast_ball",
             "multi_ball",
-            "extra_life"
+            "extra_life",
+            "slow"
     };
 
     public Brick(double x, double y, int hitPoints, int type, String imagePath, String crackedImagePath) {
@@ -65,9 +66,5 @@ public class Brick extends GameObject {
 
     public boolean isDestroyed() {
         return hitPoints <= 0;
-    }
-
-    public int getType() {
-        return type;
     }
 }

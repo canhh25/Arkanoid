@@ -11,7 +11,6 @@ public class MultiBallPower extends Power<GameManager> {
     @Override
     public void applyDefaultEffect(GameManager gameManager) {
         if (gameManager.getBalls().isEmpty()) return;
-        System.out.println("Add ball");
         Ball originalBall = gameManager.getBall();
 
         gameManager.addBall(originalBall.getX(), originalBall.getY(), originalBall.getSpeed(), -120);

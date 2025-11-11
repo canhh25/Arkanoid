@@ -15,9 +15,7 @@ public class ShrinkPaddle extends Power<Paddle> {
         if (!isActive) {
             double currWidth = paddle.getWidth();
             double newWidth = currWidth / EXPAND_MULTIPLIER;
-
             paddle.setWidth(newWidth);
-
             activate();
         }
     }
