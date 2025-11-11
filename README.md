@@ -136,9 +136,6 @@ The game uses multiple threads to ensure smooth performance:
 |-------|-------|-------|-------|
 | ![Map 1](src/main/resources/images/background/Pixel-Art%20Background%201/frame0001.png) | ![Map 2](src/main/resources/images/background/Pixel-Art%20Background%202/frame0001.png) | ![Map 3](src/main/resources/images/background/Pixel-Art%20Background%203/frame0001.png) | ![Map 4](src/main/resources/images/background/Pixel-Art%20Background%204/preview.png) |
 
-### Video demo
-
----
 ## Future Improvements
 ### Planned Features
 
