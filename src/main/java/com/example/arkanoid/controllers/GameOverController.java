@@ -55,7 +55,7 @@ public class GameOverController {
                 navigationFacade.restartCurrentLevel(levelToPlay);
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

@@ -75,7 +75,7 @@ public class GameController {
                 gameManager.resetScore();
                 navigationFacade.navigateToLevelUp();
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         });
     }
@@ -91,7 +91,7 @@ public class GameController {
                     Files.copy(in, file.toPath());
                 }
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
         return file;
@@ -102,7 +102,7 @@ public class GameController {
         try (Scanner sc = new Scanner(file)) {
             if (sc.hasNextInt()) return sc.nextInt();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return 0;
     }
@@ -112,7 +112,7 @@ public class GameController {
         try (PrintWriter out = new PrintWriter(file)) {
             out.println(score);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -127,6 +127,7 @@ public class GameController {
 
             } catch (Exception e) {
                 navigationFacade.navigateToMenu();
+                e.printStackTrace();
             }
         });
     }
