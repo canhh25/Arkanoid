@@ -37,13 +37,19 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 
 **Used in:** Game Manager, Game Facade
 
-**Purpose:** 
+**Purpose:** Ensures that there is only one instance of a key class during runtime — for example, the GameManager that tracks game state or the GameFacade that coordinates scene transitions. Singleton centralizes control so that all parts of the program access the same object instead of creating duplicates.
 
-#### 2. Abstract Factory
+#### 2. Factory
 
-**Used in:** abc
+**Used in:** PowerFactory
 
-**Purpose:** 
+**Purpose:** Encapsulates the creation logic of power-up objects (like ExpandPaddle, FastBall, or ExtraLifePowerUp) into one centralized place.
+
+#### 2. Strategy 
+
+**Used in:** PowerStrategy
+
+**Purpose:** Defines a family of interchangeable behaviors (e.g., different power-up effects) and encapsulates each one separately.
 
 #### 3. Facade
 **Used in:** Game Controller
