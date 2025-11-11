@@ -62,7 +62,7 @@ public class LevelController {
             getNavigationFacade().navigateToMenu();
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -156,7 +156,7 @@ public class LevelController {
             }
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

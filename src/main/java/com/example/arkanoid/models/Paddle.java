@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Paddle extends MovableObject {
-    public static final double PADDLE_SPEED = 5;
+    public static final double PADDLE_SPEED = 5.7;
     public static double paddle_width = 100;
     public static double paddle_height = 30;
     public static final double PADDLE_WIDTH = 100;

@@ -38,7 +38,7 @@ public class GameFacade {
             primaryStage.show();
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -63,7 +63,7 @@ public class GameFacade {
             SoundManager.playBackgroundMusic("/sounds/nen.mp3");
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -87,7 +87,7 @@ public class GameFacade {
             gameController.start();
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -107,7 +107,7 @@ public class GameFacade {
             primaryStage.setScene(scene);
 
         } catch (Exception e) {
-
+            e.printStackTrace();
             navigateToMenu();
         }
     }
@@ -128,7 +128,7 @@ public class GameFacade {
             primaryStage.setScene(scene);
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -154,7 +154,7 @@ public class GameFacade {
             helpStage.show();
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -184,7 +184,7 @@ public class GameFacade {
             return pauseStage;
 
         } catch (Exception e) {
-
+            e.printStackTrace();
             return null;
         }
     }
@@ -208,7 +208,7 @@ public class GameFacade {
             gameController.start();
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -219,7 +219,7 @@ public class GameFacade {
             navigateToGame(nextLevel);
 
         } catch (Exception e) {
-
+            e.printStackTrace();
             navigateToMenu();
         }
     }
