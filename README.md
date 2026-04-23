@@ -30,7 +30,7 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 - Progress through multiple levels with increasing difficulty
 
 ---
-## My Contributions (Nguyễn Hữu Cảnh)
+## My Contributions
 * **Architecture & Design Patterns:** Trực tiếp triển khai Strategy Pattern cho hệ thống Power-up để dễ dàng mở rộng các loại hiệu ứng mới.
 * **Core Gameplay Logic:** Xử lý thuật toán va chạm giữa bóng và gạch/paddle, đảm bảo vật lý trong game hoạt động mượt mà.
 * **Testing & Debugging:** Rà soát lỗi và fix các bug liên quan đến việc bóng bị kẹt ở góc hẹp khi va chạm với gạch
