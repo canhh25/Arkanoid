@@ -31,9 +31,9 @@ This is a classic Arkanoid game developed in Java as a final project for Object-
 
 ---
 ## My Contributions
-* **Architecture & Design Patterns:** Trực tiếp triển khai Strategy Pattern cho hệ thống Power-up để dễ dàng mở rộng các loại hiệu ứng mới.
-* **Core Gameplay Logic:** Xử lý thuật toán va chạm giữa bóng và gạch/paddle, đảm bảo vật lý trong game hoạt động mượt mà.
-* **Testing & Debugging:** Rà soát lỗi và fix các bug liên quan đến việc bóng bị kẹt ở góc hẹp khi va chạm với gạch
+* **Architecture & Design Patterns:** Implemented the Strategy Pattern for the Power-up system, allowing for the seamless integration and expansion of new power-up effects.
+* **Core Gameplay Logic:** Developed and optimized the collision detection algorithms between the ball, bricks, and the paddle to ensure smooth and accurate in-game physics.
+* **Testing & Debugging:** Conducted rigorous testing and resolved critical bugs, specifically addressing edge-case physics issues such as the ball getting trapped in narrow corners during collisions.
 
 ---
 ### Design Pattern Implementation
